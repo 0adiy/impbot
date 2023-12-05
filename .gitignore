@@ -1,0 +1,9 @@
+# Secrets
+/.env
+config.js
+
+# Defaults
+/node_modules
+.vscode/*
+pnp-lock.yaml
+
