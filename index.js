@@ -1,49 +1,28 @@
 import { Client, GatewayIntentBits, Partials, Collection } from "discord.js";
 import config from "./config.js";
+import { handleMessage } from "./methods/messageHandler.js";
 
-// making new client
 const client = new Client({
-  intents: [
-    GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.GuildMembers,
-    GatewayIntentBits.GuildPresences,
-    GatewayIntentBits.MessageContent,
-    GatewayIntentBits.DirectMessages,
-    GatewayIntentBits.DirectMessageReactions,
-    GatewayIntentBits.GuildVoiceStates,
-  ],
+  intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers, GatewayIntentBits.GuildPresences, GatewayIntentBits.MessageContent, GatewayIntentBits.DirectMessages, GatewayIntentBits.DirectMessageReactions, GatewayIntentBits.GuildVoiceStates],
   partials: [Partials.Message, Partials.Channel, Partials.Reaction],
   presence: {
     status: "online",
     afk: false,
     activities: [
       {
-        name: "Beep Boop 🤖",
+        name: "with your life",
         type: 1,
       },
     ],
   },
 });
 
-// START OF THINGS WE WILL MOVE TO SOMEWHERE ELSE
-
 client.once("ready", () => {
-  console.log(`logged in as ${client.user.tag}`);
+  console.log(`Authorized as ${client.user.username}`);
 });
 
-client.on("messageCreate", message => {
-  if (message.content.startsWith(config.prefix)) {
-    const [cmdName, ...cmdArgs] = message.content
-      .slice(config.prefix.length)
-      .trim()
-      .split(/\s+/);
-
-    if (cmdName === "ping") message.reply("Pong!");
-  }
+client.on("messageCreate", async (message) => {
+  await handleMessage(message);
 });
 
-// END OF THINGS WE WILL MOVE TO SOMEWHERE ELSE
-
-// Turning it on
 client.login(config.TOKEN);
