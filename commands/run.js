@@ -74,21 +74,18 @@ export default {
     const embedColor = stderr ? COLORS.ERROR : COLORS.SUCCESS;
 
     const embed = new EmbedBuilder()
-      .setTitle("Code Evaluation")
-      .setDescription("```" + `${language}\n${stdout || stderr}` + "```")
+      .setTitle("Execution Time")
+      .setDescription(`${executionTime}ms`)
       .setTimestamp(new Date())
-      .setFields([
-        {
-          name: "Execution Time",
-          value: `${executionTime}ms`,
-        },
-      ])
       .setFooter({
         text: `Requested by ${message.author.username}`,
         iconURL: message.author.displayAvatarURL({ dynamic: true }),
       })
       .setColor(embedColor);
 
-    message.reply({ embeds: [embed] });
+    message.reply({
+      content: "```" + `${language}\n${stdout || stderr}` + "```",
+      embeds: [embed],
+    });
   },
 };
