@@ -1,12 +1,33 @@
+import { EmbedBuilder } from "discord.js";
+import { COLORS } from "../utils/enums.js";
+
 const API = "https://onecompiler.com/api/code/exec";
 
-async function evaluateCode(message, language, code) {
+async function evaluateCode(language, code) {
+  let lang = language.toLowerCase();
+  switch (lang) {
+    case "js" || "javascript":
+      lang = "javascript";
+      break;
+    case "py" || "python":
+      lang = "python";
+      break;
+    case "c#" || "csharp" || "cs":
+      lang = "csharp";
+      break;
+    case "c++":
+      lang = "cpp";
+      break;
+    default:
+      break;
+  }
+
   try {
     const payload = {
       properties: {
-        language,
+        language: lang,
         files: [
-          { name: `requesting_protocol_execution.${language}`, content: code },
+          { name: `requesting_protocol_execution.${lang}`, content: code },
         ],
       },
     };
@@ -22,14 +43,16 @@ async function evaluateCode(message, language, code) {
     if (!response.ok) throw new Error(response.status);
 
     const data = await response.json();
-    let codeBody = data.stdout;
-    if (data.stderr || data.exception) codeBody = data.stderr;
 
-    const output = `\`\`\`${language}\n${codeBody}\n\n\nexecution: ${data.executionTime}ms\n\`\`\``;
-    message.reply(output);
+    let { stdout, stderr } = data;
+
+    if (stderr?.length > 4000) stderr = stderr.slice(0, 4000);
+    if (stdout?.length > 4000) stdout = stdout.slice(0, 4000);
+
+    return [stdout, stderr, data.executionTime];
   } catch (error) {
     console.error("Error during API request:", error);
-    message.reply("An error occurred during the code evaluation.");
+    return null;
   }
 }
 
@@ -37,13 +60,35 @@ export default {
   name: "run",
   aliases: ["r"],
   guildOnly: true,
-  usage: "<language> <code>",
+  args: ["language", "code"],
   execute: async (client, message, args) => {
     const language = args.shift();
     const code = args.join(" ");
-    if (!code) return message.reply("please provide some code to run");
 
     // FIXME -modify from here pls
-    await evaluateCode(message, language, code);
+    const data = await evaluateCode(language, code);
+    if (data === null) return message.reply("Some API error occured");
+
+    let [stdout, stderr, executionTime] = data;
+
+    const embedColor = stderr ? COLORS.ERROR : COLORS.SUCCESS;
+
+    const embed = new EmbedBuilder()
+      .setTitle("Code Evaluation")
+      .setDescription("```" + `${language}\n${stdout || stderr}` + "```")
+      .setTimestamp(new Date())
+      .setFields([
+        {
+          name: "Execution Time",
+          value: `${executionTime}ms`,
+        },
+      ])
+      .setFooter({
+        text: `Requested by ${message.author.username}`,
+        iconURL: message.author.displayAvatarURL({ dynamic: true }),
+      })
+      .setColor(embedColor);
+
+    message.reply({ embeds: [embed] });
   },
 };

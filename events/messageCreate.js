@@ -1,4 +1,4 @@
-import { Events, Message, Client } from "discord.js";
+import { Events, Message, Client, EmbedBuilder } from "discord.js";
 import chalk from "chalk";
 import config from "../config.js";
 
@@ -43,12 +43,28 @@ export default {
     if (command.guildOnly && !message.channel.isTextBased())
       return message.reply("I can't execute that command inside DMs!");
 
-    if (command.args && !args.length) {
-      let reply = `You didn't provide any arguments, ${message.author}!`;
-      if (command.usage)
-        reply += `\nThe proper usage would be: \`${config.prefix}${command.name} ${command.usage}\``;
+    if (command.args?.length > args.length) {
+      const desc = `\`${config.prefix}${command.name}\` requires ${command.args?.length} arguments.`;
+      const usage = `\`${config.prefix}${command.name} ${command.args
+        ?.map(arg => `<${arg}>`)
+        .join(" ")}\``;
 
-      return message.reply(reply);
+      const embed = new EmbedBuilder()
+        .setTitle("Invalid Arguments!")
+        .setDescription(desc)
+        .setFields([
+          {
+            name: "Usage",
+            value: usage,
+          },
+        ])
+        .setTimestamp(new Date())
+        .setFooter({
+          text: `Requested by ${message.author.username}`,
+          iconURL: message.author.displayAvatarURL({ dynamic: true }),
+        })
+        .setColor(0xff0000);
+      return message.reply({ embeds: [embed] });
     }
 
     try {
