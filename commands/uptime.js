@@ -11,12 +11,11 @@ export default {
     const uptimeCorrected = parseInt(uptime / 1000);
 
     const embed = new EmbedBuilder()
-      .setTitle("Uptime!")
-      .setDescription(`Uptime: **<t:${uptimeCorrected}:R>**`)
-      .setTimestamp(new Date())
-      .setColor(COLORS.SUCCESS)
-      .setFooter({
-        text: `Requested by ${message.author.username}`,
+      .setTitle(`**<t:${uptimeCorrected}:R>**`)
+      .setDescription(`The bot started **<t:${uptimeCorrected}:R>**`)
+      .setColor(COLORS.DEFAULT)
+      .setAuthor({
+        name: message.author.username,
         iconURL: message.author.displayAvatarURL({ dynamic: true }),
       });
 
