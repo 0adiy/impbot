@@ -8,6 +8,9 @@ export default {
   args: ["language"],
   execute: async (client, message, args) => {
     const language = args.shift();
+    if (!message.reference) {
+      return;
+    }
     const repliedTo = await message.channel.messages.fetch(message.reference.messageId);
     const code = repliedTo.content;
 

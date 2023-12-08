@@ -14,15 +14,11 @@ export default {
    */
   execute: async (client, message) => {
     const embed = new EmbedBuilder()
-      .setTitle("Pong!")
-      .setDescription(`Latency: ${client.ws.ping}ms`)
+      .setTitle(`**${client.ws.ping}ms**`)
+      .setDescription(`The latency of bot is currently ${client.ws.ping}ms.`)
+      .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
       .setTimestamp(new Date())
-      .setColor(COLORS.SUCCESS)
-      .setFooter({
-        text: `Requested by ${message.author.username}`,
-        iconURL: message.author.displayAvatarURL({ dynamic: true }),
-      });
-
+      .setColor(COLORS.SUCCESS);
     message.reply({ embeds: [embed] });
   },
 };
