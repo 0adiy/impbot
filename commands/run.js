@@ -5,18 +5,35 @@ const API = "https://onecompiler.com/api/code/exec";
 
 async function evaluateCode(language, code) {
   let lang = language.toLowerCase();
+  let extension;
   switch (lang) {
     case "js" || "javascript":
       lang = "javascript";
+      extension = "js";
       break;
     case "py" || "python":
       lang = "python";
+      extension = "py";
       break;
     case "c#" || "csharp" || "cs":
       lang = "csharp";
+      extension = "cs";
       break;
     case "c++":
       lang = "cpp";
+      extension = "cpp";
+    case "java":
+      lang = "java";
+      extension = "java";
+    case "rb" || "ruby":
+      lang = "ruby";
+      extension = "rb";
+    case "php":
+      lang = "php";
+      extension = "php";
+    case "go":
+      lang = "go";
+      extension = "go";
       break;
     default:
       break;
@@ -26,9 +43,7 @@ async function evaluateCode(language, code) {
     const payload = {
       properties: {
         language: lang,
-        files: [
-          { name: `requesting_protocol_execution.${lang}`, content: code },
-        ],
+        files: [{ name: `requesting_protocol_execution.${extension}`, content: code }],
       },
     };
 
@@ -65,7 +80,6 @@ export default {
     const language = args.shift();
     const code = args.join(" ");
 
-    // FIXME -modify from here pls
     const data = await evaluateCode(language, code);
     if (data === null) return message.reply("Some API error occured");
 
