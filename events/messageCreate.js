@@ -15,15 +15,15 @@ export default {
     if (message.author.bot) return;
 
     // TODO - Separate this logic upto //end
-    const msgIn = message.guild
-      ? chalk.black.bgGreen(message.guild?.nameAcronym)
-      : chalk.black.bgWhite("Dm");
+    // const msgIn = message.guild
+    //   ? chalk.black.bgGreen(message.guild?.nameAcronym)
+    //   : chalk.black.bgWhite("Dm");
 
-    console.log(
-      `🗨️ ${chalk.bgRed(message.author.username)} in ${msgIn} has ${chalk.gray(
-        message.content
-      )}`
-    );
+    // console.log(
+    //   `🗨️ ${chalk.bgRed(message.author.username)} in ${msgIn} has ${chalk.gray(
+    //     message.content
+    //   )}`
+    // );
     //end
 
     if (!message.content.startsWith(config.prefix)) return;

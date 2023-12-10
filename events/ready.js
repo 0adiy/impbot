@@ -1,4 +1,5 @@
 import { Events } from "discord.js";
+import { loadSlashCommands } from "../handlers/slashCommandHandler.js";
 // import { loadMessageCommands } from "../handlers/messageCommandHandler.js";
 
 export default {
@@ -9,5 +10,6 @@ export default {
 
     // Loading Commands
     // loadMessageCommands(client);
+    loadSlashCommands(client);
   },
 };

@@ -29,7 +29,7 @@ const client = new Client({
 
 client.events = new Collection();
 client.messageCommands = new Collection();
-// client.slashCommands = new Collection(); // later maybe?
+client.slashCommands = new Collection(); // later maybe?
 client.uptimeTrackerTimestamp = new Date();
 
 // TODO - use promise.all here?
