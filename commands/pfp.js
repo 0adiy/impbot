@@ -20,7 +20,7 @@ function findUserByName(client, name) {
 
 export default {
   name: "pfp",
-  aliases: ["pfp", "pic", "photo"],
+  aliases: ["pfp", "dp", "profile"],
   guildOnly: true,
   args: ["user"],
   execute: async (client, message, args) => {
