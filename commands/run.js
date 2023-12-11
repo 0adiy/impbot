@@ -22,15 +22,19 @@ async function evaluateCode(language, code) {
     case "c++":
       lang = "cpp";
       extension = "cpp";
+      break;
     case "java":
       lang = "java";
       extension = "java";
+      break;
     case "rb" || "ruby":
       lang = "ruby";
       extension = "rb";
+      break;
     case "php":
       lang = "php";
       extension = "php";
+      break;
     case "go":
       lang = "go";
       extension = "go";
@@ -43,7 +47,9 @@ async function evaluateCode(language, code) {
     const payload = {
       properties: {
         language: lang,
-        files: [{ name: `requesting_protocol_execution.${extension}`, content: code }],
+        files: [
+          { name: `requesting_protocol_execution.${extension}`, content: code },
+        ],
       },
     };
 

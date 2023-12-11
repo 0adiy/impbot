@@ -6,6 +6,12 @@ export default {
   args: [],
   aliases: ["u"],
   guildOnly: true,
+  /**
+   * Shows the uptime of the bot
+   *
+   * @param {Client} client
+   * @param {Message} message
+   */
   execute: async (client, message) => {
     const uptime = client.uptimeTrackerTimestamp.getTime();
     const uptimeCorrected = parseInt(uptime / 1000);

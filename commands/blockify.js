@@ -6,12 +6,21 @@ export default {
   aliases: ["blockify", "wrap", "b", "w"],
   guildOnly: true,
   args: ["language"],
+  /**
+   * Makes a code block from the replied message using the language provided
+   *
+   * @param {Client} client
+   * @param {Message} message
+   * @param {String[]} args
+   */
   execute: async (client, message, args) => {
     const language = args.shift();
     if (!message.reference) {
       return;
     }
-    const repliedTo = await message.channel.messages.fetch(message.reference.messageId);
+    const repliedTo = await message.channel.messages.fetch(
+      message.reference.messageId
+    );
     const code = repliedTo.content;
 
     const data = wrapCode(language, code);

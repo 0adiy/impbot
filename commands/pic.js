@@ -7,7 +7,9 @@ function getRandomItems(array, count) {
 
 async function getPic(query) {
   const headers = { Authorization: config.photoAPI.key };
-  const response = await fetch(config.photoAPI.endpoint + query, { headers: headers });
+  const response = await fetch(config.photoAPI.endpoint + query, {
+    headers: headers,
+  });
   const data = await response.json();
   const photos = getRandomItems(data.photos, 10);
   let photo_urls = [];
@@ -22,6 +24,13 @@ export default {
   aliases: ["pic", "photo", "snap"],
   guildOnly: true,
   args: ["query"],
+  /**
+   * Seaches for images and sends them
+   *
+   * @param {Client} client
+   * @param {Message} message
+   * @param {String[]} args
+   */
   execute: async (client, message, args) => {
     const query = args.shift();
     const response = await getPic(query);
