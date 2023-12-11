@@ -1,6 +1,7 @@
 import { Events, Message, Client, EmbedBuilder } from "discord.js";
 import chalk from "chalk";
 import config from "../config.js";
+import { messageMiddleWare } from "../middlewares/message.middleware.js";
 
 export default {
   name: Events.MessageCreate,
@@ -26,7 +27,10 @@ export default {
     // );
     //end
 
-    if (!message.content.startsWith(config.prefix)) return;
+    if (!message.content.startsWith(config.prefix)) {
+      messageMiddleWare(message, client);
+      return;
+    }
     // if (!message.guild) return; //REVIEW - does this mean DMs are not allowed?
 
     const args = message.content.slice(config.prefix.length).split(/ +|\n/g);
