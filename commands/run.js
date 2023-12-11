@@ -84,7 +84,7 @@ export default {
   args: ["language", "code"],
   execute: async (client, message, args) => {
     const language = args.shift();
-    const code = args.join(" ");
+    const code = args.join(" ").replace(/^```\w*\n|\n?```$/g, "");
 
     const data = await evaluateCode(language, code);
     if (data === null) return message.reply("Some API error occured");
