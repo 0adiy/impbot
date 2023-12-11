@@ -29,7 +29,7 @@ export default {
     if (!message.content.startsWith(config.prefix)) return;
     // if (!message.guild) return; //REVIEW - does this mean DMs are not allowed?
 
-    const args = message.content.slice(config.prefix.length).split(/ +/);
+    const args = message.content.slice(config.prefix.length).split(/ +|\n/g);
     const commandName = args.shift().toLowerCase();
 
     const command =
