@@ -19,7 +19,7 @@ async function evaluateCode(language, code) {
       lang = "csharp";
       extension = "cs";
       break;
-    case "c++":
+    case "c++" || "cpp":
       lang = "cpp";
       extension = "cpp";
       break;
