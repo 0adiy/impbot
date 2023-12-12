@@ -15,8 +15,8 @@ function messageMiddleWare(message, client) {
         pattern,
         (m, p1, p2, p3) => p1 + "ddinstagram" + p3
       );
-    message.channel.send(newContent);
-    message.delete();
+    // message.channel.send(newContent); // TODO: fix later
+    // message.delete();
   }
 }
 
