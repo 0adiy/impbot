@@ -7,3 +7,5 @@ config.js
 .vscode/*
 pnp-lock.yaml
 
+#tests
+tests/*
