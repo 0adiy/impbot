@@ -1,6 +1,8 @@
+import { config } from "../config.js";
+
 let result = "";
-function print(String) {
-  if (result.length < 1900) result += String;
+function print(str) {
+  if (result.length < 1900) result += str;
 }
 
 /**
@@ -14,6 +16,12 @@ async function execute(client, message, args) {
   const code = args.join(" ").replace(/^```\w* |\n?```$/g, "");
 
   const [guild, channel] = [message.guild, message.channel]; // for later use
+
+  if (!config.superUsersArray.includes(message.author.id)) {
+    await message.react("<a:cross:1060641653121093803>");
+    await message.channel.send("Nice try 🤓.");
+    return;
+  }
 
   try {
     const asyncFunction = new Function(
