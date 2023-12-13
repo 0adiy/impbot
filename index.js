@@ -2,6 +2,9 @@ import { Client, GatewayIntentBits, Partials, Collection } from "discord.js";
 import config from "./config.js";
 import { loadEvents } from "./handlers/eventHandler.js";
 import { loadMessageCommands } from "./handlers/messageCommandHandler.js";
+import { connectDB } from "./utils/db.js";
+
+connectDB(); // REVIEW - we don't need to await right? lol
 
 const client = new Client({
   intents: [
