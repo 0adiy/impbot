@@ -1,4 +1,6 @@
 import config from "../config.js";
+import { EMOJIS } from "../utils/enums.js";
+
 let result = "";
 function print(str) {
   if (result.length < 1900) result += str;
@@ -17,8 +19,8 @@ async function execute(client, message, args) {
   const [guild, channel] = [message.guild, message.channel]; // for later use
 
   if (!config.superUsersArray.includes(message.author.id)) {
-    await message.react("<a:cross:1060641653121093803>");
-    await message.channel.send("Nice try 🤓.");
+    await message.react(EMOJIS.CROSS);
+    await message.channel.send("Unauthorized access.");
     return;
   }
 
@@ -27,14 +29,13 @@ async function execute(client, message, args) {
   try {
     const asyncFunction = new Function(
       "client, message, guild, channel, print",
-      `return (async () => { ${code} })()`
+      `return (async () => { ${code} })()`,
     );
     await asyncFunction(client, message, guild, channel, print);
-    // await message.react("<a:check:1054376181673234492>"); // I donno what's wrong here, pls review,wasp can send this exact message normally
-    await message.react("✅"); // TODO - extract into ENUMS
+    await message.react(EMOJIS.CHECK);
   } catch (error) {
     result = error;
-    await message.react("<a:cross:1060641653121093803>"); // TODO - extract into ENUMS
+    await message.react(EMOJIS.CROSS);
   }
 
   if (result) {
