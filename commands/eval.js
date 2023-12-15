@@ -1,5 +1,4 @@
-import { config } from "../config.js";
-
+import config from "../config.js";
 let result = "";
 function print(str) {
   if (result.length < 1900) result += str;
@@ -23,13 +22,16 @@ async function execute(client, message, args) {
     return;
   }
 
+  console.log("eval: " + code);
+
   try {
     const asyncFunction = new Function(
       "client, message, guild, channel, print",
       `return (async () => { ${code} })()`
     );
     await asyncFunction(client, message, guild, channel, print);
-    await message.react("<a:check:1054376181673234492>"); // TODO - extract into ENUMS
+    // await message.react("<a:check:1054376181673234492>"); // I donno what's wrong here, pls review,wasp can send this exact message normally
+    await message.react("✅"); // TODO - extract into ENUMS
   } catch (error) {
     result = error;
     await message.react("<a:cross:1060641653121093803>"); // TODO - extract into ENUMS

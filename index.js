@@ -34,6 +34,7 @@ client.events = new Collection();
 client.messageCommands = new Collection();
 client.slashCommands = new Collection(); // later maybe?
 client.uptimeTrackerTimestamp = new Date();
+client.modals = new Collection();
 
 // TODO - use promise.all here?
 loadEvents(client);

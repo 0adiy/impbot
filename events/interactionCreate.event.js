@@ -42,6 +42,12 @@ export default {
     else if (interaction.isAutocomplete()) {
       const command = client.slashCommands.get(interaction.commandName);
       command?.autocomplete(interaction, client);
+    } else if (interaction.isModalSubmit()) {
+      console.log("🔘 Modal Submit");
+
+      const modalFunc = client.modals.get(interaction.customId);
+      if (!modalFunc) return;
+      modalFunc(interaction, client);
     } else if (interaction.isStringSelectMenu()) {
       console.log("🔘 String Select Menu");
     }
