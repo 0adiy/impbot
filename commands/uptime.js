@@ -19,7 +19,7 @@ export default {
     const embed = new EmbedBuilder()
       .setTitle(`**<t:${uptimeCorrected}:R>**`)
       .setDescription(`The bot started **<t:${uptimeCorrected}:R>**`)
-      .setColor(COLORS.DEFAULT)
+      .setColor(COLORS.PRIMARY)
       .setAuthor({
         name: message.author.username,
         iconURL: message.author.displayAvatarURL({ dynamic: true }),
