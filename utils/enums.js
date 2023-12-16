@@ -1,6 +1,6 @@
 const COLORS = {
   SUCCESS: 0xcf9fff,
-  ERROR: 0xff0000,
+  ERROR: 0xcf534a,
   INFO: 0x00ffff,
   PRIMARY: 0x9165a3,
   SECONDARY: 0xf9dab7,
