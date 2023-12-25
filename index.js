@@ -3,8 +3,10 @@ import config from "./config.js";
 import { loadEvents } from "./handlers/eventHandler.js";
 import { loadMessageCommands } from "./handlers/messageCommandHandler.js";
 import { connectDB } from "./utils/db.js";
+import loadModals from "./handlers/modalHandler.js";
 
-connectDB(); // REVIEW - we don't need to await right? lol
+// NOTE - this is currently turned off for VPS
+// connectDB(); // REVIEW - we can use promise.all for all command, modal, button,etc loaders and this connectDB
 
 const client = new Client({
   intents: [
@@ -39,5 +41,6 @@ client.modals = new Collection();
 // TODO - use promise.all here?
 loadEvents(client);
 loadMessageCommands(client);
+loadModals(client);
 
 client.login(config.TOKEN);

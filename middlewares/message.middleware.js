@@ -47,9 +47,14 @@ import fs from "fs";
 
 function messageMiddleWare(message, client) {
   const content = message.content;
-  const pattern = /^(https?:\/\/(www\.)?)instagram(\.com\/(p|reel)\/[A-Za-z0-9_-]+\/?)/g;
+  const pattern =
+    /^(https?:\/\/(www\.)?)instagram(\.com(\/[A-Za-z0-9_-]+)?\/(p|reel)\/[A-Za-z0-9_-]+\/?)$/;
   if (pattern.test(content)) {
-    const newContent = content.replace(pattern, (m, p1, p2, p3) => p1 + "ddinstagram" + p3);
+    const newContent = content.replace(
+      pattern,
+      (m, p1, p2, p3) => p1 + "ddinstagram" + p3
+    );
+    message.delete();
     message.channel.send(newContent);
   }
 

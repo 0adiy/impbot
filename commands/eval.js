@@ -29,7 +29,10 @@ async function execute(client, message, args) {
   try {
     const asyncFunction = new Function(
       "client, message, guild, channel, print",
-      `return (async () => { ${code} })()`,
+      `return (async () => {
+        console.log = print;
+        ${code} 
+      })()`
     );
     await asyncFunction(client, message, guild, channel, print);
     await message.react(EMOJIS.CHECK);
