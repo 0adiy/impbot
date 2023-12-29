@@ -27,11 +27,11 @@ async function execute(client, message, args) {
   console.log("eval: " + code);
 
   try {
+    // TODO - find better way to implement replacement of console.log with print
     const asyncFunction = new Function(
       "client, message, guild, channel, print",
       `return (async () => {
-        console.log = print;
-        ${code} 
+        ${code.replaceAll("console.log(", "print(")} 
       })()`
     );
     await asyncFunction(client, message, guild, channel, print);
