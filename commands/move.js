@@ -11,6 +11,18 @@ async function getChannel(param, client, message) {
   }
 }
 
+async function create_webhook_if_not_exists(channel, name, pfp) {
+  const previousWebhooks = await channel.fetchWebhooks();
+  const hasWebhookAlready = previousWebhooks.find((webhook) => webhook.name == name);
+  if (hasWebhookAlready) return hasWebhookAlready;
+  const newWebhook = await channel.createWebhook({ name: name, avatar: pfp });
+  return newWebhook;
+}
+
+async function send_message_with_webhook(webhook, message) {
+  await webhook.send({ content: message });
+}
+
 export default {
   name: "move",
   description: "Move messages to some other channel",
@@ -39,23 +51,38 @@ export default {
     tagged.message = await message.channel.messages.fetch(tagged.message.messageId);
 
     if (range != 0) {
-      tagged.location.messages
-        .fetch({ before: tagged.message.id, limit: range })
-        .then((messages) => {
-          messages.sort((a, b) => a.createdTimestamp - b.createdTimestamp);
-          messages.forEach((msg) => {
-            if (msg.id != tagged.message.id && msg.id != message.id) {
-              tagged.siblings.push(msg);
-            }
-          });
-          tagged.siblings.push(tagged.message);
-          for (const msg of tagged.siblings) {
-            tagged.destination.send(msg.content);
-            msg.delete();
-          }
-        });
+      const messages = await tagged.location.messages.fetch({
+        before: tagged.message.id,
+        limit: range,
+      });
+
+      messages.sort((a, b) => a.createdTimestamp - b.createdTimestamp);
+      messages.forEach((msg) => {
+        if (msg.id != tagged.message.id && msg.id != message.id) {
+          tagged.siblings.push(msg);
+        }
+      });
+
+      tagged.siblings.push(tagged.message);
+
+      for (const msg of tagged.siblings) {
+        // tagged.destination.send(msg.content);
+        const hook = await create_webhook_if_not_exists(
+          tagged.destination,
+          msg.author.username,
+          msg.author.avatarURL({ size: 1024 }),
+        );
+        console.log(hook);
+        await hook.send({ content: msg.content });
+        msg.delete();
+      }
     } else {
-      tagged.destination.send(tagged.message.content);
+      const hook = await create_webhook_if_not_exists(
+        tagged.destination,
+        tagged.message.author.username,
+        tagged.message.author.avatarURL({ size: 1024 }),
+      );
+      await hook.send({ content: tagged.message.content });
       tagged.message.delete();
     }
     await message.react(EMOJIS.CHECK);
