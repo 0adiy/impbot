@@ -2,11 +2,15 @@ import { EmbedBuilder } from "discord.js";
 import { COLORS } from "../utils/enums.js";
 import config from "../config.js";
 
+function capitalize_First_Letter(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 export default {
   name: "help",
   args: [],
   aliases: ["h"],
-  description: "Provides help for commands",
+  description: "Provides descriptions of available commands.",
   guildOnly: false,
   /**
    * Provides help for commands
@@ -15,27 +19,21 @@ export default {
    * @param {Message} message - The message object.
    */
   execute: async (client, message) => {
-    let description = "List of commands\n";
-    client.messageCommands.forEach(command => {
-      const usage = command.args
-        ? `${config.prefix}${command.name} ${command.args
-            .map(a => `<${a}>`)
-            .join(" ")}`
-        : command.name;
+    let embed = new EmbedBuilder()
+      .setTitle(`Available commands`)
+      .setDescription("Additionally you can see slash commands by typing /")
+      .setColor(COLORS.SECONDARY);
+    client.messageCommands.forEach((cmd) => {
+      const usage = cmd.args
+        ? `${config.prefix}${cmd.name} ${cmd.args.map((a) => `<${a}>`).join(" ")}`
+        : `${config.prefix}${cmd.name}`;
 
-      description += `**${usage}** -\n ${command.description}\n\n`;
-    });
-
-    const embed = new EmbedBuilder()
-      .setTitle(`Help!`)
-      .setDescription(description)
-      .setTimestamp(new Date())
-      .setColor(COLORS.SUCCESS)
-      .setFooter({
-        text: `Requested by ${message.author.username}`,
-        iconURL: message.author.displayAvatarURL({ dynamic: true }),
+      const description = `${cmd.description}\nAKA ${cmd.aliases.join(", ")}.`;
+      embed.addFields({
+        name: usage,
+        value: description,
       });
-
+    });
     message.reply({ embeds: [embed] });
   },
 };

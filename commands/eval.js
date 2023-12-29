@@ -31,8 +31,8 @@ async function execute(client, message, args) {
       "client, message, guild, channel, print",
       `return (async () => {
         console.log = print;
-        ${code} 
-      })()`
+        ${code}
+      })()`,
     );
     await asyncFunction(client, message, guild, channel, print);
     await message.react(EMOJIS.CHECK);
@@ -52,6 +52,7 @@ async function execute(client, message, args) {
 export default {
   name: "eval",
   aliases: ["e"],
+  description: "Evaluates code in bot's runtime environment. Special privileges required.",
   guildOnly: false,
   args: ["code"],
   execute: execute,

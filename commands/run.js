@@ -47,9 +47,7 @@ async function evaluateCode(language, code) {
     const payload = {
       properties: {
         language: lang,
-        files: [
-          { name: `requesting_protocol_execution.${extension}`, content: code },
-        ],
+        files: [{ name: `requesting_protocol_execution.${extension}`, content: code }],
       },
     };
 
@@ -80,6 +78,7 @@ async function evaluateCode(language, code) {
 export default {
   name: "run",
   aliases: ["r"],
+  description: "Executes the provided code in the specified programming language.",
   guildOnly: true,
   args: ["language", "code"],
   execute: async (client, message, args) => {

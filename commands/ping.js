@@ -5,6 +5,7 @@ export default {
   name: "ping",
   args: [],
   aliases: ["p"],
+  description: "Measures the ping (latency) of the bot.",
   guildOnly: false,
   /**
    * Replies with "Pong!"
