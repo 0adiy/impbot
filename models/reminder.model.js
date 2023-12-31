@@ -1,6 +1,7 @@
-import { Schema, model, models } from "mongoose";
+import pkg from "mongoose";
+const { Schema, model, models } = pkg; // NOTE - CommonJS so gotta import it like this
 
-const favPlaylistSchema = new Schema({
+const reminderSchema = new Schema({
   userId: {
     type: String,
     required: true,
@@ -23,4 +24,4 @@ const favPlaylistSchema = new Schema({
   },
 });
 
-export default models.favPlaylist || model("favPlaylist", favPlaylistSchema);
+export default models.reminderSchema || model("reminderSchema", reminderSchema);

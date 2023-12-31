@@ -6,6 +6,8 @@ import {
   ModalSubmitInteraction,
   Client,
 } from "discord.js";
+// import reminderSchema from "../../models/reminder.model.js";
+// import { getFutureTimestamp } from "../../utils/generalUtils.js";
 
 const name = "reminder";
 
@@ -66,6 +68,14 @@ export default {
     const minutes = interaction.fields.getTextInputValue("minutes");
     const seconds = interaction.fields.getTextInputValue("seconds");
     const reminder = interaction.fields.getTextInputValue("reminder");
+
+    // const doc = new reminderSchema({
+    //   userId: interaction.user.id,
+    //   reminder: `${reminder}`,
+    //   date: getFutureTimestamp(days, hours, minutes, seconds),
+    //   messageId: interaction.message.id,
+    //   channelId: interaction.message.channelId,
+    // });
 
     interaction.reply(`${days} ${hours} ${minutes} ${seconds} : ${reminder}`);
   },
