@@ -14,10 +14,10 @@ const reminderSchema = new Schema({
     type: Date,
     required: true,
   },
-  messageId: {
-    type: String,
-    required: true,
-  },
+  // messageId: {
+  //   type: String,
+  //   required: true,
+  // },
   channelId: {
     type: String,
     required: true,

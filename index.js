@@ -6,7 +6,7 @@ import { connectDB } from "./utils/db.js";
 import loadModals from "./handlers/modalHandler.js";
 
 // NOTE - this is currently turned off for VPS
-// connectDB(); // REVIEW - we can use promise.all for all command, modal, button,etc loaders and this connectDB
+connectDB(); // REVIEW - we can use promise.all for all command, modal, button,etc loaders and this connectDB
 
 const client = new Client({
   intents: [

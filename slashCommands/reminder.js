@@ -1,4 +1,6 @@
 import { SlashCommandBuilder } from "discord.js";
+import reminderSchema from "../models/reminder.model.js";
+import { getFutureTimestamp } from "../utils/generalUtils.js";
 
 function formatTimeString(string) {
   //example input: "10d 4h 5m 10s"
@@ -21,18 +23,18 @@ export default {
     .setName("reminder")
     .setDescription("Sets a reminder for a desired time.")
     .setDMPermission(false)
-    .addStringOption((option) =>
+    .addStringOption(option =>
       option
         .setName("duration")
         .setDescription("The duration of reminder. e.g. 10d 4h 5m 10s")
         .setMaxLength(20)
-        .setRequired(true),
+        .setRequired(true)
     )
-    .addStringOption((option) =>
+    .addStringOption(option =>
       option
         .setName("message")
         .setDescription("The message or description of reminder")
-        .setRequired(true),
+        .setRequired(true)
     ),
   /**
    *
@@ -45,7 +47,7 @@ export default {
     const formattedTime = formatTimeString(timeString);
     if (formattedTime.hasErr) {
       interaction.reply(
-        `The time is in invalid format. Please recheck and try again. Time provided:\n${timeString}`,
+        `The time is in invalid format. Please recheck and try again. Time provided:\n${timeString}`
       );
       return;
     }
@@ -55,11 +57,27 @@ export default {
       formattedTime.minutes == 0 &&
       formattedTime.seconds == 0
     ) {
-      interaction.reply("The time provided is 0, same as your IQ; can not set reminder.");
+      interaction.reply(
+        "The time provided is 0, same as your IQ; can not set reminder."
+      );
       return;
     }
-    interaction.reply(
-      `days: ${formattedTime.days}\nhours: ${formattedTime.hours}\nminutes: ${formattedTime.minutes}\nseconds: ${formattedTime.seconds}\nmessage: ${reminderMessage}`,
+
+    const dateObj = getFutureTimestamp(
+      formattedTime.days,
+      formattedTime.hours,
+      formattedTime.minutes,
+      formattedTime.seconds
     );
+
+    const doc = new reminderSchema({
+      userId: interaction.user.id,
+      reminder: `${reminderMessage}`,
+      date: dateObj,
+      channelId: interaction.channelId,
+    });
+    await doc.save();
+
+    interaction.reply(`Reminder you <t:${Math.floor(dateObj / 1000)}:R>`);
   },
 };
