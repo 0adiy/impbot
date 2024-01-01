@@ -1,6 +1,6 @@
-import { SlashCommandBuilder } from "discord.js";
+import { SlashCommandBuilder, time } from "discord.js";
 import reminderSchema from "../models/reminder.model.js";
-import { getFutureTimestamp } from "../utils/generalUtils.js";
+import { getFutureTimestamp, setReminder } from "../utils/generalUtils.js";
 
 function formatTimeString(string) {
   //example input: "10d 4h 5m 10s"
@@ -23,18 +23,18 @@ export default {
     .setName("reminder")
     .setDescription("Sets a reminder for a desired time.")
     .setDMPermission(false)
-    .addStringOption(option =>
+    .addStringOption((option) =>
       option
         .setName("duration")
         .setDescription("The duration of reminder. e.g. 10d 4h 5m 10s")
         .setMaxLength(20)
-        .setRequired(true)
+        .setRequired(true),
     )
-    .addStringOption(option =>
+    .addStringOption((option) =>
       option
         .setName("message")
         .setDescription("The message or description of reminder")
-        .setRequired(true)
+        .setRequired(true),
     ),
   /**
    *
@@ -42,12 +42,14 @@ export default {
    * @param {Client} client
    */
   async execute(interaction, client) {
+    await interaction.deferReply();
+
     const timeString = interaction.options.getString("duration");
     const reminderMessage = interaction.options.getString("message");
     const formattedTime = formatTimeString(timeString);
     if (formattedTime.hasErr) {
       interaction.reply(
-        `The time is in invalid format. Please recheck and try again. Time provided:\n${timeString}`
+        `The time is in invalid format. Please recheck and try again. Time provided:\n${timeString}`,
       );
       return;
     }
@@ -57,9 +59,7 @@ export default {
       formattedTime.minutes == 0 &&
       formattedTime.seconds == 0
     ) {
-      interaction.reply(
-        "The time provided is 0, same as your IQ; can not set reminder."
-      );
+      interaction.reply("The time provided is 0, same as your IQ; can not set reminder.");
       return;
     }
 
@@ -67,17 +67,23 @@ export default {
       formattedTime.days,
       formattedTime.hours,
       formattedTime.minutes,
-      formattedTime.seconds
+      formattedTime.seconds,
     );
 
-    const doc = new reminderSchema({
+    let reminder = {
       userId: interaction.user.id,
-      reminder: `${reminderMessage}`,
+      reminder: reminderMessage,
       date: dateObj,
       channelId: interaction.channelId,
-    });
+    };
+
+    const doc = new reminderSchema(reminder);
     await doc.save();
 
-    interaction.reply(`Reminder you <t:${Math.floor(dateObj / 1000)}:R>`);
+    const offset = new Date(reminder.date) - Date.now();
+
+    setReminder(reminder, offset, client);
+
+    interaction.editReply(`The reminder was set. You will be reminded in ${timeString}.`);
   },
 };
