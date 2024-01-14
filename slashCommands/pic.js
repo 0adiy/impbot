@@ -1,10 +1,6 @@
 import { SlashCommandBuilder } from "discord.js";
+import { getRandomItems } from "../utils/generalUtils.js";
 import config from "../config.js";
-
-function getRandomItems(array, count) {
-  count = count > array.length ? array.length : count;
-  return array.sort(() => 0.5 - Math.random()).slice(0, count);
-}
 
 async function getPic(api, query, limit) {
   let endpoint,

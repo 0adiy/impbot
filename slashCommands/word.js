@@ -1,15 +1,7 @@
 import { SlashCommandBuilder, EmbedBuilder, Embed } from "discord.js";
 import config from "../config.js";
 import { COLORS } from "../utils/enums.js";
-
-function capitalize_First_Letter(str) {
-  return str.charAt(0).toUpperCase() + str.slice(1);
-}
-
-function getRandomItems(array, count) {
-  count = count > array.length ? array.length : count;
-  return array.sort(() => 0.5 - Math.random()).slice(0, count);
-}
+import { getRandomItems, capitalize_First_Letter } from "../utils/generalUtils.js";
 
 async function get_Definition_Of_Given_Word(interaction, word) {
   let title = "",

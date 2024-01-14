@@ -1,21 +1,14 @@
 function getFutureTimestamp(days, hours, minutes, seconds) {
-  // Get the current timestamp in milliseconds.
   const now = Date.now();
 
-  // Convert the input parameters to milliseconds.
   const daysInMilliseconds = days * 24 * 60 * 60 * 1000;
   const hoursInMilliseconds = hours * 60 * 60 * 1000;
   const minutesInMilliseconds = minutes * 60 * 1000;
   const secondsInMilliseconds = seconds * 1000;
 
-  // Calculate the future timestamp in milliseconds.
   const futureTimestamp =
     now + daysInMilliseconds + hoursInMilliseconds + minutesInMilliseconds + secondsInMilliseconds;
-
-  // Create a new Date object with the future timestamp.
   const futureDate = new Date(futureTimestamp);
-
-  // Return the future Date object.
   return futureDate;
 }
 
@@ -41,4 +34,43 @@ function sendReminderAlert(client, reminder) {
   channel.send(`<@${reminder.userId}> its the time.\n${reminder.reminder}`);
 }
 
-export { getFutureTimestamp, loadAndSetAllReminders, setReminder };
+async function getChannel(param, client, message) {
+  if (/^\d+$/.test(param)) {
+    return client.channels.cache.get(param);
+  } else {
+    param.toLowerCase().replaceAll(" ", "-");
+    return message.guild.channels.cache.find((channel) => channel.name.toLowerCase() == param);
+  }
+}
+
+async function create_webhook_if_not_exists(channel, name, pfp) {
+  const previousWebhooks = await channel.fetchWebhooks();
+  const hasWebhookAlready = previousWebhooks.find((webhook) => webhook.name == name);
+  if (hasWebhookAlready) return hasWebhookAlready;
+  const newWebhook = await channel.createWebhook({ name: name, avatar: pfp });
+  return newWebhook;
+}
+
+async function send_message_with_webhook(webhook, message) {
+  await webhook.send({ content: message });
+}
+
+function getRandomItems(array, count) {
+  count = count > array.length ? array.length : count;
+  return array.sort(() => 0.5 - Math.random()).slice(0, count);
+}
+
+function capitalize_First_Letter(str) {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+export {
+  getFutureTimestamp,
+  loadAndSetAllReminders,
+  setReminder,
+  getChannel,
+  create_webhook_if_not_exists,
+  send_message_with_webhook,
+  getRandomItems,
+  capitalize_First_Letter,
+};

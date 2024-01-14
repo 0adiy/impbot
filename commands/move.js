@@ -1,27 +1,9 @@
 import { EMOJIS } from "../utils/enums.js";
-
-async function getChannel(param, client, message) {
-  if (/^\d+$/.test(param)) {
-    //ID was provided
-    return client.channels.cache.get(param);
-  } else {
-    //Name was provided
-    param.toLowerCase().replaceAll(" ", "-");
-    return message.guild.channels.cache.find((channel) => channel.name.toLowerCase() == param);
-  }
-}
-
-async function create_webhook_if_not_exists(channel, name, pfp) {
-  const previousWebhooks = await channel.fetchWebhooks();
-  const hasWebhookAlready = previousWebhooks.find((webhook) => webhook.name == name);
-  if (hasWebhookAlready) return hasWebhookAlready;
-  const newWebhook = await channel.createWebhook({ name: name, avatar: pfp });
-  return newWebhook;
-}
-
-async function send_message_with_webhook(webhook, message) {
-  await webhook.send({ content: message });
-}
+import {
+  getChannel,
+  create_webhook_if_not_exists,
+  send_message_with_webhook,
+} from "../utils/generalUtils.js";
 
 export default {
   name: "move",
@@ -66,14 +48,13 @@ export default {
       tagged.siblings.push(tagged.message);
 
       for (const msg of tagged.siblings) {
-        // tagged.destination.send(msg.content);
         const hook = await create_webhook_if_not_exists(
           tagged.destination,
           msg.author.username,
           msg.author.avatarURL({ size: 1024 }),
         );
         console.log(hook);
-        await hook.send({ content: msg.content });
+        await hook.send({ content: msg.content, embeds: [...msg.embeds] });
         msg.delete();
       }
     } else {
@@ -82,7 +63,7 @@ export default {
         tagged.message.author.username,
         tagged.message.author.avatarURL({ size: 1024 }),
       );
-      await hook.send({ content: tagged.message.content });
+      await hook.send({ content: tagged.message.content, embeds: [...tagged.message.embeds] });
       tagged.message.delete();
     }
     await message.react(EMOJIS.CHECK);
