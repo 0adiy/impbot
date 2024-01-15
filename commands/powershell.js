@@ -1,5 +1,8 @@
+import config from "../config.js";
 import { EMOJIS } from "../utils/enums.js";
 import { exec } from "child_process";
+
+import { Client, Message } from "discord.js";
 
 export default {
   name: "powershell",
@@ -15,6 +18,9 @@ export default {
    * @param {Array} args - The arguments passed to the command.
    */
   execute: async (client, message, args) => {
+    // validation
+    if (!config.superUsersArray.includes(message.author.id)) return;
+
     const code = args.join(" ").replace(/^```\w* |\n?```$/g, "");
 
     exec(code, { shell: "powershell" }, (error, stdout, stderr) => {
