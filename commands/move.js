@@ -21,7 +21,12 @@ export default {
     let range = args.shift() ?? 0;
 
     final_channel = await getChannel(final_channel, client, message);
-    if (!message.reference || !final_channel || message.channel == final_channel) return;
+    if (
+      !message.reference ||
+      !final_channel ||
+      message.channel == final_channel
+    )
+      return;
 
     let tagged = {
       message: message.reference,
@@ -30,7 +35,9 @@ export default {
       destination: final_channel,
     };
 
-    tagged.message = await message.channel.messages.fetch(tagged.message.messageId);
+    tagged.message = await message.channel.messages.fetch(
+      tagged.message.messageId
+    );
 
     if (range != 0) {
       const messages = await tagged.location.messages.fetch({
@@ -39,7 +46,7 @@ export default {
       });
 
       messages.sort((a, b) => a.createdTimestamp - b.createdTimestamp);
-      messages.forEach((msg) => {
+      messages.forEach(msg => {
         if (msg.id != tagged.message.id && msg.id != message.id) {
           tagged.siblings.push(msg);
         }
@@ -51,19 +58,27 @@ export default {
         const hook = await create_webhook_if_not_exists(
           tagged.destination,
           msg.author.username,
-          msg.author.avatarURL({ size: 1024 }),
+          msg.author.avatarURL({ size: 1024 })
         );
         console.log(hook);
-        await hook.send({ content: msg.content, embeds: [...msg.embeds] });
+        await hook.send({
+          content: msg.content,
+          embeds: [...msg.embeds],
+          attachments: [...msg.attachments],
+        });
         msg.delete();
       }
     } else {
       const hook = await create_webhook_if_not_exists(
         tagged.destination,
         tagged.message.author.username,
-        tagged.message.author.avatarURL({ size: 1024 }),
+        tagged.message.author.avatarURL({ size: 1024 })
       );
-      await hook.send({ content: tagged.message.content, embeds: [...tagged.message.embeds] });
+      await hook.send({
+        content: tagged.message.content,
+        embeds: [...tagged.message.embeds],
+        attachments: [...tagged.message.attachments],
+      });
       tagged.message.delete();
     }
     await message.react(EMOJIS.CHECK);
