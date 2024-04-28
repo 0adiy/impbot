@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from "discord.js";
 import config from "../config.js";
-const axios = require("axios");
-const cheerio = require("cheerio");
+import axios from "axios";
+import { load } from "cheerio";
 
 async function getSongLink(songName) {
   let responseData = { status: 400, song: null };
@@ -30,7 +30,7 @@ async function getSongLink(songName) {
 async function scrapeLyrics(url) {
   try {
     const response = await axios.get(url);
-    const $ = cheerio.load(response.data);
+    const $ = load(response.data);
     const lyrics = $("pre.lyric-body").text().trim();
     return lyrics;
   } catch (error) {
@@ -67,9 +67,10 @@ export default {
    */
   async execute(interaction, client) {
     const songName = interaction.options.getString("song");
-    let response;
     let lyrics = await getSongLyrics(songName);
-    response = lyrics == null ? "No lyrics found" : lyrics;
+    // TODO - add multi-emebeds (each emebed can have upto 6000 chars while simple message can have upto 2000 chars)
+    // and even maybe pagination
+    let response = lyrics?.slice(0, 1900) ?? "No lyrics found";
     await interaction.reply(response);
   },
 };
