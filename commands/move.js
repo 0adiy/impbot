@@ -60,11 +60,10 @@ export default {
           msg.author.username,
           msg.author.avatarURL({ size: 1024 })
         );
-        console.log(hook);
         await hook.send({
           content: msg.content,
           embeds: [...msg.embeds],
-          attachments: [...msg.attachments],
+          files: [...msg.attachments.map(attachment => attachment.attachment)],
         });
         msg.delete();
       }
@@ -77,7 +76,11 @@ export default {
       await hook.send({
         content: tagged.message.content,
         embeds: [...tagged.message.embeds],
-        attachments: [...tagged.message.attachments],
+        files: [
+          ...tagged.message.attachments.map(
+            attachment => attachment.attachment
+          ),
+        ],
       });
       tagged.message.delete();
     }
