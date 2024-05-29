@@ -19,6 +19,7 @@
     "cheerio": "^1.0.0-rc.12",
     "discord.js": "^14.14.1",
     "glob": "^10.3.10",
+    "lyrixcope": "^1.0.1",
     "mongoose": "^8.0.3"
   },
   "devDependencies": {
