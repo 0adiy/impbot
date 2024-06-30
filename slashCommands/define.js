@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, EmbedBuilder, Embed } from "discord.js";
 import config from "../config.js";
 import { COLORS } from "../utils/enums.js";
-import { getRandomItems, capitalize_First_Letter } from "../utils/generalUtils.js";
+import { getRandomItems, capitalize_First_Letter, logEvent } from "../utils/generalUtils.js";
 
 async function get_Definition_Of_Given_Word(interaction, word) {
   let title = "",
@@ -45,7 +45,7 @@ async function get_Definition_Of_Given_Word(interaction, word) {
       name: "Part of speech:",
       value: capitalize_First_Letter(_w.meanings[0].partOfSpeech),
     });
-    if (_w.phonetics) {
+    if (_w.phonetics && _w.phonetics.length > 0) {
       let _p = _w.phonetics[0];
       if (_p.text) embed.addFields({ name: "Phonetic:", value: _p.text });
       if (_p.audio) embed.addFields({ name: "Pronounciation:", value: _p.audio });
@@ -56,7 +56,9 @@ async function get_Definition_Of_Given_Word(interaction, word) {
     );
     let photo_data = await photo_request.json();
     let random_photo = getRandomItems(photo_data.hits, 1)[0];
-    embed.setImage(random_photo.largeImageURL);
+    if(random_photo && random_photo.largeImageURL){
+      embed.setImage(random_photo.largeImageURL);
+    }
   }
 
   return embed;
@@ -64,11 +66,11 @@ async function get_Definition_Of_Given_Word(interaction, word) {
 
 export default {
   data: new SlashCommandBuilder()
-    .setName("word")
+    .setName("define")
     .setDescription("Look up definitions of a given word")
     .setDMPermission(false)
     .addStringOption((option) =>
-      option.setName("query").setDescription("The word to look up").setRequired(true),
+      option.setName("word").setDescription("The word to look up").setRequired(true),
     ),
   /**
    *
@@ -77,8 +79,12 @@ export default {
    */
   async execute(interaction, client) {
     await interaction.deferReply();
-    const word = interaction.options.getString("query");
-    const response = await get_Definition_Of_Given_Word(interaction, word);
-    await interaction.editReply({ embeds: [response] });
+    const word = interaction.options.getString("word");
+    try {
+      const response = await get_Definition_Of_Given_Word(interaction, word);
+      await interaction.editReply({ embeds: [response] });
+    } catch (e) {
+      await logEvent("ERR", client, e)
+    }
   },
 };
