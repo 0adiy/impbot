@@ -1,3 +1,5 @@
+import config from "../config.js";
+
 function getFutureTimestamp(days, hours, minutes, seconds) {
   const now = Date.now();
 
@@ -78,11 +80,13 @@ async function sleep(ms) {
   await new Promise(r => setTimeout(r, ms));
 }
 
-async function logEvent(type, client, information){
-  const logChannel = await client.channels.cache.get("1255925885563961364");
+async function logEvent(type, client, information) {
+  const logChannel = await client.channels.cache.get(config.logChannel);
   if (type == "DM") {
     let message = information;
-    logChannel.send(`:speech_balloon: ${message.author.username}: ${message.content}`);
+    logChannel.send(
+      `:speech_balloon: ${message.author.username}: ${message.content}`
+    );
     return;
   }
   if (type == "ERR") {
@@ -91,10 +95,11 @@ async function logEvent(type, client, information){
   }
   if (type == "REPORT") {
     let report = information;
-    logChannel.send(`:triangular_flag_on_post: ${report.reporter} reported ${report.url}`);
+    logChannel.send(
+      `:triangular_flag_on_post: ${report.reporter} reported ${report.url}`
+    );
   }
 }
-
 
 export {
   getFutureTimestamp,
@@ -106,5 +111,5 @@ export {
   getRandomItems,
   capitalize_First_Letter,
   sleep,
-  logEvent
+  logEvent,
 };
