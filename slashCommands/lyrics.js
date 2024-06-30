@@ -1,6 +1,8 @@
-import { SlashCommandBuilder } from "discord.js";
+import { SlashCommandBuilder, EmbedBuilder } from "discord.js";
 import config from "../config.js";
 import { configureLyrixcope, getSongLyrics } from "lyrixcope";
+import { logEvent, splitStringAtIntervals } from "../utils/generalUtils.js";
+import { COLORS } from "../utils/enums.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -32,10 +34,24 @@ export default {
     );
     const songName = interaction.options.getString("song");
     const artistName = interaction.options.getString("artist") ?? "";
-    let response = await getSongLyrics(songName, artistName);
-    // TODO - add multi-emebeds (each emebed can have upto 6000 chars while simple message can have upto 2000 chars)
-    // and even maybe paginationr
-    let lyrics = response.status == 200 ? response.lyrics : "No lyrics found";
-    await interaction.followUp(lyrics);
+    try {
+      let response = await getSongLyrics(songName, artistName);
+      let title =
+        response.status == 200
+          ? `${response.song.song} by ${response.song.artist}`
+          : "Not found.";
+      let lyrics =
+        response.status == 200
+          ? response.lyrics
+          : "We were unable to find lyrics for this one.";
+      const embed = new EmbedBuilder()
+        .setTitle(title)
+        .setDescription(lyrics)
+        .setTimestamp(new Date())
+        .setColor(COLORS.SUCCESS);
+      await interaction.followUp({ embeds: [embed] });
+    } catch (e) {
+      await logEvent("ERR", client, e);
+    }
   },
 };
