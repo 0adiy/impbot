@@ -4,10 +4,13 @@ import config from "../config.js";
 export default {
   data: new SlashCommandBuilder()
     .setName("color")
-    .setDescription("Generates image based on specific hex colour")
+    .setDescription("Previews a specific hex colour")
     .setDMPermission(false)
-    .addStringOption((option) =>
-      option.setName("colour").setDescription("The desired colour to preview").setRequired(true),
+    .addStringOption(option =>
+      option
+        .setName("colour")
+        .setDescription("The desired colour to preview (e.g. #FFFFFF)")
+        .setRequired(true)
     ),
   /**
    *
