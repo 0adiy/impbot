@@ -49,7 +49,7 @@ export default {
     const formattedTime = formatTimeString(timeString);
     if (formattedTime.hasErr) {
       interaction.reply(
-        `The time is in invalid format. Please recheck and try again. Time provided:\n${timeString}`,
+        `The time format is invalid. Please recheck and try again. Time provided: ${timeString}`,
       );
       return;
     }

@@ -39,7 +39,7 @@ function setReminder(reminder, duration, client) {
 
 function sendReminderAlert(client, reminder) {
   const channel = client.channels.cache.get(reminder.channelId);
-  channel.send(`<@${reminder.userId}> its the time.\n${reminder.reminder}`);
+  channel.send(`<@${reminder.userId}> It's the time:\n${reminder.reminder}`);
 }
 
 async function getChannel(param, client, message) {
