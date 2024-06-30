@@ -36,15 +36,15 @@ async function getPic(api, query, limit) {
 export default {
   data: new SlashCommandBuilder()
     .setName("pic")
-    .setDescription("Search beautiful pictures")
+    .setDescription("Search beautiful pictures.")
     .setDMPermission(false)
     .addStringOption((option) =>
       option.setName("search").setDescription("The term to search").setRequired(true),
     )
     .addStringOption((option) =>
       option
-        .setName("api")
-        .setDescription("The API to use")
+        .setName("service")
+        .setDescription("Select the service")
         .setRequired(true)
         .addChoices(
           { name: "Pixabay", value: "api_pixabay" },
@@ -66,7 +66,7 @@ export default {
   async execute(interaction, client) {
     const limit = interaction.options.getInteger("limit") ?? 4;
     const query = interaction.options.getString("search");
-    const api = interaction.options.getString("api");
+    const api = interaction.options.getString("service");
 
     const response = await getPic(api, query, limit);
     interaction.reply(`Found ${response.length} images on ${query}`);
