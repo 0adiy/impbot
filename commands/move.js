@@ -8,6 +8,7 @@ import {
 export default {
   name: "move",
   description: "Moves messages to some other desired channel",
+  isPrivate: false,
   aliases: ["move", "m", "shift"],
   guildOnly: true,
   args: ["channel", "range"],

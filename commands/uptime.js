@@ -3,6 +3,7 @@ import { COLORS } from "../utils/enums.js";
 
 export default {
   name: "uptime",
+  isPrivate: false,
   args: [],
   description: "Displays bot's uptime information.",
   aliases: ["u"],

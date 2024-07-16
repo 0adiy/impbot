@@ -8,6 +8,7 @@ function capitalize_First_Letter(str) {
 
 export default {
   name: "help",
+  isPrivate: false,
   args: [],
   aliases: ["h"],
   description: "Provides descriptions of available commands.",

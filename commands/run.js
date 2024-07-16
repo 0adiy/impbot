@@ -77,6 +77,7 @@ async function evaluateCode(language, code) {
 
 export default {
   name: "run",
+  isPrivate: false,
   aliases: ["r"],
   description: "Executes the provided code in the specified programming language.",
   guildOnly: true,

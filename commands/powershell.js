@@ -6,6 +6,7 @@ import { Client, Message } from "discord.js";
 
 export default {
   name: "powershell",
+  isPrivate: true,
   args: ["cmd"],
   aliases: ["ps"],
   description: "(only for SuperUsers) Runs a powershell command.",

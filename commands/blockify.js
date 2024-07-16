@@ -3,6 +3,7 @@ function wrapCode(language, code) {
 }
 export default {
   name: "blockify",
+  isPrivate: false,
   aliases: ["blockify", "wrap", "b", "w"],
   description: "Wraps a message in code block.",
   guildOnly: true,

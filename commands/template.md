@@ -16,6 +16,7 @@ Each command file should have these properties in the default exported object
 ```js
 export default {
   name: 'ping',
+  isPrivate: false,
   aliases: [ 'p', 'pong' ],
   guildOnly: false,
   args: [],

@@ -49,6 +49,7 @@ async function execute(client, message, args) {
 
 export default {
   name: "eval",
+  isPrivate: true,
   aliases: ["e"],
   description: "Evaluates code in bot's runtime environment. Special privileges required.",
   guildOnly: false,
