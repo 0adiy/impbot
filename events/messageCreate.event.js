@@ -15,23 +15,12 @@ export default {
   async execute(message, client) {
     if (message.author.bot) return;
 
-    // TODO - Separate this logic upto //end
-    // const msgIn = message.guild
-    //   ? chalk.black.bgGreen(message.guild?.nameAcronym)
-    //   : chalk.black.bgWhite("Dm");
-
-    // console.log(
-    //   `🗨️ ${chalk.bgRed(message.author.username)} in ${msgIn} has ${chalk.gray(
-    //     message.content
-    //   )}`
-    // );
-    //end
+    // NOTE No need to log every message in console
 
     if (!message.content.startsWith(config.prefix)) {
       await messageMiddleWare(message, client);
       return;
     }
-    // if (!message.guild) return; //REVIEW - does this mean DMs are not allowed?
 
     const args = message.content.slice(config.prefix.length).split(/ +|\n/g);
     const commandName = args.shift().toLowerCase();
