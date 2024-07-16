@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, EmbedBuilder } from "discord.js";
 import config from "../config.js";
 import { configureLyrixcope, getSongLyrics } from "lyrixcope";
-import { logEvent } from "../utils/generalUtils.js";
+import {logEvent, splitStringAtIntervals} from "../utils/generalUtils.js";
 import { COLORS } from "../utils/enums.js";
 
 export default {
@@ -36,14 +36,8 @@ export default {
     const artistName = interaction.options.getString("artist") ?? "";
     try {
       let response = await getSongLyrics(songName, artistName);
-      let title =
-        response.status == 200
-          ? `${response.song.song} by ${response.song.artist}`
-          : "Not found.";
-      let lyrics =
-        response.status == 200
-          ? response.lyrics
-          : "We were unable to find lyrics for this one.";
+      let title = response.status == 200 ? `${response.song.song} by ${response.song.artist}` : "Not found.";
+      let lyrics = response.status == 200 ? response.lyrics : "We were unable to find lyrics for this one.";
       const embed = new EmbedBuilder()
         .setTitle(title)
         .setDescription(lyrics)

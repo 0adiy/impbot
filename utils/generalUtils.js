@@ -101,6 +101,14 @@ async function logEvent(type, client, information) {
   }
 }
 
+function splitStringAtIntervals(str, interval) {
+  let result = [];
+  for (let i = 0; i < str.length; i += interval) {
+    result.push(str.substring(i, i + interval));
+  }
+  return result;
+}
+
 export {
   getFutureTimestamp,
   loadAndSetAllReminders,
@@ -112,4 +120,5 @@ export {
   capitalize_First_Letter,
   sleep,
   logEvent,
+  splitStringAtIntervals,
 };
