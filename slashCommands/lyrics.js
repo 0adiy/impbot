@@ -1,7 +1,7 @@
 import { SlashCommandBuilder, EmbedBuilder } from "discord.js";
 import config from "../config.js";
 import { configureLyrixcope, getSongLyrics } from "lyrixcope";
-import { logEvent, splitStringAtIntervals } from "../utils/generalUtils.js";
+import { logEvent } from "../utils/generalUtils.js";
 import { COLORS } from "../utils/enums.js";
 
 export default {
