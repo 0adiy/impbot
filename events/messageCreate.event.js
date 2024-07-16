@@ -28,7 +28,7 @@ export default {
     //end
 
     if (!message.content.startsWith(config.prefix)) {
-      messageMiddleWare(message, client);
+      await messageMiddleWare(message, client);
       return;
     }
     // if (!message.guild) return; //REVIEW - does this mean DMs are not allowed?

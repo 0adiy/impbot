@@ -45,7 +45,7 @@ import fs from "fs";
 //     });
 // }
 
-function messageMiddleWare(message, client) {
+async function messageMiddleWare(message, client) {
   const content = message.content;
   const pattern =
     /^(https?:\/\/(www\.)?)instagram(\.com(\/[A-Za-z0-9_-]+)?\/(p|reel)\/[A-Za-z0-9_-]+\/?)$/;
