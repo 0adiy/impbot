@@ -46,31 +46,7 @@ import fs from "fs";
 // }
 
 async function messageMiddleWare(message, client) {
-  const content = message.content;
-  const pattern =
-    /^(https?:\/\/(www\.)?)instagram(\.com(\/[A-Za-z0-9_-]+)?\/(p|reel)\/[A-Za-z0-9_-]+\/?)$/;
-  if (pattern.test(content)) {
-    const newContent = content.replace(
-      pattern,
-      (m, p1, p2, p3) => p1 + "ddinstagram" + p3
-    );
-    message.delete();
-    message.channel.send(newContent);
-  }
-
-  // if (is_Instagram_Reel(message.content)) {
-  //   message.channel.send("Instagram Reel detected.").then((__message) => {
-  //     get_Direct_Instagram_Reel_Video_URL(message.content, (video_url) => {
-  //       __message.edit(`Instagram Reel fetched: ${video_url}`);
-  //       download_Video(video_url, "tmp_vids/output.mp4", (output) => {
-  //         __message.edit(`Reel downloaded successfully.`);
-  //         message.channel.send({
-  //           files: [output],
-  //         });
-  //       });
-  //     });
-  //   });
-  // }
+  
 }
 
 export { messageMiddleWare };
