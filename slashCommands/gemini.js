@@ -8,13 +8,13 @@ export default {
     .addStringOption(option =>
       option
         .setName("query")
-        .setDescription("The question to ask Gemini")
+        .setDescription("Enter your prompt")
         .setRequired(true)
     )
     .addAttachmentOption(option =>
       option
         .setName("image")
-        .setDescription("An image to use as context")
+        .setDescription("Provide an attachment")
         .setRequired(false)
     ),
   /**
@@ -29,7 +29,7 @@ export default {
     const query = interaction.options.getString("query");
     const image = interaction.options.getAttachment("image");
 
-    const prompt = `${interaction.user.id} @${interaction.user.username}#${interaction.user.discriminator}: ${query}`;
+    const prompt = `@${interaction.user.username}: ${query}`;
 
     interaction.deferReply();
 
