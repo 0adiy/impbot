@@ -1,13 +1,6 @@
-import { Client, Message } from "discord.js";
 import { logEvent } from "../utils/generalUtils.js";
 import { EMOJIS } from "../utils/enums.js";
 import config from "../config.js";
-
-/**
- *
- * @param {Message} message
- * @param {Client} client
- */
 
 // function is_Instagram_Reel(url) {
 //   const instagramReelRegex =
@@ -47,6 +40,12 @@ import config from "../config.js";
 //     });
 // }
 
+/**
+ * @typedef {import("discord.js").Client} Client
+ * @typedef {import("discord.js").Message} Message
+ * @param {Message} message
+ * @param {Client} client
+ */
 async function messageMiddleWare(message, client) {
   //log DMS if enabled
   if (config.DMLogging && message.guild == null) {

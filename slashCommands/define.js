@@ -1,7 +1,12 @@
 import { SlashCommandBuilder, EmbedBuilder, Embed } from "discord.js";
 import config from "../config.js";
 import { COLORS } from "../utils/enums.js";
-import { getRandomItems, capitalize_First_Letter, logEvent } from "../utils/generalUtils.js";
+import {
+  getRandomItems,
+  capitalize_First_Letter,
+  logEvent,
+} from "../utils/generalUtils.js";
+import wordsList from "an-array-of-english-words" assert { type: "json" }; //eslint-disable-line
 
 async function get_Definition_Of_Given_Word(interaction, word) {
   let title = "",
@@ -48,15 +53,16 @@ async function get_Definition_Of_Given_Word(interaction, word) {
     if (_w.phonetics && _w.phonetics.length > 0) {
       let _p = _w.phonetics[0];
       if (_p.text) embed.addFields({ name: "Phonetic:", value: _p.text });
-      if (_p.audio) embed.addFields({ name: "Pronounciation:", value: _p.audio });
+      if (_p.audio)
+        embed.addFields({ name: "Pronounciation:", value: _p.audio });
       if (_w.origin) embed.addFields({ name: "Origin:", value: _w.origin });
     }
     let photo_request = await fetch(
-      `${config.apis.pixabay_photo_api.endpoint}?key=${config.apis.pixabay_photo_api.key}&q=${title}&image_type=photo`,
+      `${config.apis.pixabay_photo_api.endpoint}?key=${config.apis.pixabay_photo_api.key}&q=${title}&image_type=photo`
     );
     let photo_data = await photo_request.json();
     let random_photo = getRandomItems(photo_data.hits, 1)[0];
-    if(random_photo && random_photo.largeImageURL){
+    if (random_photo && random_photo.largeImageURL) {
       embed.setImage(random_photo.largeImageURL);
     }
   }
@@ -69,8 +75,12 @@ export default {
     .setName("define")
     .setDescription("Look up definitions of a given word")
     .setDMPermission(false)
-    .addStringOption((option) =>
-      option.setName("word").setDescription("The word to look up").setRequired(true),
+    .addStringOption(option =>
+      option
+        .setName("word")
+        .setDescription("The word to look up")
+        .setRequired(true)
+        .setAutocomplete(true)
     ),
   /**
    *
@@ -84,7 +94,15 @@ export default {
       const response = await get_Definition_Of_Given_Word(interaction, word);
       await interaction.editReply({ embeds: [response] });
     } catch (e) {
-      await logEvent("ERR", client, e)
+      await logEvent("ERR", client, e);
     }
+  },
+  async autocomplete(interaction) {
+    const word = interaction.options.getFocused();
+    // have to send only the first 10 results
+    const filteredWords = wordsList
+      .filter(w => w.toLowerCase().startsWith(word.toLowerCase()))
+      .slice(0, 10);
+    return interaction.respond(filteredWords.map(w => ({ name: w, value: w })));
   },
 };
