@@ -5,6 +5,7 @@ import {
   getRandomItems,
   capitalize_First_Letter,
   logEvent,
+  binarySearchLowerBound,
 } from "../utils/generalUtils.js";
 import wordsList from "an-array-of-english-words" assert { type: "json" }; //eslint-disable-line
 
@@ -99,10 +100,12 @@ export default {
   },
   async autocomplete(interaction) {
     const word = interaction.options.getFocused();
-    // have to send only the first 10 results
-    const filteredWords = wordsList
-      .filter(w => w.toLowerCase().startsWith(word.toLowerCase()))
-      .slice(0, 10);
-    return interaction.respond(filteredWords.map(w => ({ name: w, value: w })));
+    //NOTE - have to send only the first 10 results
+    const wordIndex = binarySearchLowerBound(wordsList, word);
+    return interaction.respond(
+      wordsList
+        .slice(wordIndex, wordIndex + 10)
+        .map(w => ({ name: w, value: w }))
+    );
   },
 };

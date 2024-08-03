@@ -109,6 +109,23 @@ function splitStringAtIntervals(str, interval) {
   return result;
 }
 
+function binarySearchLowerBound(array, word) {
+  let low = 0;
+  let high = array.length - 1;
+  let mid;
+  while (low <= high) {
+    mid = Math.floor((low + high) / 2);
+    if (array[mid] < word) {
+      low = mid + 1;
+    } else if (array[mid] > word) {
+      high = mid - 1;
+    } else {
+      return mid;
+    }
+  }
+  return low;
+}
+
 export {
   getFutureTimestamp,
   loadAndSetAllReminders,
@@ -121,4 +138,5 @@ export {
   sleep,
   logEvent,
   splitStringAtIntervals,
+  binarySearchLowerBound,
 };
