@@ -1,5 +1,6 @@
 import { ChatInputCommandInteraction, Client, Events } from "discord.js";
 import config from "../config.js";
+import { logEvent } from "../utils/generalUtils.js";
 
 export default {
   name: Events.InteractionCreate,
@@ -28,8 +29,11 @@ export default {
           content: "This is for devs 🤓",
           ephemeral: true,
         });
-
       command.execute(interaction, client);
+      await logEvent("SLASHCMD", client, {
+        interaction: interaction,
+        command: command,
+      });
     }
     //  else if (interaction.isButton()) {
     //   console.log("🔘 Button");

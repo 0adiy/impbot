@@ -1,45 +1,6 @@
 import { logEvent } from "../utils/generalUtils.js";
 import { EMOJIS } from "../utils/enums.js";
 import config from "../config.js";
-
-// function is_Instagram_Reel(url) {
-//   const instagramReelRegex =
-//     /^(https?:\/\/)?(www\.)?instagram\.com\/reel\/[a-zA-Z0-9_-]+\/?(\?.*)?$/;
-//   return instagramReelRegex.test(url);
-// }
-
-// function get_Direct_Instagram_Reel_Video_URL(url, callback) {
-//   fetch(url)
-//     .then((resp) => resp.json())
-//     .then((jsonData) => {
-//       const video_url = jsonData.graphql.shortcode_media.video_url;
-//       console.log("FETCH::SUCCESS");
-//       callback(video_url);
-//       return video_url;
-//     })
-//     .catch((error) => {
-//       console.error("ERR::FETCH", error);
-//     });
-// }
-
-// function download_Video(url, output, callback) {
-//   fetch(url)
-//     .then((response) => {
-//       if (!response.ok) {
-//         throw new Error(`ERR::HTTP.STATUS:${response.status}`);
-//       }
-//       return response.arrayBuffer();
-//     })
-//     .then((buffer) => {
-//       fs.writeFileSync(output, Buffer.from(buffer));
-//       console.log("DOWNLOAD::SUCCESS");
-//       callback(output);
-//     })
-//     .catch((error) => {
-//       console.error("DOWNLOAD::ERR:", error);
-//     });
-// }
-
 /**
  * @typedef {import("discord.js").Client} Client
  * @typedef {import("discord.js").Message} Message

@@ -2,6 +2,7 @@ import { Events, Message, Client, EmbedBuilder } from "discord.js";
 import chalk from "chalk";
 import config from "../config.js";
 import { messageMiddleWare } from "../middlewares/message.middleware.js";
+import { logEvent } from "../utils/generalUtils.js";
 
 export default {
   name: Events.MessageCreate,
@@ -15,8 +16,6 @@ export default {
   async execute(message, client) {
     if (message.author.bot) return;
 
-    // NOTE No need to log every message in console
-
     if (!message.content.startsWith(config.prefix)) {
       await messageMiddleWare(message, client);
       return;
@@ -27,12 +26,10 @@ export default {
 
     const command =
       client.messageCommands.get(commandName) ||
-      client.messageCommands.find(
-        // cmd => cmd.aliases && cmd.aliases.includes(commandName)
-        cmd => cmd.aliases?.includes(commandName)
-      );
+      client.messageCommands.find(cmd => cmd.aliases?.includes(commandName));
 
     if (!command) return;
+
     if (command.guildOnly && !message.channel.isTextBased())
       return message.reply("I can't execute that command inside DMs!");
 
@@ -62,8 +59,9 @@ export default {
 
     try {
       command.execute(client, message, args);
+      await logEvent("MSGCMD", client, { message: message, command: command });
     } catch (error) {
-      console.error(error);
+      await logEvent("ERR", client, error);
       message.reply(
         "There was an error trying to execute that command!\n" + error
       );

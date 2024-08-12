@@ -84,19 +84,32 @@ async function logEvent(type, client, information) {
   const logChannel = await client.channels.cache.get(config.logChannel);
   if (type == "DM") {
     let message = information;
-    logChannel.send(
+    return logChannel.send(
       `:speech_balloon: ${message.author.username}: ${message.content}`
     );
-    return;
   }
   if (type == "ERR") {
     let error = information;
-    logChannel.send(`\`\`\`js\n${error.name}: ${error.message}\n\`\`\``);
+    return logChannel.send(`\`\`\`js\n${error.name}: ${error.message}\n\`\`\``);
   }
   if (type == "REPORT") {
     let report = information;
-    logChannel.send(
+    return logChannel.send(
       `:triangular_flag_on_post: ${report.reporter} reported ${report.url}`
+    );
+  }
+  if (type == "MSGCMD") {
+    let message = information.message;
+    let command = information.command;
+    return logChannel.send(
+      `${message.author.username} used \`$${command.name}\`: ${message.url}`
+    );
+  }
+  if (type == "SLASHCMD") {
+    let interaction = information.interaction;
+    let command = information.command;
+    return logChannel.send(
+      `${interaction.user.username} used </${command.name}:${command.id}> in ${interaction.channel.name}`
     );
   }
 }
