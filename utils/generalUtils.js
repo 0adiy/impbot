@@ -41,11 +41,15 @@ function setReminder(reminder, duration, client) {
 
 function sendReminderAlert(client, reminder) {
   const channel = client.channels.cache.get(reminder.channelId);
+  const user = client.users.fetch(reminder.userId);
   const embed = new EmbedBuilder()
-    .setTitle(":bell: Reminder")
+    .setTitle(":bell: Gentle Reminder")
     .setDescription(reminder.reminder)
-    .setTimestamp(new Date())
-    .setColor(COLORS.SUCCESS);
+    .setColor(COLORS.SUCCESS)
+    .setAuthor({
+      name: user.username,
+      iconURL: user.displayAvatarURL(),
+    });
   channel.send({ content: `<@${reminder.userId}>`, embeds: [embed] });
 }
 
