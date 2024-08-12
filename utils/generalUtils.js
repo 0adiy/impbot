@@ -109,10 +109,7 @@ async function logEvent(type, client, information) {
   if (type == "SLASHCMD") {
     let interaction = information.interaction;
     let command = information.command.data;
-    logChannel.send(
-      `${EMOJIS.SLASHCMD} \`${interaction.user.username}\` : \`/${command.name}\` > https://discord.com/channels/${interaction.guildId}/${interaction.channelId}`
-    );
-    logChannel.send(
+    return logChannel.send(
       `${EMOJIS.SLASHCMD} \`${interaction.user.username}\` : \`/${command.name}\` > https://discord.com/channels/${interaction.guildId}/${interaction.channelId}/${interaction.id}`
     );
   }
