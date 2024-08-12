@@ -1,5 +1,6 @@
 import config from "../config.js";
-import { EMOJIS } from "./enums.js";
+import { COLORS, EMOJIS } from "./enums.js";
+import { EmbedBuilder } from "discord.js";
 
 function getFutureTimestamp(days, hours, minutes, seconds) {
   const now = Date.now();
@@ -40,7 +41,12 @@ function setReminder(reminder, duration, client) {
 
 function sendReminderAlert(client, reminder) {
   const channel = client.channels.cache.get(reminder.channelId);
-  channel.send(`<@${reminder.userId}> It's the time:\n${reminder.reminder}`);
+  const embed = new EmbedBuilder()
+    .setTitle(":bell: Reminder")
+    .setDescription(reminder.reminder)
+    .setTimestamp(new Date())
+    .setColor(COLORS.SUCCESS);
+  channel.send({ content: `<@${reminder.userId}>`, embeds: [embed] });
 }
 
 async function getChannel(param, client, message) {
