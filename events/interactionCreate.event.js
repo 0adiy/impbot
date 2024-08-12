@@ -24,11 +24,13 @@ export default {
       if (
         command.devloper &&
         !config.superUsersArray.includes(interaction.user.id)
-      )
+      ) {
         return interaction.reply({
           content: "This is for devs 🤓",
           ephemeral: true,
         });
+      }
+
       command.execute(interaction, client);
       await logEvent("SLASHCMD", client, {
         interaction: interaction,

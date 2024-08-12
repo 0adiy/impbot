@@ -110,7 +110,7 @@ async function logEvent(type, client, information) {
     let interaction = information.interaction;
     let command = information.command;
     return logChannel.send(
-      `${EMOJIS.SLASHCMD} \`${interaction.user.username}\` : </${command.name}:${command.id}> > ${interaction.channel.name}`
+      `${EMOJIS.SLASHCMD} \`${interaction.user.username}\` : ${command} > ${interaction.channel.name}`
     );
   }
 }
