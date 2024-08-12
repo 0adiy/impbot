@@ -1,4 +1,5 @@
 import config from "../config.js";
+import { EMOJIS } from "./enums.js";
 
 function getFutureTimestamp(days, hours, minutes, seconds) {
   const now = Date.now();
@@ -102,14 +103,14 @@ async function logEvent(type, client, information) {
     let message = information.message;
     let command = information.command;
     return logChannel.send(
-      `${message.author.username} used \`$${command.name}\`: ${message.url}`
+      `${EMOJIS.MSGCMD} \`${message.author.username}\` : \`$${command.name}\` > ${message.url}`
     );
   }
   if (type == "SLASHCMD") {
     let interaction = information.interaction;
     let command = information.command;
     return logChannel.send(
-      `${interaction.user.username} used </${command.name}:${command.id}> in ${interaction.channel.name}`
+      `${EMOJIS.SLASHCMD} \`${interaction.user.username}\` : </${command.name}:${command.id}> > ${interaction.channel.name}`
     );
   }
 }
