@@ -32,16 +32,16 @@ async function loadAndSetAllReminders(reminderSchema, client) {
   });
 }
 
-function setReminder(reminder, duration, client) {
-  setTimeout(() => {
-    sendReminderAlert(client, reminder);
+async function setReminder(reminder, duration, client) {
+  setTimeout(async () => {
+    await sendReminderAlert(client, reminder);
   }, duration);
   console.log("Reminder set.");
 }
 
-function sendReminderAlert(client, reminder) {
-  const channel = client.channels.cache.get(reminder.channelId);
-  const user = client.users.fetch(reminder.userId);
+async function sendReminderAlert(client, reminder) {
+  const channel = await client.channels.fetch(reminder.channelId);
+  const user = await client.users.fetch(reminder.userId);
   const embed = new EmbedBuilder()
     .setTitle(":bell: Gentle Reminder")
     .setDescription(reminder.reminder)

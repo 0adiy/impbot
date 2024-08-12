@@ -82,7 +82,7 @@ export default {
 
     const offset = new Date(reminder.date) - Date.now();
 
-    setReminder(reminder, offset, client);
+    await setReminder(reminder, offset, client);
 
     interaction.editReply(`The reminder was set. You will be reminded in ${timeString}.`);
   },
