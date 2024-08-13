@@ -26,12 +26,15 @@ export default {
       let range = args.shift() ?? 0;
 
       final_channel = await getChannel(final_channel, client, message);
+
       if (
         !message.reference ||
         !final_channel ||
         message.channel == final_channel
       )
-        return message.channel.send("invalid destination");
+        return message.channel.send(
+          `message.reference: ${message.reference}\nfinal channel: ${final_channel}\n${final_channel.name}`
+        );
 
       let tagged = {
         message: message.reference,
