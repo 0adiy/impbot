@@ -20,6 +20,8 @@ export default {
    */
   execute: async (client, message, args) => {
     try {
+      message.channel.send("hi");
+
       let final_channel = args.shift();
       let range = args.shift() ?? 0;
 
@@ -29,7 +31,7 @@ export default {
         !final_channel ||
         message.channel == final_channel
       )
-        return;
+        return message.channel.send("invalid destination");
 
       let tagged = {
         message: message.reference,
@@ -41,6 +43,8 @@ export default {
       tagged.message = await message.channel.messages.fetch(
         tagged.message.messageId
       );
+
+      message.channel.send("ln47");
 
       if (range != 0) {
         const messages = await tagged.location.messages.fetch({
