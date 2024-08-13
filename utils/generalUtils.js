@@ -101,13 +101,24 @@ async function logEvent(type, client, information) {
   }
   if (type == "ERR") {
     let error = information;
-    return logChannel.send(`\`\`\`js\n${error.name}: ${error.message}\n\`\`\``);
-  }
-  if (type == "REPORT") {
-    let report = information;
-    return logChannel.send(
-      `:triangular_flag_on_post: ${report.reporter} reported ${report.url}`
-    );
+    let embed = new EmbedBuilder()
+      .setTitle(error.name)
+      .setDescription(`\`\`\`js\n${error.toString()}\n${error.stack}\n\`\`\``)
+      .setFields([
+        {
+          name: "Cause",
+          value: error.cause,
+          inline: false,
+        },
+        {
+          name: "Message",
+          value: error.message,
+          inline: false,
+        },
+      ])
+      .setColor(COLORS.ERROR)
+      .setTimestamp(new Date());
+    return logChannel.send({ embeds: [embed] });
   }
   if (type == "MSGCMD") {
     let message = information.message;
