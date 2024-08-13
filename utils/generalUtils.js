@@ -100,27 +100,23 @@ async function logEvent(type, client, information) {
     );
   }
   if (type == "ERR") {
-    logChannel.send("uwu error");
     let error = information;
-    logChannel.send(
-      `${error.name}\n${error.cause}\n${error.message}\n${error.toString()}`
-    );
     logChannel.send(error.stack);
     let embed = new EmbedBuilder()
-      .setTitle(error.name || "Unknown Error")
-      .setDescription(`\`\`\`js\n${error.toString()}\n${error.stack}\n\`\`\``)
-      // .setFields([
-      //   {
-      //     name: "Cause",
-      //     value: error.cause,
-      //     inline: false,
-      //   },
-      //   {
-      //     name: "Message",
-      //     value: error.message,
-      //     inline: false,
-      //   },
-      // ])
+      .setTitle(error.toString() || "Unknown Error")
+      .setDescription(`\`\`\`js\n${error.stack}\n\`\`\``)
+      .setFields([
+        {
+          name: "Name",
+          value: error.name,
+          inline: true,
+        },
+        {
+          name: "Message",
+          value: error.message,
+          inline: false,
+        },
+      ])
       .setColor(COLORS.ERROR)
       .setTimestamp(new Date());
     return logChannel.send({ embeds: [embed] });
