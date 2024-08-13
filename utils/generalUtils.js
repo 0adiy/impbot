@@ -100,6 +100,7 @@ async function logEvent(type, client, information) {
     );
   }
   if (type == "ERR") {
+    logChannel.send("uwu error");
     let error = information;
     let embed = new EmbedBuilder()
       .setTitle(error.name)

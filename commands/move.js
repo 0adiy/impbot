@@ -20,10 +20,6 @@ export default {
    */
   execute: async (client, message, args) => {
     try {
-
-      const thyMother = "fat";
-      thyMother(); //deliberately causing an error
-
       let final_channel = args.shift();
       let range = args.shift() ?? 0;
 
