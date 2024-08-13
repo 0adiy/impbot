@@ -43,8 +43,6 @@ export default {
         tagged.message.messageId
       );
 
-      message.channel.send("ln47");
-
       if (range != 0) {
         const messages = await tagged.location.messages.fetch({
           before: tagged.message.id,
