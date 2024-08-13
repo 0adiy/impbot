@@ -1,4 +1,5 @@
 import { SlashCommandBuilder } from "discord.js";
+import { logEvent } from "../utils/generalUtils";
 
 export default {
   data: new SlashCommandBuilder()
@@ -32,19 +33,21 @@ export default {
     const prompt = `@${interaction.user.username}: ${query}`;
 
     interaction.deferReply();
-
-    let result;
-    if (image) {
-      const imageData = {
-        data: await image.toBuffer(),
-        mimeType: image.contentType,
-      };
-      result = await model.generateContent([prompt, imageData]);
-    } else {
-      result = await model.generateContent(prompt);
+    try {
+      let result;
+      if (image) {
+        const imageData = {
+          data: await image.toBuffer(),
+          mimeType: image.contentType,
+        };
+        result = await model.generateContent([prompt, imageData]);
+      } else {
+        result = await model.generateContent(prompt);
+      }
+      const response = result.response.text();
+      interaction.editReply(response);
+    } catch (error) {
+      await logEvent("ERR", client, error);
     }
-
-    const response = result.response.text();
-    interaction.editReply(response);
   },
 };

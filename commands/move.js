@@ -20,8 +20,6 @@ export default {
    */
   execute: async (client, message, args) => {
     try {
-      message.channel.send("hi");
-
       let final_channel = args.shift();
       let range = args.shift() ?? 0;
 
@@ -32,9 +30,7 @@ export default {
         !final_channel ||
         message.channel == final_channel
       )
-        return message.channel.send(
-          `message.reference: ${message.reference}\nfinal channel: ${final_channel}\n${final_channel.name}`
-        );
+        return;
 
       let tagged = {
         message: message.reference,
