@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "discord.js";
-import { logEvent } from "../utils/generalUtils";
+import { logEvent } from "../utils/generalUtils.js";
 
 export default {
   data: new SlashCommandBuilder()
