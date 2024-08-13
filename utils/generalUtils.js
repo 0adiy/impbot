@@ -101,22 +101,9 @@ async function logEvent(type, client, information) {
   }
   if (type == "ERR") {
     let error = information;
-    logChannel.send(error.stack);
     let embed = new EmbedBuilder()
-      .setTitle(error.toString() || "Unknown Error")
+      .setTitle("Error occured")
       .setDescription(`\`\`\`js\n${error.stack}\n\`\`\``)
-      .setFields([
-        {
-          name: "Name",
-          value: error.name,
-          inline: true,
-        },
-        {
-          name: "Message",
-          value: error.message,
-          inline: false,
-        },
-      ])
       .setColor(COLORS.ERROR)
       .setTimestamp(new Date());
     return logChannel.send({ embeds: [embed] });
