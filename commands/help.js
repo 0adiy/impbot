@@ -21,12 +21,17 @@ export default {
    * @param {Message} message - The message object.
    */
   execute: async (client, message) => {
+    const isSuper = config.superUsersArray.includes(message.author.id);
+    let description = isSuper
+      ? "Also includes private commands."
+      : "DM the bot if you have any complaints.";
     let embed = new EmbedBuilder()
       .setTitle(`Available commands`)
-      .setDescription("DM the bot if you have any complaints.")
+      .setDescription(description)
       .setColor(COLORS.SECONDARY);
     client.messageCommands.forEach(cmd => {
-      if (cmd.isPrivate) return;
+      if (cmd.isPrivate && !config.superUsersArray.includes(message.author.id))
+        return;
       const usage = cmd.args
         ? `${config.prefix}${cmd.name} ${cmd.args.map(a => `<${a}>`).join(" ")}`
         : `${config.prefix}${cmd.name}`;
