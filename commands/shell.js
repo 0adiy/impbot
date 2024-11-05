@@ -24,7 +24,7 @@ export default {
     const code = args.join(" ").replace(/^```\w* |\n?```$/g, "");
     const shell = process.platform == "win32" ? "powershell" : "bash";
     exec(code, { shell: shell }, (error, stdout, stderr) => {
-      if (!(stdout || error || stderr)) {
+      if (!error) {
         message.react(EMOJIS.CHECK);
       } else {
         message.react(EMOJIS.CROSS);
