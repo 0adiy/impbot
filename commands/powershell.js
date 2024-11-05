@@ -9,7 +9,7 @@ export default {
   isPrivate: true,
   args: ["cmd"],
   aliases: ["ps"],
-  description: "(only for SuperUsers) Runs a powershell command.",
+  description: "Runs a powershell command.",
   guildOnly: false,
   /**
    * Executes the given code in powershell and sends the response back.
@@ -19,16 +19,18 @@ export default {
    * @param {Array} args - The arguments passed to the command.
    */
   execute: async (client, message, args) => {
-    // validation
+    //REVIEW - Do validation for all .isPrivate commands instead of here
     if (!config.superUsersArray.includes(message.author.id)) return;
-
     const code = args.join(" ").replace(/^```\w* |\n?```$/g, "");
-
-    exec(code, { shell: "powershell" }, (error, stdout, stderr) => {
-      if (!(stdout || error || stderr)) return message.react(EMOJIS.CHECK);
-
+    const shell = process.platform == "win32" ? "powershell" : "bash";
+    exec(code, { shell: shell }, (error, stdout, stderr) => {
+      if (!(stdout || error || stderr)) {
+        message.react(EMOJIS.CHECK);
+      } else {
+        message.react(EMOJIS.CROSS);
+      }
       message.reply({
-        content: "```" + `ansi\n${stdout || error || stderr}` + "```",
+        content: `\`\`\`ansi\n${stdout || error || stderr}\`\`\``,
       });
     });
   },
