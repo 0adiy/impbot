@@ -11,12 +11,6 @@ export default {
         .setName("query")
         .setDescription("Enter your prompt")
         .setRequired(true)
-    )
-    .addAttachmentOption(option =>
-      option
-        .setName("image")
-        .setDescription("Provide an attachment")
-        .setRequired(false)
     ),
   /**
    * Shows pfp of a desired user
@@ -27,37 +21,43 @@ export default {
    * @param {Client} client
    */
   async execute(interaction, client) {
+    interaction.deferReply();
+
     const model = client.aiModel;
     const query = interaction.options.getString("query");
-    const image = interaction.options.getAttachment("image");
 
-    // REVIEW - it loads recent 5 messages from channel and uses only first 500 charcters of it, incase it's too long
-    // it still can cause errors though, need to double check (delete after reading)
-    const botPermissions = interaction.channel.permissionsFor(client.user);
-
+    const MIN_PROMPT_LENGTH = 1500;
     let prompt = "";
-    if (botPermissions.has("READ_MESSAGE_HISTORY")) {
-      const messages = await interaction.channel.messages.fetch({ limit: 5 });
-      messages.forEach(msg => {
-        prompt += `@${msg.author.username}: ${msg.content.slice(0, 500)}\n`;
+    let fetchedMessages = [];
+    let lastMessageId = null;
+
+    const botPermissions = interaction.channel.permissionsFor(client.user);
+    if (!botPermissions.has("READ_MESSAGE_HISTORY"))
+      return interaction.editReply("Necessary permissions missing");
+
+    while (prompt.length < MIN_PROMPT_LENGTH) {
+      let messages = await interaction.channel.messages.fetch({
+        limit: 5,
+        ...(lastMessageId ? { before: lastMessageId } : {}),
       });
+      if (messages.size == 0) break;
+      messages = messages.filter(
+        message =>
+          !message.author.bot ||
+          message.author.id === interaction.client.user.id
+      );
+      messages.sort((a, b) => a.createdTimestamp - b.createdTimestamp);
+      messages.forEach(message => {
+        prompt += `${message.author.username.slice(0, 3)}: ${
+          message.content
+        }\n`;
+        lastMessageId = message.id;
+      });
+      if (prompt.length >= MIN_PROMPT_LENGTH) break;
     }
-
-    prompt = "Context:\n" + prompt;
-    prompt += `\nQuery:\n@${interaction.user.username}: ${query}`;
-
-    interaction.deferReply();
+    prompt += `${interaction.user.username.slice(0, 3)}: ${query}`;
     try {
-      let result;
-      if (image) {
-        const imageData = {
-          data: await image.toBuffer(),
-          mimeType: image.contentType,
-        };
-        result = await model.generateContent([prompt, imageData]);
-      } else {
-        result = await model.generateContent(prompt);
-      }
+      let result = await model.generateContent(prompt);
       const response = result.response.text();
       interaction.editReply(response);
     } catch (error) {
