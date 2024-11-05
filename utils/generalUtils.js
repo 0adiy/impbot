@@ -3,7 +3,7 @@ import { COLORS, EMOJIS } from "./enums.js";
 import { EmbedBuilder } from "discord.js";
 
 // Global list for storing cancellable timeout IDs
-const reminderTimeoutList = [];
+let reminderTimeoutList = [];
 
 function getFutureTimestamp(days, hours, minutes, seconds) {
   const now = Date.now();
@@ -30,8 +30,9 @@ function getFutureTimestamp(days, hours, minutes, seconds) {
  *  (delete after reading)
  */
 async function loadAndSetAllReminders(reminderSchema, client) {
-  // clear the already existing reminders
+  // clear the already existing reminders using IDs and clear the list as well
   reminderTimeoutList.forEach(id => clearTimeout(id));
+  reminderTimeoutList = [];
 
   let currentDate = new Date();
   let twoDaysAhead = new Date(currentDate.getTime() + 2 * 24 * 60 * 60 * 1000); // 2 days ahead
