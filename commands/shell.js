@@ -19,8 +19,6 @@ export default {
    * @param {Array} args - The arguments passed to the command.
    */
   execute: async (client, message, args) => {
-    //REVIEW - Do validation for all .isPrivate commands instead of here
-    if (!config.superUsersArray.includes(message.author.id)) return;
     const code = args.join(" ").replace(/^```\w* |\n?```$/g, "");
     const shell = process.platform == "win32" ? "powershell" : "bash";
     exec(code, { shell: shell }, (error, stdout, stderr) => {

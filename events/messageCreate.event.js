@@ -3,6 +3,7 @@ import chalk from "chalk";
 import config from "../config.js";
 import { messageMiddleWare } from "../middlewares/message.middleware.js";
 import { logEvent } from "../utils/generalUtils.js";
+import { EMOJIS } from "../utils/enums.js";
 
 export default {
   name: Events.MessageCreate,
@@ -32,6 +33,12 @@ export default {
 
     if (command.guildOnly && !message.channel.isTextBased())
       return message.reply("I can't execute that command inside DMs!");
+
+    if (
+      command.isPrivate &&
+      !config.superUsersArray.includes(message.author.id)
+    )
+      return message.reply(`Severe skill issue detected.`);
 
     if (command.args?.length > args.length) {
       const desc = `\`${config.prefix}${command.name}\` requires ${command.args?.length} arguments.`;
