@@ -4,6 +4,8 @@ import { loadAndSetAllReminders } from "../utils/generalUtils.js";
 import reminderSchema from "../models/reminder.model.js";
 // import { loadMessageCommands } from "../handlers/messageCommandHandler.js";
 
+const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
+
 export default {
   name: Events.ClientReady,
   once: true,
@@ -12,7 +14,15 @@ export default {
 
     // Loading Commands
     // loadMessageCommands(client);
-    await loadAndSetAllReminders(reminderSchema, client);
+
+    // REVIEW - awaits were removed from here, don't think we need to wait for anything actually they can just happen (remove this line after reading)
+    // Call loadAndSetAllReminders immediately when the bot starts and then call it every 24 hours
+    loadAndSetAllReminders(reminderSchema, client);
+    setInterval(
+      () => loadAndSetAllReminders(reminderSchema, client),
+      ONE_DAY_IN_MS
+    );
+
     loadSlashCommands(client);
   },
 };

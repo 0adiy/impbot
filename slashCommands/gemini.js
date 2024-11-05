@@ -22,6 +22,7 @@ export default {
    * Shows pfp of a desired user
    *
    * @typedef {import("discord.js").ChatInputCommandInteraction} ChatInputCommandInteraction
+   * @typedef {import("discord.js").Client} Client
    * @param {ChatInputCommandInteraction} interaction
    * @param {Client} client
    */
@@ -30,7 +31,20 @@ export default {
     const query = interaction.options.getString("query");
     const image = interaction.options.getAttachment("image");
 
-    const prompt = `@${interaction.user.username}: ${query}`;
+    // REVIEW - it loads recent 5 messages from channel and uses only first 500 charcters of it, incase it's too long
+    // it still can cause errors though, need to double check (delete after reading)
+    const botPermissions = interaction.channel.permissionsFor(client.user);
+
+    let prompt = "";
+    if (botPermissions.has("READ_MESSAGE_HISTORY")) {
+      const messages = await interaction.channel.messages.fetch({ limit: 5 });
+      messages.forEach(msg => {
+        prompt += `@${msg.author.username}: ${msg.content.slice(0, 500)}\n`;
+      });
+    }
+
+    prompt = "Context:\n" + prompt;
+    prompt += `\nQuery:\n@${interaction.user.username}: ${query}`;
 
     interaction.deferReply();
     try {

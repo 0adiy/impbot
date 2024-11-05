@@ -2,6 +2,9 @@ import config from "../config.js";
 import { COLORS, EMOJIS } from "./enums.js";
 import { EmbedBuilder } from "discord.js";
 
+// Global list for storing cancellable timeout IDs
+const reminderTimeoutList = [];
+
 function getFutureTimestamp(days, hours, minutes, seconds) {
   const now = Date.now();
 
@@ -20,12 +23,25 @@ function getFutureTimestamp(days, hours, minutes, seconds) {
   return futureDate;
 }
 
+/* REVIEW - the changes here connects a lot of functions to each other, might wanna change how they are structured?
+ *  the global variable is also weird, maybe wanna change that too
+ *  current logic is to remove all pending reminders, then get all the new 2 days ahead reminders and load them in
+ *  this function itself it supposed to be called every 24 hours so there should be no misses
+ *  (delete after reading)
+ */
 async function loadAndSetAllReminders(reminderSchema, client) {
+  // clear the already existing reminders
+  reminderTimeoutList.forEach(id => clearTimeout(id));
+
   let currentDate = new Date();
+  let twoDaysAhead = new Date(currentDate.getTime() + 2 * 24 * 60 * 60 * 1000); // 2 days ahead
+
   const reminders = await reminderSchema
-    .find({ date: { $gt: currentDate } })
+    .find({ date: { $gt: currentDate, $lte: twoDaysAhead } })
     .exec();
+
   console.log(`Loaded ${reminders.length} reminders`);
+
   reminders.forEach(reminder => {
     const offset = new Date(reminder.date) - Date.now();
     setReminder(reminder, offset, client);
@@ -33,9 +49,12 @@ async function loadAndSetAllReminders(reminderSchema, client) {
 }
 
 async function setReminder(reminder, duration, client) {
-  setTimeout(async () => {
+  const id = setTimeout(async () => {
     await sendReminderAlert(client, reminder);
   }, duration);
+
+  reminderTimeoutList.push(id);
+
   console.log("Reminder set.");
 }
 
