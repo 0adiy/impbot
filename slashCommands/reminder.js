@@ -23,18 +23,18 @@ export default {
     .setName("reminder")
     .setDescription("Sets a reminder for a desired time.")
     .setDMPermission(false)
-    .addStringOption((option) =>
+    .addStringOption(option =>
       option
         .setName("duration")
         .setDescription("The duration of reminder. e.g. 10d 4h 5m 10s")
         .setMaxLength(20)
-        .setRequired(true),
+        .setRequired(true)
     )
-    .addStringOption((option) =>
+    .addStringOption(option =>
       option
         .setName("message")
         .setDescription("The message or description of reminder")
-        .setRequired(true),
+        .setRequired(true)
     ),
   /**
    *
@@ -49,17 +49,32 @@ export default {
     const formattedTime = formatTimeString(timeString);
     if (formattedTime.hasErr) {
       interaction.reply(
-        `The time format is invalid. Please recheck and try again. Time provided: ${timeString}`,
+        `The time format is invalid. Please recheck and try again. Time provided: ${timeString}`
       );
       return;
     }
+
     if (
       formattedTime.days == 0 &&
       formattedTime.hours == 0 &&
       formattedTime.minutes == 0 &&
       formattedTime.seconds == 0
     ) {
-      interaction.reply("The time provided is 0, same as your IQ; can not set reminder.");
+      interaction.reply(
+        "The time provided is 0, same as your IQ; can not set reminder."
+      );
+      return;
+    }
+
+    if (
+      formattedTime.days < 365 &&
+      formattedTime.hours < 100 &&
+      formattedTime.minutes < 100 &&
+      formattedTime.seconds < 6000
+    ) {
+      interaction.reply(
+        "Don't go over 356 days, or 100 hours or 100 minutes or 6000 seconds, yes our limits are arbitrary"
+      );
       return;
     }
 
@@ -67,7 +82,7 @@ export default {
       formattedTime.days,
       formattedTime.hours,
       formattedTime.minutes,
-      formattedTime.seconds,
+      formattedTime.seconds
     );
 
     let reminder = {
@@ -82,8 +97,15 @@ export default {
 
     const offset = new Date(reminder.date) - Date.now();
 
-    await setReminder(reminder, offset, client);
+    console.log(new Date(reminder.date), Date.now(), offset);
 
-    interaction.editReply(`The reminder was set. You will be reminded in ${timeString}.`);
+    if (offset < 24 * 60 * 60 * 1000) {
+      // 24 hours
+      await setReminder(reminder, offset, client);
+    }
+
+    interaction.editReply(
+      `The reminder was set. You will be reminded in ${timeString}.`
+    );
   },
 };
