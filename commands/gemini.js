@@ -47,7 +47,6 @@ export default {
     }
     try {
       let result = await model.generateContent(prompt);
-      console.log(prompt);
       const response = result.response.text();
       message.channel.send(response);
     } catch (error) {
