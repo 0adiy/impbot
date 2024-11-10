@@ -4,7 +4,10 @@ import { loadEvents } from "./handlers/eventHandler.js";
 import { loadMessageCommands } from "./handlers/messageCommandHandler.js";
 import { connectDB } from "./utils/db.js";
 import loadModals from "./handlers/modalHandler.js";
-import { genAIModel } from "./models/googleGenerativeAI.js";
+import {
+  createContextBasedAI,
+  createQueryBasedAI,
+} from "./models/googleGenerativeAI.js";
 
 connectDB();
 
@@ -32,16 +35,15 @@ const client = new Client({
   },
 });
 
-client.aiModel = genAIModel;
+client.contextualAI = createContextBasedAI();
+client.queryAI = createQueryBasedAI();
 client.events = new Collection();
 client.messageCommands = new Collection();
-client.slashCommands = new Collection(); // later maybe?
+client.slashCommands = new Collection();
 client.uptimeTrackerTimestamp = new Date();
 client.modals = new Collection();
 
-// TODO - use promise.all here?
 loadEvents(client);
 loadMessageCommands(client);
 loadModals(client);
-
 client.login(config.TOKEN);
