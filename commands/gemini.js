@@ -34,7 +34,9 @@ export default {
       if (messages.size == 0) break;
       messages = messages.filter(
         message =>
-          !message.author.bot || message.author.id === client.user.id
+          !message.author.bot ||
+          message.author.id === client.user.id ||
+          !["$g", "$ai", "$gemini"].includes(message.content)
       );
       messages.sort((a, b) => a.createdTimestamp - b.createdTimestamp);
       messages.forEach(message => {
@@ -46,6 +48,7 @@ export default {
       if (prompt.length >= MIN_PROMPT_LENGTH) break;
     }
     try {
+      logEvent("CTX", client, prompt);
       let result = await model.generateContent(prompt);
       const response = result.response.text();
       message.channel.send(response);

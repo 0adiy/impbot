@@ -142,6 +142,9 @@ async function logEvent(type, client, information) {
       `${EMOJIS.SLASHCMD} \`${interaction.user.username}\` : \`/${command.name}\` > https://discord.com/channels/${interaction.guildId}/${interaction.channelId}/${interaction.id}`
     );
   }
+  if (type == "CTX") {
+    return logChannel.send(`\`\`\`\n${information}\n\`\`\``);
+  }
 }
 
 function splitStringAtIntervals(str, interval) {
