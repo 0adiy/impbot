@@ -1,13 +1,14 @@
 import { Events } from "discord.js";
 import { loadSlashCommands } from "../handlers/slashCommandHandler.js";
 import { loadAndSetAllReminders } from "../utils/generalUtils.js";
+import { logEvent } from "../utils/generalUtils.js";
 import reminderSchema from "../models/reminder.model.js";
 
 export default {
   name: Events.ClientReady,
   once: true,
   async execute(client) {
-    console.log(`😈 ${client.user.tag} is ready!`);
+    logEvent("UP", client, null);
     loadAndSetAllReminders(reminderSchema, client);
     // Manually invoked to load reminders scheduled for the near future into memory.
     setInterval(

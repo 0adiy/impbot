@@ -142,8 +142,10 @@ async function logEvent(type, client, information) {
       `${EMOJIS.SLASHCMD} \`${interaction.user.username}\` : \`/${command.name}\` > https://discord.com/channels/${interaction.guildId}/${interaction.channelId}/${interaction.id}`
     );
   }
-  if (type == "CTX") {
-    return logChannel.send(`\`\`\`\n${information}\n\`\`\``);
+  if (type == "UP") {
+    information = `${client.user.tag} is ready!`;
+    console.log(`🚀 ${information}`);
+    return logChannel.send(`${EMOJIS.BOOT} ${information}`);
   }
 }
 
@@ -172,6 +174,37 @@ function binarySearchLowerBound(array, word) {
   return low;
 }
 
+async function getChatHistory(channel) {
+  let history = "";
+  let lastMessageId = null;
+  const allMessages = [];
+
+  while (history.length < 1500) {
+    const messages = await channel.messages.fetch({
+      limit: 10,
+      before: lastMessageId,
+    });
+
+    if (messages.size === 0) break;
+
+    messages.forEach(message => allMessages.push(message));
+
+    lastMessageId = messages.last().id;
+
+    const tempHistory = allMessages.map(msg => msg.content).join("\n");
+    if (tempHistory.length >= 1500) break;
+  }
+
+  allMessages.sort((a, b) => a.createdTimestamp - b.createdTimestamp);
+
+  history = allMessages
+    .filter(msg => !msg.content.startsWith(config.prefix))
+    .map(msg => `${msg.author.username.slice(0, 3)}: ${msg.content}`)
+    .join("\n");
+
+  return history;
+}
+
 export {
   getFutureTimestamp,
   loadAndSetAllReminders,
@@ -185,4 +218,5 @@ export {
   logEvent,
   splitStringAtIntervals,
   binarySearchLowerBound,
+  getChatHistory,
 };
