@@ -149,14 +149,6 @@ async function logEvent(type, client, information) {
   }
 }
 
-function splitStringAtIntervals(str, interval) {
-  let result = [];
-  for (let i = 0; i < str.length; i += interval) {
-    result.push(str.substring(i, i + interval));
-  }
-  return result;
-}
-
 function binarySearchLowerBound(array, word) {
   let low = 0;
   let high = array.length - 1;
@@ -205,6 +197,21 @@ async function getChatHistory(channel) {
   return history;
 }
 
+function splitResponse(text, maxLength = 1500) {
+  const parts = [];
+  let currentPart = "";
+  text.split("\n").forEach(line => {
+    if (currentPart.length + line.length + 1 > maxLength) {
+      parts.push(currentPart);
+      currentPart = line;
+    } else {
+      currentPart += (currentPart ? "\n" : "") + line;
+    }
+  });
+  if (currentPart) parts.push(currentPart);
+  return parts;
+}
+
 export {
   getFutureTimestamp,
   loadAndSetAllReminders,
@@ -216,7 +223,7 @@ export {
   capitalizeFirstLetter,
   sleep,
   logEvent,
-  splitStringAtIntervals,
   binarySearchLowerBound,
   getChatHistory,
+  splitResponse,
 };
