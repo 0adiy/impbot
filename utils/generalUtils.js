@@ -103,7 +103,7 @@ function getRandomItems(array, count) {
   return array.sort(() => 0.5 - Math.random()).slice(0, count);
 }
 
-function capitalize_First_Letter(str) {
+function capitalizeFirstLetter(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
@@ -213,7 +213,7 @@ export {
   create_webhook_if_not_exists,
   send_message_with_webhook,
   getRandomItems,
-  capitalize_First_Letter,
+  capitalizeFirstLetter,
   sleep,
   logEvent,
   splitStringAtIntervals,

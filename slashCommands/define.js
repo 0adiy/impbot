@@ -3,7 +3,7 @@ import config from "../config.js";
 import { COLORS } from "../utils/enums.js";
 import {
   getRandomItems,
-  capitalize_First_Letter,
+  capitalizeFirstLetter,
   logEvent,
   binarySearchLowerBound,
 } from "../utils/generalUtils.js";
@@ -39,7 +39,7 @@ async function get_Definition_Of_Given_Word(interaction, word) {
     let _w = response[0];
     let _def = _w.meanings[0].definitions;
     title = _w.word;
-    embed.setTitle(capitalize_First_Letter(title));
+    embed.setTitle(capitalizeFirstLetter(title));
     for (let i = 0; i < _def.length; i++) {
       const def = _def[i];
       const _ex = def.example ? `**Example:** ${def.example}\n\n` : "\n";
@@ -49,7 +49,7 @@ async function get_Definition_Of_Given_Word(interaction, word) {
     embed.setDescription(description);
     embed.addFields({
       name: "Part of speech:",
-      value: capitalize_First_Letter(_w.meanings[0].partOfSpeech),
+      value: capitalizeFirstLetter(_w.meanings[0].partOfSpeech),
     });
     if (_w.phonetics && _w.phonetics.length > 0) {
       let _p = _w.phonetics[0];

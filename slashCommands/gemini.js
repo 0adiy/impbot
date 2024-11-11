@@ -1,5 +1,6 @@
-import { SlashCommandBuilder } from "discord.js";
-import { logEvent } from "../utils/generalUtils.js";
+import { SlashCommandBuilder, EmbedBuilder } from "discord.js";
+import { logEvent, capitalizeFirstLetter } from "../utils/generalUtils.js";
+import { COLORS } from "../utils/enums.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -28,7 +29,16 @@ export default {
         `${interaction.user.username}: ${query}`
       );
       const response = result.response.text();
-      interaction.editReply(response);
+      let embed = new EmbedBuilder()
+        .setTitle(capitalizeFirstLetter(query))
+        .setDescription(response)
+        .setColor(COLORS.PRIMARY)
+        .setTimestamp(new Date())
+        .setFooter({
+          text: `${interaction.user.username}`,
+          iconURL: interaction.user.displayAvatarURL({ dynamic: true }),
+        });
+      interaction.editReply({ embeds: [embed] });
     } catch (error) {
       await logEvent("ERR", client, error);
     }
