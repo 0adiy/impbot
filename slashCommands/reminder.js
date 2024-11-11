@@ -48,7 +48,7 @@ export default {
     const reminderMessage = interaction.options.getString("message");
     const formattedTime = formatTimeString(timeString);
     if (formattedTime.hasErr) {
-      interaction.reply(
+      interaction.editReply(
         `The time format is invalid. Please recheck and try again. Time provided: ${timeString}`
       );
       return;
@@ -60,19 +60,19 @@ export default {
       formattedTime.minutes == 0 &&
       formattedTime.seconds == 0
     ) {
-      interaction.reply(
+      interaction.editReply(
         "The time provided is 0, same as your IQ; can not set reminder."
       );
       return;
     }
 
     if (
-      formattedTime.days < 365 &&
-      formattedTime.hours < 100 &&
-      formattedTime.minutes < 100 &&
-      formattedTime.seconds < 6000
+      formattedTime.days > 365 &&
+      formattedTime.hours > 100 &&
+      formattedTime.minutes > 100 &&
+      formattedTime.seconds > 6000
     ) {
-      interaction.reply(
+      interaction.editReply(
         "Don't go over 356 days, or 100 hours or 100 minutes or 6000 seconds, yes our limits are arbitrary"
       );
       return;
