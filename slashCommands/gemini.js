@@ -26,6 +26,7 @@ export default {
    * @param {Client} client
    */
   async execute(interaction, client) {
+    return interaction.reply("Disabled temporarily.");
     await interaction.deferReply();
     const query = interaction.options.getString("query");
     try {
