@@ -1,5 +1,10 @@
-import { SlashCommandBuilder } from "discord.js";
-import { logEvent } from "../utils/generalUtils.js";
+import { SlashCommandBuilder, EmbedBuilder } from "discord.js";
+import {
+  logEvent,
+  capitalizeFirstLetter,
+  splitResponse,
+} from "../utils/generalUtils.js";
+import { COLORS } from "../utils/enums.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -21,14 +26,19 @@ export default {
    * @param {Client} client
    */
   async execute(interaction, client) {
-    interaction.deferReply();
+    await interaction.deferReply();
     const query = interaction.options.getString("query");
     try {
-      let result = await client.queryAI.generateContent(
+      const result = await client.queryAI.generateContent(
         `${interaction.user.username}: ${query}`
       );
-      const response = result.response.text();
-      interaction.editReply(response);
+      const response = await result.response.text();
+      const parts = splitResponse(response);
+      await interaction.editReply(parts[0]);
+      if (!(parts.length > 0)) return;
+      for (let i = 1; i < parts.length; i++) {
+        await interaction.channel.send(parts[i]);
+      }
     } catch (error) {
       await logEvent("ERR", client, error);
     }

@@ -11,6 +11,7 @@ const EMOJIS = {
   CROSS: "<:crossimp:1185263122827710474>",
   SLASHCMD: "<:slashcmd:1272652769194541249>",
   MSGCMD: "<:msgcmd:1272656123840958476>",
+  BOOT: "<:startup:1305494476734857236>",
 };
 
 export { COLORS, EMOJIS };

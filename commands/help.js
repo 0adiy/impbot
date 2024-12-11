@@ -3,7 +3,7 @@ import { COLORS } from "../utils/enums.js";
 import config from "../config.js";
 import { logEvent } from "../utils/generalUtils.js";
 
-function capitalize_First_Letter(str) {
+function capitalizeFirstLetter(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
