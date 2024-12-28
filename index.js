@@ -35,8 +35,8 @@ const client = new Client({
   },
 });
 
-client.contextualAI = undefined; //createContextBasedAI();
-client.queryAI = undefined; //createQueryBasedAI();
+client.contextualAI = createContextBasedAI();
+client.queryAI = createQueryBasedAI();
 client.events = new Collection();
 client.messageCommands = new Collection();
 client.slashCommands = new Collection();

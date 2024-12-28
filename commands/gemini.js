@@ -16,7 +16,6 @@ export default {
    * @param {Message} message
    */
   execute: async (client, message) => {
-    return message.reply("Disabled temporarily.");
     try {
       const history = await getChatHistory(message.channel);
       const result = await client.contextualAI.generateContent(history);
