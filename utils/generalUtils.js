@@ -139,7 +139,7 @@ async function logEvent(type, client, information) {
     let interaction = information.interaction;
     let command = information.command.data;
     return logChannel.send(
-      `${EMOJIS.SLASHCMD} \`${interaction.user.username}\` : \`/${command.name}\` > https://discord.com/channels/${interaction.guildId}/${interaction.channelId}/${interaction.id}`
+      `${EMOJIS.SLASHCMD} \`${interaction.user.username}\` : \`/${command.name}\` > ${interaction.channel.url}/${interaction.id}`
     );
   }
   if (type == "UP") {

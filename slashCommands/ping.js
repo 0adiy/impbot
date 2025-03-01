@@ -1,11 +1,25 @@
-import { SlashCommandBuilder, EmbedBuilder} from "discord.js";
+import {
+  SlashCommandBuilder,
+  EmbedBuilder,
+  InteractionContextType,
+  ApplicationIntegrationType,
+} from "discord.js";
 import { COLORS } from "../utils/enums.js";
 
 export default {
   data: new SlashCommandBuilder()
     .setName("ping")
     .setDescription("Outputs latency of the bot")
-    .setDMPermission(false),
+    // .setDMPermission(false),
+    .setContexts([
+      InteractionContextType.Guild,
+      InteractionContextType.BotDM,
+      InteractionContextType.PrivateChannel,
+    ])
+    .setIntegrationTypes([
+      ApplicationIntegrationType.GuildInstall,
+      ApplicationIntegrationType.UserInstall,
+    ]),
   /**
    *
    * @param {ChatInputCommandInteraction} interaction
@@ -14,7 +28,9 @@ export default {
   async execute(interaction, client) {
     const embed = new EmbedBuilder()
       .setTitle(`**${client.ws.ping}ms**`)
-      .setDescription(`The latency of the bot is currently ${client.ws.ping}ms.`)
+      .setDescription(
+        `The latency of the bot is currently ${client.ws.ping}ms.`
+      )
       .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
       .setTimestamp(new Date())
       .setColor(COLORS.SUCCESS);
