@@ -5,7 +5,7 @@ import {
   ActionRowBuilder,
   EmbedBuilder,
 } from "discord.js";
-import taskSchema from "../models/reminder.model.js";
+import taskSchema from "../models/task.model.js";
 import { loadAllTasks } from "../utils/generalUtils.js";
 import { COLORS } from "../utils/enums.js";
 
