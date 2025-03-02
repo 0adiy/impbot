@@ -60,6 +60,9 @@ export default {
     }
 
     const tasks = loadAllTasks(taskSchema, client);
+    console.log(`TASKCMD: taks --> ${tasks}`);
+    console.log(`TASKCMD: taks.len --> ${tasks.length}`);
+
     tasks.forEach(task => {
       embed.addFields({
         name: task.task,
