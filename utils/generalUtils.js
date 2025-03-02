@@ -29,6 +29,12 @@ function getFutureTimestamp(days, hours, minutes, seconds) {
  *  this function itself it supposed to be called every 24 hours so there should be no misses
  *  (delete after reading)
  */
+
+async function loadAllTasks(taskSchema, client) {
+  const tasks = await taskSchema.find({ completed: false }).exec();
+  return tasks;
+}
+
 async function loadAndSetAllReminders(reminderSchema, client) {
   // clear the already existing reminders using IDs and clear the list as well
   reminderTimeoutList.forEach(id => clearTimeout(id));
@@ -226,4 +232,5 @@ export {
   binarySearchLowerBound,
   getChatHistory,
   splitResponse,
+  loadAllTasks,
 };
