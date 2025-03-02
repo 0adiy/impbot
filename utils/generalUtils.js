@@ -31,7 +31,7 @@ function getFutureTimestamp(days, hours, minutes, seconds) {
  */
 
 async function loadAllTasks(taskSchema, client) {
-  const tasks = await taskSchema.find({ completed: false }).exec();
+  let tasks = await taskSchema.find({ completed: false }).exec();
   console.log(`TASKS LEN: ${tasks.length}`);
   console.log(`TASK: ${tasks}`);
   tasks = tasks ?? [];
