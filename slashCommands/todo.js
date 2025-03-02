@@ -59,7 +59,7 @@ export default {
       content = "Your task was set successfully";
     }
 
-    const tasks = loadAllTasks(taskSchema, client);
+    const tasks = await loadAllTasks(taskSchema, client);
     console.log(`TASKCMD: taks --> ${tasks}`);
     console.log(`TASKCMD: taks.len --> ${tasks.length}`);
 
