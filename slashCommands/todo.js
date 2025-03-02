@@ -60,15 +60,13 @@ export default {
     }
 
     const tasks = await loadAllTasks(taskSchema, client);
-    console.log(`TASKCMD: taks --> ${tasks}`);
-    console.log(`TASKCMD: taks.len --> ${tasks.length}`);
-
-    tasks.forEach(task => {
+    for (const task of tasks) {
+      let user = await client.users.fetch(task.userId);
       embed.addFields({
-        name: task.task,
-        value: task.date,
+        name: user.username,
+        value: task.task,
       });
-    });
+    }
 
     embed.setTitle(`${tasks.length} tasks pending`);
 
