@@ -28,7 +28,7 @@ export default {
     let embed = new EmbedBuilder()
       .setTitle(`Available commands`)
       .setDescription(description)
-      .setColor(COLORS.SECONDARY);
+      .setColor(COLORS.PRIMARY);
     client.messageCommands.forEach(cmd => {
       if (cmd.isPrivate && !config.superUsersArray.includes(message.author.id))
         return;

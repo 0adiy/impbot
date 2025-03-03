@@ -5,7 +5,7 @@ import {
   StringSelectMenuOptionBuilder,
   StringSelectMenuInteraction,
 } from "discord.js";
-import { deleteTask } from "../../utils/generalUtils";
+import { deleteTask } from "../../utils/generalUtils.js";
 import taskSchema from "../../models/task.model.js";
 
 export default {

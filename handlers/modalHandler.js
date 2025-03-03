@@ -18,5 +18,5 @@ export default async function loadModals(client) {
     //formatting
     table.addRow(modal.name, "🟧");
   }
-  return console.log(table.toString(), "\nButtons loaded");
+  return console.log(table.toString(), "\nModals loaded");
 }
