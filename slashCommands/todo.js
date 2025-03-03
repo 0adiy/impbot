@@ -10,6 +10,21 @@ import taskSchema from "../models/task.model.js";
 import { loadAllTasks } from "../utils/generalUtils.js";
 import { COLORS } from "../utils/enums.js";
 
+function formatDate(timestamp) {
+  const date = new Date(timestamp);
+
+  const options = {
+    weekday: "short",
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+  };
+  const formattedDate = date.toLocaleDateString("en-US", options);
+
+  // Replace the default comma with a period
+  return formattedDate.replace(",", ".");
+}
+
 export default {
   data: new SlashCommandBuilder()
     .setName("todo")
@@ -65,7 +80,7 @@ export default {
       let user = await client.users.fetch(task.userId);
       embed.addFields({
         name: task.task,
-        value: user.username,
+        value: `By ${user.username} on ${formatDate(task.date)}`,
       });
       taskSelect.setOptions(
         tasks.map(task => ({

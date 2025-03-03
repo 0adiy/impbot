@@ -20,7 +20,7 @@ export default {
    */
   async execute(interaction, client) {
     const task = interaction.values[0];
-    const [userId, taskMessage] = taskSelect.split("_", 2);
+    const [userId, taskMessage] = task.split("_", 2);
     const deletedTask = await deleteTask(taskSchema, userId, taskMessage);
     const message = deletedTask
       ? "Task deleted successfully"
