@@ -38,15 +38,15 @@ export default {
     const taskMessage = interaction.options.getString("task") ?? null;
     let content = null;
 
-    const clearButton = new ButtonBuilder()
-      .setCustomId("clearall")
-      .setLabel("Clear All")
-      .setStyle(ButtonStyle.Danger);
+    // const clearButton = new ButtonBuilder()
+    //   .setCustomId("clearall")
+    //   .setLabel("Clear All")
+    //   .setStyle(ButtonStyle.Danger);
 
-    const markButton = new ButtonBuilder()
-      .setCustomId("markall")
-      .setLabel("Mark All")
-      .setStyle(ButtonStyle.Success);
+    // const markButton = new ButtonBuilder()
+    //   .setCustomId("markall")
+    //   .setLabel("Mark All")
+    //   .setStyle(ButtonStyle.Success);
 
     const embed = new EmbedBuilder()
       .setColor(COLORS.SUCCESS)
@@ -85,17 +85,17 @@ export default {
 
     embed.setTitle(`${tasks.length} tasks pending`);
 
-    const firstRow = new ActionRowBuilder().addComponents(
-      markButton,
-      clearButton
-    );
+    // const firstRow = new ActionRowBuilder().addComponents(
+    //   markButton,
+    //   clearButton
+    // );
 
     const secondRow = new ActionRowBuilder().addComponents(taskSelect);
 
     await interaction.editReply({
       content: content,
       embeds: [embed],
-      components: [firstRow, secondRow],
+      components: [/*firstRow,*/ secondRow],
     });
   },
 };
