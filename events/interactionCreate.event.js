@@ -56,6 +56,9 @@ export default {
       modalFunc(interaction, client);
     } else if (interaction.isStringSelectMenu()) {
       console.log("🔘 String Select Menu");
+      const selectMenuHandler = client.selectMenus.get(interaction.customId);
+      if (!selectMenuHandler) return;
+      await selectMenuHandler.execute(interaction, client);
     }
   },
 };
