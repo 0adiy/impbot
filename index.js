@@ -4,7 +4,7 @@ import { loadEvents } from "./handlers/eventHandler.js";
 import { loadMessageCommands } from "./handlers/messageCommandHandler.js";
 import { connectDB } from "./utils/db.js";
 import loadModals from "./handlers/modalHandler.js";
-import { loadSelectMenus } from "./handlers/selectMenuHandler.js";
+import loadSelectMenus from "./handlers/selectMenuHandler.js";
 import {
   createContextBasedAI,
   createQueryBasedAI,
