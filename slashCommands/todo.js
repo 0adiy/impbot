@@ -69,7 +69,7 @@ export default {
       taskSelect.setOptions(
         tasks.map(task => ({
           label: task.task,
-          value: `task_${task._id}`,
+          value: `${taskSelect.userId}_${task.task}`,
         }))
       );
     }

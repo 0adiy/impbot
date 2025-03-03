@@ -5,6 +5,8 @@ import {
   StringSelectMenuOptionBuilder,
   StringSelectMenuInteraction,
 } from "discord.js";
+import { deleteTask } from "../../utils/generalUtils";
+import taskSchema from "../../models/task.model.js";
 
 export default {
   id: "task_select",
@@ -17,6 +19,12 @@ export default {
    * @param {Client} client
    */
   async execute(interaction, client) {
-    await interaction.reply("hi");
+    const task = interaction.values[0];
+    const [userId, taskMessage] = taskSelect.split("_", 2);
+    const deletedTask = await deleteTask(taskSchema, userId, taskMessage);
+    const message = deletedTask
+      ? "Task deleted successfully"
+      : "Task not found";
+    await interaction.reply({ content: message });
   },
 };
