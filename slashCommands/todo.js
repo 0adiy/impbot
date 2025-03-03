@@ -12,17 +12,10 @@ import { COLORS } from "../utils/enums.js";
 
 function formatDate(timestamp) {
   const date = new Date(timestamp);
-
-  const options = {
-    weekday: "short",
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-  };
-  const formattedDate = date.toLocaleDateString("en-US", options);
-
-  // Replace the default comma with a period
-  return formattedDate.replace(",", ".");
+  const day = String(date.getDate()).padStart(2, "0");
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const year = date.getFullYear();
+  return `${day}/${month}/${year}`;
 }
 
 export default {
@@ -85,7 +78,7 @@ export default {
       taskSelect.setOptions(
         tasks.map(task => ({
           label: task.task,
-          value: `${taskSelect.userId}_${task.task}`,
+          value: `${task.userId}_${task.task}`,
         }))
       );
     }
