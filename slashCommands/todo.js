@@ -3,8 +3,8 @@ import {
   ButtonBuilder,
   ButtonStyle,
   ActionRowBuilder,
-  EmbedBuilder,
 } from "discord.js";
+import taskSelectMenu from "../components/selectMenus/task.select.js";
 import taskSchema from "../models/task.model.js";
 import { loadAllTasks } from "../utils/generalUtils.js";
 import { COLORS } from "../utils/enums.js";
@@ -39,8 +39,6 @@ export default {
       .setLabel("Mark All")
       .setStyle(ButtonStyle.Success);
 
-    const row = new ActionRowBuilder().addComponents(markButton, clearButton);
-
     const embed = new EmbedBuilder()
       .setColor(COLORS.SUCCESS)
       .setDescription(
@@ -60,20 +58,35 @@ export default {
     }
 
     const tasks = await loadAllTasks(taskSchema, client);
+    const taskSelect = taskSelectMenu.data;
+
     for (const task of tasks) {
       let user = await client.users.fetch(task.userId);
       embed.addFields({
-        name: user.username,
-        value: task.task,
+        name: task.task,
+        value: user.username,
       });
+      taskSelect.setOptions(
+        tasks.map(task => ({
+          label: task.task,
+          value: `task_${task._id}`,
+        }))
+      );
     }
 
     embed.setTitle(`${tasks.length} tasks pending`);
 
+    const firstRow = new ActionRowBuilder().addComponents(
+      markButton,
+      clearButton
+    );
+
+    const secondRow = new ActionRowBuilder().addComponents(taskSelect);
+
     await interaction.editReply({
       content: content,
       embeds: [embed],
-      components: [row],
+      components: [firstRow, secondRow],
     });
   },
 };
