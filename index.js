@@ -4,6 +4,7 @@ import { loadEvents } from "./handlers/eventHandler.js";
 import { loadMessageCommands } from "./handlers/messageCommandHandler.js";
 import { connectDB } from "./utils/db.js";
 import loadModals from "./handlers/modalHandler.js";
+import { loadSelectMenus } from "./handlers/selectMenuHandler.js";
 import {
   createContextBasedAI,
   createQueryBasedAI,
@@ -42,9 +43,10 @@ client.messageCommands = new Collection();
 client.slashCommands = new Collection();
 client.uptimeTrackerTimestamp = new Date();
 client.modals = new Collection();
-client.selectMenus = new Collection
+client.selectMenus = new Collection();
 
 loadEvents(client);
 loadMessageCommands(client);
 loadModals(client);
+loadSelectMenus(client);
 client.login(config.TOKEN);
