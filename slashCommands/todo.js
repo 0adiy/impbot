@@ -26,6 +26,7 @@ export default {
       option
         .setName("task")
         .setDescription("The task to be done")
+        .setMaxLength(80)
         .setRequired(false)
     ),
   /**
@@ -75,13 +76,14 @@ export default {
         name: task.task,
         value: `By ${user.username} on ${formatDate(task.date)}`,
       });
-      taskSelect.setOptions(
-        tasks.map(task => ({
-          label: task.task,
-          value: `${task.userId}_${task.task}`,
-        }))
-      );
     }
+
+    taskSelect.setOptions(
+      tasks.map(task => ({
+        label: task.task,
+        value: task._id,
+      }))
+    );
 
     embed.setTitle(`${tasks.length} tasks pending`);
 

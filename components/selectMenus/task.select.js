@@ -7,7 +7,6 @@ import {
   EmbedBuilder,
 } from "discord.js";
 import { COLORS } from "../../utils/enums.js";
-import { deleteTask } from "../../utils/generalUtils.js";
 import taskSchema from "../../models/task.model.js";
 
 export default {
@@ -21,25 +20,26 @@ export default {
    * @param {Client} client
    */
   async execute(interaction, client) {
-    const task = interaction.values[0];
-    const [userId, taskMessage] = task.split("_", 2);
-    const deletedTask = await deleteTask(taskSchema, userId, taskMessage);
-    const embed = new EmbedBuilder();
+    const taskId = interaction.values[0];
+    const deletedTask = await taskSchema.findOneAndDelete({ _id: taskId });
+
     let colour, title, description;
     if (deletedTask) {
       colour = COLORS.SUCCESS;
       title = "Task Deleted";
-      description = `*Deleted task:* ${taskMessage}`;
+      description = `*Deleted task:* ${deletedTask.taskMessage}`;
     } else {
       colour = COLORS.ERROR;
       title = "Task Not Found";
-      description = `Failed to delete task *${taskMessage}*.`;
+      description = `Failed to delete task *${deletedTask.taskMessage}*.`;
     }
-    embed
+
+    const embed = new EmbedBuilder()
       .setTitle(title)
       .setDescription(description)
       .setColor(colour)
       .setTimestamp();
+
     await interaction.reply({ embeds: [embed] });
   },
 };

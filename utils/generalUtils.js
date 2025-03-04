@@ -36,10 +36,6 @@ async function loadAllTasks(taskSchema, client) {
   return tasks;
 }
 
-async function deleteTask(taskSchema, userId, taskMessage) {
-  return !!(await taskSchema.findOneAndDelete({ task: taskMessage, userId }));
-}
-
 async function loadAndSetAllReminders(reminderSchema, client) {
   // clear the already existing reminders using IDs and clear the list as well
   reminderTimeoutList.forEach(id => clearTimeout(id));
@@ -238,5 +234,4 @@ export {
   getChatHistory,
   splitResponse,
   loadAllTasks,
-  deleteTask,
 };
