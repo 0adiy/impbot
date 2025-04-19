@@ -1,4 +1,10 @@
-import { Client, GatewayIntentBits, Partials, Collection } from "discord.js";
+import {
+  Client,
+  GatewayIntentBits,
+  Partials,
+  Collection,
+  ActivityType,
+} from "discord.js";
 import config from "./config.js";
 import { loadEvents } from "./handlers/eventHandler.js";
 import { loadMessageCommands } from "./handlers/messageCommandHandler.js";
@@ -30,7 +36,7 @@ const client = new Client({
     activities: [
       {
         name: "with your life",
-        type: 1,
+        type: ActivityType.Playing,
       },
     ],
   },
