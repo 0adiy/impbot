@@ -41,7 +41,7 @@ export default {
           ? `${response.song.song} by ${response.song.artist}`
           : "Not found.";
       let lyrics =
-        response.status == 200
+        response.status == 200 && response.lyrics.length > 0
           ? response.lyrics
           : "We were unable to find lyrics for this one.";
       const embed = new EmbedBuilder()

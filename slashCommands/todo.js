@@ -5,7 +5,7 @@ import {
 } from "discord.js";
 import taskSelectMenu from "../components/selectMenus/task.select.js";
 import taskSchema from "../models/task.model.js";
-import { loadAllTasks } from "../utils/generalUtils.js";
+import { isSuperUser, loadAllTasks } from "../utils/generalUtils.js";
 import { COLORS } from "../utils/enums.js";
 
 function formatDate(timestamp) {
@@ -29,11 +29,17 @@ export default {
     ),
   /**
    *
-   * @param {ChatInputCommandInteraction} interaction
+   * @param {import("discord.js").ChatInputCommandInteraction} interaction
    * @param {Client} client
    */
   async execute(interaction, client) {
     await interaction.deferReply();
+
+    // Auth
+    if (!isSuperUser(interaction.user)) {
+      return interaction.reply("You are not allowed to do this");
+    }
+
     const taskMessage = interaction.options.getString("task") ?? null;
     let content = null;
 

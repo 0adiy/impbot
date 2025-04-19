@@ -6,6 +6,7 @@ import {
 } from "discord.js";
 import { COLORS } from "../../utils/enums.js";
 import taskSchema from "../../models/task.model.js";
+import { isSuperUser } from "../../utils/generalUtils.js";
 
 export default {
   id: "task_select",
@@ -18,6 +19,11 @@ export default {
    * @param {Client} client
    */
   async execute(interaction, client) {
+    // Auth
+    if (!isSuperUser(interaction.user)) {
+      return interaction.reply("You are not allowed to do this");
+    }
+
     const taskId = interaction.values[0];
     const deletedTask = await taskSchema.findOneAndDelete({ _id: taskId });
 

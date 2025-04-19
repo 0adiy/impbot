@@ -1,6 +1,6 @@
 import config from "../config.js";
 import { COLORS, EMOJIS } from "./enums.js";
-import { EmbedBuilder } from "discord.js";
+import { EmbedBuilder, User } from "discord.js";
 
 // Global list for storing cancellable timeout IDs
 let reminderTimeoutList = [];
@@ -29,6 +29,18 @@ function getFutureTimestamp(days, hours, minutes, seconds) {
  *  this function itself it supposed to be called every 24 hours so there should be no misses
  *  (delete after reading)
  */
+
+/**
+ * @param {User | String} user
+ * @returns {bool}
+ * @description doesn't suport usernames
+ */
+function isSuperUser(user) {
+  if (user instanceof User) return config.superUsersArray.contains(user.id);
+  if (user instanceof String) return config.superUsersArray.contains(user);
+
+  return false;
+}
 
 async function loadAllTasks(taskSchema, client) {
   let tasks = await taskSchema.find({ completed: false }).exec();
@@ -234,4 +246,5 @@ export {
   getChatHistory,
   splitResponse,
   loadAllTasks,
+  isSuperUser,
 };
