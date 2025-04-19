@@ -1,7 +1,5 @@
 import {
   SlashCommandBuilder,
-  ButtonBuilder,
-  ButtonStyle,
   ActionRowBuilder,
   EmbedBuilder,
 } from "discord.js";
@@ -81,7 +79,7 @@ export default {
     taskSelect.setOptions(
       tasks.map(task => ({
         label: task.task,
-        value: task._id,
+        value: task._id.toString(),
       }))
     );
 

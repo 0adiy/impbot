@@ -1,8 +1,6 @@
 import {
   Client,
-  ActionRowBuilder,
   StringSelectMenuBuilder,
-  StringSelectMenuOptionBuilder,
   StringSelectMenuInteraction,
   EmbedBuilder,
 } from "discord.js";
@@ -27,11 +25,11 @@ export default {
     if (deletedTask) {
       colour = COLORS.SUCCESS;
       title = "Task Deleted";
-      description = `*Deleted task:* ${deletedTask.taskMessage}`;
+      description = `*Deleted task:* ${deletedTask.task}`;
     } else {
       colour = COLORS.ERROR;
       title = "Task Not Found";
-      description = `Failed to delete task *${deletedTask.taskMessage}*.`;
+      description = `Failed to delete task.`;
     }
 
     const embed = new EmbedBuilder()
