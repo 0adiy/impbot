@@ -35,7 +35,7 @@ export default {
     } else {
       colour = COLORS.ERROR;
       title = "Task Not Found";
-      description = `The task has already been deleted`;
+      description = `This task has already been deleted`;
     }
 
     const embed = new EmbedBuilder()
