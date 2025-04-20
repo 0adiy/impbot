@@ -40,7 +40,7 @@ export default {
     await interaction.deferReply();
 
     if (!isSuperUser(interaction.user)) {
-      return interaction.reply("This command is not available for you.");
+      return interaction.editReply("This command is not available for you.");
     }
 
     const taskMessage = interaction.options.getString("task") ?? null;

@@ -21,7 +21,7 @@ export default {
   async execute(interaction, client) {
     // Auth
     if (!isSuperUser(interaction.user)) {
-      return interaction.reply("You are not allowed to do this");
+      return interaction.reply("This action is not permitted.");
     }
 
     const taskId = interaction.values[0];
@@ -35,7 +35,7 @@ export default {
     } else {
       colour = COLORS.ERROR;
       title = "Task Not Found";
-      description = `Failed to delete task.`;
+      description = `The task has already been deleted`;
     }
 
     const embed = new EmbedBuilder()
