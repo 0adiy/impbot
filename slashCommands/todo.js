@@ -24,9 +24,13 @@ export default {
       option
         .setName("task")
         .setDescription("The task to be done")
-        .setMaxLength(80)
+        .setMaxLength(90)
         .setRequired(false)
     ),
+
+  //helpful for filtering
+  isPrivate: true,
+
   /**
    *
    * @param {import("discord.js").ChatInputCommandInteraction} interaction
@@ -35,9 +39,8 @@ export default {
   async execute(interaction, client) {
     await interaction.deferReply();
 
-    // Auth
     if (!isSuperUser(interaction.user)) {
-      return interaction.reply("You are not allowed to do this");
+      return interaction.reply("This command is not available for you.");
     }
 
     const taskMessage = interaction.options.getString("task") ?? null;

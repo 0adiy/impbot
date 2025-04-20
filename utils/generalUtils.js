@@ -36,9 +36,8 @@ function getFutureTimestamp(days, hours, minutes, seconds) {
  * @description doesn't suport usernames
  */
 function isSuperUser(user) {
-  if (user instanceof User) return config.superUsersArray.contains(user.id);
-  if (user instanceof String) return config.superUsersArray.contains(user);
-
+  if (user instanceof User) return config.superUsersArray.includes(user.id);
+  if (user instanceof String) return config.superUsersArray.includes(user);
   return false;
 }
 
