@@ -10,7 +10,6 @@ export default {
   data: new SlashCommandBuilder()
     .setName("ping")
     .setDescription("Outputs latency of the bot")
-    // .setDMPermission(false),
     .setContexts([
       InteractionContextType.Guild,
       InteractionContextType.BotDM,

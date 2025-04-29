@@ -10,7 +10,6 @@ export default {
   data: new SlashCommandBuilder()
     .setName("gemini")
     .setDescription("Ask Gemini anything!")
-    .setDMPermission(false)
     .addStringOption(option =>
       option
         .setName("query")

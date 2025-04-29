@@ -37,7 +37,6 @@ export default {
   data: new SlashCommandBuilder()
     .setName("pic")
     .setDescription("Search beautiful pictures.")
-    .setDMPermission(false)
     .addStringOption((option) =>
       option.setName("search").setDescription("The term to search").setRequired(true),
     )

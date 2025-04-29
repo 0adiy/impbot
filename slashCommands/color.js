@@ -5,7 +5,6 @@ export default {
   data: new SlashCommandBuilder()
     .setName("color")
     .setDescription("Previews a specific hex colour")
-    .setDMPermission(false)
     .addStringOption(option =>
       option
         .setName("colour")

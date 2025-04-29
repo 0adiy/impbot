@@ -75,7 +75,6 @@ export default {
   data: new SlashCommandBuilder()
     .setName("define")
     .setDescription("Look up definitions of a given word")
-    .setDMPermission(false)
     .addStringOption(option =>
       option
         .setName("word")
@@ -100,7 +99,6 @@ export default {
   },
   async autocomplete(interaction) {
     const word = interaction.options.getFocused();
-    //NOTE - have to send only the first 10 results
     const wordIndex = binarySearchLowerBound(wordsList, word);
     return interaction.respond(
       wordsList

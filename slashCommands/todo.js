@@ -27,10 +27,7 @@ export default {
         .setMaxLength(90)
         .setRequired(false)
     ),
-
-  //auth handled in interactionCreate.event.js:24
   isPrivate: true,
-
   /**
    *
    * @param {import("discord.js").ChatInputCommandInteraction} interaction

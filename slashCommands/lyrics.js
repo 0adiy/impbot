@@ -8,7 +8,6 @@ export default {
   data: new SlashCommandBuilder()
     .setName("lyrics")
     .setDescription("Get lyrics of the desired song")
-    .setDMPermission(false)
     .addStringOption(option =>
       option
         .setName("song")

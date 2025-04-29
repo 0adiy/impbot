@@ -4,7 +4,6 @@ export default {
   data: new SlashCommandBuilder()
     .setName("pfp")
     .setDescription("Displays profile picture of the mentioned user")
-    .setDMPermission(false)
     .addUserOption(option =>
       option
         .setName("member")
