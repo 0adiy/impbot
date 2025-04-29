@@ -4,7 +4,7 @@ import {
   send_message_with_webhook,
   logEvent,
 } from "../utils/generalUtils.js";
-import getChannel from "../utils/discordUtils.js";
+import { getChannel } from "../utils/discordUtils.js";
 
 export default {
   name: "move",
