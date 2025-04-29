@@ -7,6 +7,17 @@ function print(str) {
   if (result.length < 1900) result += str + "\n";
 }
 
+function help() {
+  const functionList = Object.keys(dutil).filter(
+    key => typeof dutil[key] === "function"
+  );
+  console.log(
+    `Context being passed:\n\tclient, message, guild, channel.\nFunction available under dutil:\n${functionList.join(
+      "\n"
+    )}`
+  );
+}
+
 /**
  * Executes the given code asynchronously and handles the result and any errors.
  */
@@ -22,6 +33,7 @@ async function execute(client, message, args) {
       "channel",
       "print",
       "dutil",
+      "help",
       `
       const originalConsoleLog = console.log;
       console.log = (...args) => print(args.join(" "));
@@ -35,7 +47,7 @@ async function execute(client, message, args) {
       `
     );
 
-    await asyncFunction(client, message, guild, channel, print, dutil);
+    await asyncFunction(client, message, guild, channel, print, dutil, help);
     await message.react(EMOJIS.CHECK);
   } catch (error) {
     result = error.toString();
