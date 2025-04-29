@@ -65,35 +65,41 @@ function isSuperUser(user) {
 // ─────────────────────────────────────────────
 // Logging
 // ─────────────────────────────────────────────
-
-async function logEvent(type, client, info) {
-  const logChannel = client.channels.cache.get(config.logChannel);
-  if (!logChannel) return;
-
-  switch (type) {
-    case "DM":
-      return logChannel.send(`💬 ${info.author.username}: ${info.content}`);
-    case "ERR":
-      return logChannel.send({
-        embeds: [
-          new EmbedBuilder()
-            .setTitle("Error occurred")
-            .setDescription(`\`\`\`js\n${info.stack}\n\`\`\``)
-            .setColor(COLORS.ERROR)
-            .setTimestamp(),
-        ],
-      });
-    case "MSGCMD":
-      return logChannel.send(
-        `${EMOJIS.MSGCMD} \`${info.message.author.username}\` : \`$${info.command.name}\` > ${info.message.url}`
-      );
-    case "SLASHCMD":
-      return logChannel.send(
-        `${EMOJIS.SLASHCMD} \`${info.interaction.user.username}\` : \`/${info.command.data.name}\` > ${info.interaction.channel.url}/${info.interaction.id}`
-      );
-    case "UP":
-      console.log(`🚀 ${info}`);
-      return logChannel.send(`${EMOJIS.BOOT} ${info}`);
+async function logEvent(type, client, information) {
+  const logChannel = await client.channels.cache.get(config.logChannel);
+  if (type == "DM") {
+    let message = information;
+    return logChannel.send(
+      `:speech_balloon: ${message.author.username}: ${message.content}`
+    );
+  }
+  if (type == "ERR") {
+    let error = information;
+    let embed = new EmbedBuilder()
+      .setTitle("Error occured")
+      .setDescription(`\`\`\`js\n${error.stack}\n\`\`\``)
+      .setColor(COLORS.ERROR)
+      .setTimestamp(new Date());
+    return logChannel.send({ embeds: [embed] });
+  }
+  if (type == "MSGCMD") {
+    let message = information.message;
+    let command = information.command;
+    return logChannel.send(
+      `${EMOJIS.MSGCMD} \`${message.author.username}\` : \`$${command.name}\` > ${message.url}`
+    );
+  }
+  if (type == "SLASHCMD") {
+    let interaction = information.interaction;
+    let command = information.command.data;
+    return logChannel.send(
+      `${EMOJIS.SLASHCMD} \`${interaction.user.username}\` : \`/${command.name}\` > ${interaction.channel.url}/${interaction.id}`
+    );
+  }
+  if (type == "UP") {
+    information = `${client.user.tag} is ready!`;
+    console.log(`🚀 ${information}`);
+    return logChannel.send(`${EMOJIS.BOOT} ${information}`);
   }
 }
 
