@@ -25,23 +25,29 @@ async function execute(client, message, args) {
   }
 
   try {
-    // TODO - find better way to implement replacement of console.log with print
     const asyncFunction = new Function(
       "client, message, guild, channel, print",
-      `return (async () => {
-        ${code}
-      })()`,
+      `import * as dutil from "../utils/discordUtils.js"; 
+      return (async () => {
+        const originalConsoleLog = console.log;
+        console.log = (...args) => print(args.join(" "));
+        try {
+          ${code}
+        } finally {
+          console.log = originalConsoleLog;
+        }
+      })()`
     );
     await asyncFunction(client, message, guild, channel, print);
     await message.react(EMOJIS.CHECK);
   } catch (error) {
-    result = error;
+    result = error.toString();
     await message.react(EMOJIS.CROSS);
   }
 
   if (result) {
     await message.channel.send({
-      content: "```\n" + result + "\n```",
+      content: "```js\n" + result + "\n```",
     });
   }
   result = "";
@@ -51,7 +57,8 @@ export default {
   name: "eval",
   isPrivate: true,
   aliases: ["e"],
-  description: "Evaluates code in bot's runtime environment. Special privileges required.",
+  description:
+    "Evaluates code in bot's runtime environment. Special privileges required.",
   guildOnly: false,
   args: ["code"],
   execute: execute,
