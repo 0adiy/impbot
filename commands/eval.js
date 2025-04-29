@@ -25,6 +25,18 @@ async function execute(client, message, args) {
   const code = args.join(" ").replace(/^```\w* |\n?```$/g, "");
   const [guild, channel] = [message.guild, message.channel];
 
+  const originalConsoleLog = console.log;
+  console.log = (...args) => print(args.map(formatValue).join(" "));
+
+  function formatValue(val) {
+    try {
+      if (typeof val === "object") return JSON.stringify(val, null, 2);
+      return String(val);
+    } catch {
+      return "[Unserializable]";
+    }
+  }
+
   try {
     const asyncFunction = new Function(
       "client",
@@ -35,23 +47,19 @@ async function execute(client, message, args) {
       "dutil",
       "help",
       `
-      const originalConsoleLog = console.log;
-      console.log = (...args) => print(args.join(" "));
-      try {
-        return (async () => {
-          ${code}
-        })();
-      } finally {
-        console.log = originalConsoleLog;
-      }
-      `
+    return (async () => {
+      ${code}
+    })()
+    `
     );
 
     await asyncFunction(client, message, guild, channel, print, dutil, help);
     await message.react(EMOJIS.CHECK);
   } catch (error) {
-    result = error.toString();
+    result = error.stack || error.toString();
     await message.react(EMOJIS.CROSS);
+  } finally {
+    console.log = originalConsoleLog;
   }
 
   if (result) {
