@@ -13,10 +13,12 @@ export default {
       console.log("🕹️ Chat Input");
 
       // TODO: have a condtion if(command.dm && interaction.channel instanceof Discord.DMChannel) then return, also need to add dm property for each command
+      // NOTE - This is outdated. Discord provides fields to enable or disable commands in DMs. We don't have to enable checks here
+      // TODO: remove this after reading
       const command = client.slashCommands.get(interaction.commandName);
       if (!command)
         return interaction.reply({
-          content: "This is outdated",
+          content: "This action is outdated.",
           ephemeral: true,
         });
 

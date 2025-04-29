@@ -1,4 +1,4 @@
-import { ChannelType, User, Guild, Client } from "discord.js";
+import { ChannelType, User, Guild, GuildMember, Client } from "discord.js";
 
 /**
  * Retrieves a collection of all guilds the client is currently handling.
@@ -138,7 +138,7 @@ async function getChannel(client, guildInput, channelInput) {
  * @param {string|Guild} guildInput - The guild to retrieve the user from.
  * @param {string|User} userInput - The ID or username of the user to retrieve,
  * or an instance of User.
- * @returns {User|null} The retrieved user, or null if not found.
+ * @returns {GuildMember|null} The retrieved user, or null if not found.
  */
 async function getUser(client, guildInput, userInput) {
   if (userInput instanceof User) return userInput;

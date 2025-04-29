@@ -13,6 +13,7 @@ export default async function loadModals(client) {
     const modal = imported.default;
 
     const execute = (...args) => modal.execute(...args, client);
+    // NOTE - don't just attach exec directly. see selectMenuHandler.js:15
     client.modals.set(modal.name, execute);
 
     //formatting

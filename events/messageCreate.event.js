@@ -38,7 +38,7 @@ export default {
       command.isPrivate &&
       !config.superUsersArray.includes(message.author.id)
     )
-      return message.reply(`Severe skill issue detected.`);
+      return message.reply(`You are lacking permissions to use this command.`);
 
     if (command.args?.length > args.length) {
       const desc = `\`${config.prefix}${command.name}\` requires ${command.args?.length} arguments.`;
@@ -69,9 +69,7 @@ export default {
       await logEvent("MSGCMD", client, { message: message, command: command });
     } catch (error) {
       await logEvent("ERR", client, error);
-      message.reply(
-        "There was an error trying to execute that command!\n" + error
-      );
+      message.reply("An error occured.");
     }
   },
 };
