@@ -1,6 +1,5 @@
 import { ChatInputCommandInteraction, Client, Events } from "discord.js";
-import config from "../config.js";
-import { logEvent } from "../utils/generalUtils.js";
+import { logEvent, isSuperUser } from "../utils/generalUtils.js";
 
 export default {
   name: Events.InteractionCreate,
@@ -21,17 +20,17 @@ export default {
           ephemeral: true,
         });
 
-      if (
-        command.devloper &&
-        !config.superUsersArray.includes(interaction.user.id)
-      ) {
+      if (command.isPrivate && !isSuperUser(interaction.user))
         return interaction.reply({
-          content: "This is for devs 🤓",
-          ephemeral: true,
+          content: "This operation is forbidden.",
         });
+
+      try {
+        await command.execute(interaction, client);
+      } catch (e) {
+        await logEvent("ERR", client, e);
       }
 
-      command.execute(interaction, client);
       await logEvent("SLASHCMD", client, {
         interaction: interaction,
         command: command,
@@ -55,10 +54,18 @@ export default {
       if (!modalFunc) return;
       modalFunc(interaction, client);
     } else if (interaction.isStringSelectMenu()) {
-      console.log("🔘 String Select Menu");
-      const selectMenuFunc = client.selectMenus.get(interaction.customId);
-      if (!selectMenuFunc) return;
-      await selectMenuFunc(interaction, client);
+      console.log("📃 String Select Menu");
+      const selectMenu = client.selectMenus.get(interaction.customId);
+      if (!selectMenu) return;
+      if (selectMenu.isPrivate && !isSuperUser(interaction.user))
+        return interaction.reply({
+          content: "This operation is not permitted.",
+        });
+      try {
+        await selectMenu.execute(interaction, client);
+      } catch (e) {
+        await logEvent("ERR", client, e);
+      }
     }
   },
 };

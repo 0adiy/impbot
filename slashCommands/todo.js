@@ -5,7 +5,7 @@ import {
 } from "discord.js";
 import taskSelectMenu from "../components/selectMenus/task.select.js";
 import taskSchema from "../models/task.model.js";
-import { isSuperUser, loadAllTasks } from "../utils/generalUtils.js";
+import { loadAllTasks } from "../utils/generalUtils.js";
 import { COLORS } from "../utils/enums.js";
 
 function formatDate(timestamp) {
@@ -28,7 +28,7 @@ export default {
         .setRequired(false)
     ),
 
-  //helpful for filtering
+  //auth handled in interactionCreate.event.js:24
   isPrivate: true,
 
   /**
@@ -38,14 +38,8 @@ export default {
    */
   async execute(interaction, client) {
     await interaction.deferReply();
-
-    if (!isSuperUser(interaction.user)) {
-      return interaction.editReply("This command is not available for you.");
-    }
-
     const taskMessage = interaction.options.getString("task") ?? null;
     let content = null;
-
     // const clearButton = new ButtonBuilder()
     //   .setCustomId("clearall")
     //   .setLabel("Clear All")

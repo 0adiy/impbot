@@ -12,7 +12,10 @@ export default async function loadSelectMenus(client) {
     const selectMenu = imported.default;
 
     const execute = (...args) => selectMenu.execute(...args, client);
-    client.selectMenus.set(selectMenu.id, execute);
+    client.selectMenus.set(selectMenu.id, {
+      isPrivate: selectMenu.isPrivate,
+      execute,
+    });
 
     table.addRow(selectMenu.id, "🟧");
   }
