@@ -2,7 +2,7 @@ import { User, MessageReaction, Client } from "discord.js";
 export default {
   name: "delete_message",
   isPrivate: true,
-  reactions: ["wastebasket"],
+  reactions: ["wastebasket", "🗑"],
   description: "Deletes the message when reacted by super users",
   /**
    * Deletes the message when reacted by super users
