@@ -11,5 +11,7 @@ export default {
    * @param {MessageReaction} reaction
    * @param {User} user
    */
-  execute: async (client, reaction, user) => {},
+  execute: async (client, reaction, user) => {
+    console.log("hi");
+  },
 };

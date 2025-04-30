@@ -1,5 +1,5 @@
 import { Events, User, MessageReaction, Client } from "discord.js";
-
+import { isSuperUser, logEvent } from "../utils/generalUtils.js";
 export default {
   name: Events.MessageReactionAdd,
   /**
@@ -23,6 +23,12 @@ export default {
       );
     }
     if (!command) return;
-    console.log(command.name);
+    if (!isSuperUser(user)) return;
+    try {
+      await logEvent("RXN", client, { reaction, command, user });
+      await command.execute(client, reaction, user);
+    } catch (e) {
+      await logEvent("ERR", client, e);
+    }
   },
 };
