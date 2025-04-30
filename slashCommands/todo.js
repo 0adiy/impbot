@@ -2,6 +2,7 @@ import {
   SlashCommandBuilder,
   ActionRowBuilder,
   EmbedBuilder,
+  InteractionContextType,
 } from "discord.js";
 import taskSelectMenu from "../components/selectMenus/task.select.js";
 import taskSchema from "../models/task.model.js";
@@ -26,7 +27,12 @@ export default {
         .setDescription("The task to be done")
         .setMaxLength(90)
         .setRequired(false)
-    ),
+    )
+    .setContexts([
+      InteractionContextType.Guild,
+      InteractionContextType.BotDM,
+      InteractionContextType.PrivateChannel,
+    ]),
   isPrivate: true,
   /**
    *

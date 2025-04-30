@@ -2,7 +2,6 @@ import {
   SlashCommandBuilder,
   EmbedBuilder,
   InteractionContextType,
-  ApplicationIntegrationType,
 } from "discord.js";
 import { COLORS } from "../utils/enums.js";
 
@@ -14,10 +13,6 @@ export default {
       InteractionContextType.Guild,
       InteractionContextType.BotDM,
       InteractionContextType.PrivateChannel,
-    ])
-    .setIntegrationTypes([
-      ApplicationIntegrationType.GuildInstall,
-      ApplicationIntegrationType.UserInstall,
     ]),
   /**
    *

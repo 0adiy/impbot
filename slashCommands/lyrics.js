@@ -1,4 +1,8 @@
-import { SlashCommandBuilder, EmbedBuilder } from "discord.js";
+import {
+  SlashCommandBuilder,
+  EmbedBuilder,
+  InteractionContextType,
+} from "discord.js";
 import config from "../config.js";
 import { configureLyrixcope, getSongLyrics } from "lyrixcope";
 import { logEvent } from "../utils/generalUtils.js";
@@ -19,7 +23,12 @@ export default {
         .setName("artist")
         .setDescription("The name of the artist")
         .setRequired(false)
-    ),
+    )
+    .setContexts([
+      InteractionContextType.Guild,
+      InteractionContextType.BotDM,
+      InteractionContextType.PrivateChannel,
+    ]),
   /**
    *
    * @param {ChatInputCommandInteraction} interaction

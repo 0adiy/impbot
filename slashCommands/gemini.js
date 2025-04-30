@@ -1,4 +1,8 @@
-import { SlashCommandBuilder, EmbedBuilder } from "discord.js";
+import {
+  SlashCommandBuilder,
+  EmbedBuilder,
+  InteractionContextType,
+} from "discord.js";
 import {
   logEvent,
   capitalizeFirstLetter,
@@ -15,7 +19,12 @@ export default {
         .setName("query")
         .setDescription("Enter your prompt")
         .setRequired(true)
-    ),
+    )
+    .setContexts([
+      InteractionContextType.Guild,
+      InteractionContextType.BotDM,
+      InteractionContextType.PrivateChannel,
+    ]),
   /**
    * Ask Gemini
    *

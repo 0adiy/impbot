@@ -1,4 +1,9 @@
-import { SlashCommandBuilder, EmbedBuilder, Embed } from "discord.js";
+import {
+  SlashCommandBuilder,
+  EmbedBuilder,
+  Embed,
+  InteractionContextType,
+} from "discord.js";
 import config from "../config.js";
 import { COLORS } from "../utils/enums.js";
 import {
@@ -81,7 +86,12 @@ export default {
         .setDescription("The word to look up")
         .setRequired(true)
         .setAutocomplete(true)
-    ),
+    )
+    .setContexts([
+      InteractionContextType.Guild,
+      InteractionContextType.BotDM,
+      InteractionContextType.PrivateChannel,
+    ]),
   /**
    *
    * @param {ChatInputCommandInteraction} interaction

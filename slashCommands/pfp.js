@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "discord.js";
+import { SlashCommandBuilder, InteractionContextType } from "discord.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -9,7 +9,11 @@ export default {
         .setName("member")
         .setDescription("The user to display")
         .setRequired(true)
-    ),
+    )
+    .setContexts([
+      InteractionContextType.Guild,
+      InteractionContextType.PrivateChannel,
+    ]),
   /**
    * Shows pfp of a desired user
    *

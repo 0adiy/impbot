@@ -1,4 +1,4 @@
-import { SlashCommandBuilder } from "discord.js";
+import { SlashCommandBuilder, InteractionContextType } from "discord.js";
 import { getRandomItems } from "../utils/generalUtils.js";
 import config from "../config.js";
 
@@ -18,7 +18,9 @@ async function getPic(api, query, limit) {
     params = { key: pixabayApi.key, q: query, image_type: "photo" };
   }
 
-  const response = await fetch(`${endpoint}?${new URLSearchParams(params)}`, { headers });
+  const response = await fetch(`${endpoint}?${new URLSearchParams(params)}`, {
+    headers,
+  });
   const data = await response.json();
 
   let photos_array = api === "api_pexels" ? data.photos : data.hits;
@@ -37,25 +39,33 @@ export default {
   data: new SlashCommandBuilder()
     .setName("pic")
     .setDescription("Search beautiful pictures.")
-    .addStringOption((option) =>
-      option.setName("search").setDescription("The term to search").setRequired(true),
+    .setContexts([
+      InteractionContextType.Guild,
+      InteractionContextType.BotDM,
+      InteractionContextType.PrivateChannel,
+    ])
+    .addStringOption(option =>
+      option
+        .setName("search")
+        .setDescription("The term to search")
+        .setRequired(true)
     )
-    .addStringOption((option) =>
+    .addStringOption(option =>
       option
         .setName("service")
         .setDescription("Select the service")
         .setRequired(true)
         .addChoices(
           { name: "Pixabay", value: "api_pixabay" },
-          { name: "Pexels", value: "api_pexels" },
-        ),
+          { name: "Pexels", value: "api_pexels" }
+        )
     )
-    .addIntegerOption((option) =>
+    .addIntegerOption(option =>
       option
         .setName("limit")
         .setDescription("Number of images to return")
         .setMinValue(1)
-        .setMaxValue(10),
+        .setMaxValue(10)
     ),
   /**
    *
