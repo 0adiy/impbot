@@ -12,20 +12,16 @@ export default {
    */
   async execute(reaction, user, superReaction, client) {
     if (user.bot) return;
-    const emoji = reaction.emoji;
-    let command = client.reactionCommands.find(cmd =>
-      cmd.reactions.includes(emoji.name)
-    );
-    //custom emoji
-    if (emoji.id) {
-      command = client.reactionCommands.find(cmd =>
-        cmd.reactions.includes(emoji.identifier)
-      );
-    }
 
-    // const command = client.reactionCommands.find(cmd =>
-    //   cmd.reactions.some(r => searches.includes(r.toLowerCase()))
-    // );
+    const emoji = reaction.emoji;
+    const unicode = emoji.name;
+    const custom = emoji.id ? `${emoji.name}:${emoji.id}` : null;
+
+    const command = client.reactionCommands.find(
+      cmd =>
+        cmd.reactions.includes(unicode) ||
+        (custom && cmd.reactions.includes(custom))
+    );
 
     if (!command) return;
     console.log(command.name);
