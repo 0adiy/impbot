@@ -15,6 +15,7 @@ import {
   createContextBasedAI,
   createQueryBasedAI,
 } from "./models/googleGenerativeAI.js";
+import loadReactionCommands from "./handlers/reactionCommandHandler.js";
 
 connectDB();
 
@@ -57,4 +58,5 @@ loadEvents(client);
 loadMessageCommands(client);
 loadModals(client);
 loadSelectMenus(client);
+loadReactionCommands(client);
 client.login(config.TOKEN);
