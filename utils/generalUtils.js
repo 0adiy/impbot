@@ -101,6 +101,16 @@ async function logEvent(type, client, information) {
     console.log(`🚀 ${information}`);
     return logChannel.send(`${EMOJIS.BOOT} ${information}`);
   }
+  if (type == "RXN") {
+    reaction = information.reaction;
+    command = information.command;
+    user = information.user;
+    return logChannel.send(
+      `${reaction.emoji.toString()} ${user.username} : ${command.name} > ${
+        reaction.message.url
+      }`
+    );
+  }
 }
 
 // ─────────────────────────────────────────────
