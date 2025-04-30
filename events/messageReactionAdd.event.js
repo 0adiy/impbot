@@ -11,6 +11,10 @@ export default {
    */
   async execute(reaction, user, client) {
     if (user.bot) return;
-    reaction.message.channel.send(`Reaction added by ${user}`);
+    const command = [...client.reactionCommands.values()].find(cmd =>
+      cmd.reactions?.includes(emojiName)
+    );
+    console.log(command.name);
+    // reaction.message.channel.send(`Reaction added by ${user}`);
   },
 };
