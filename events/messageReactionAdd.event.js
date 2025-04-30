@@ -12,6 +12,8 @@ export default {
   async execute(reaction, user, client) {
     if (user.bot) return;
     const emoji = reaction.emoji.name.toLowerCase();
+    console.log(client);
+    
     const command = client.reactionCommands.find(cmd =>
       cmd.reactions?.includes(emoji)
     );
