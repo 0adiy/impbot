@@ -2,6 +2,7 @@ import {
   SlashCommandBuilder,
   EmbedBuilder,
   InteractionContextType,
+  ApplicationIntegrationType,
 } from "discord.js";
 import { COLORS } from "../utils/enums.js";
 
@@ -9,6 +10,10 @@ export default {
   data: new SlashCommandBuilder()
     .setName("ping")
     .setDescription("Outputs latency of the bot")
+    .setIntegrationTypes([
+      ApplicationIntegrationType.GuildInstall,
+      ApplicationIntegrationType.UserInstall,
+    ])
     .setContexts([
       InteractionContextType.Guild,
       InteractionContextType.BotDM,

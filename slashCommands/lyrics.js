@@ -2,6 +2,7 @@ import {
   SlashCommandBuilder,
   EmbedBuilder,
   InteractionContextType,
+  ApplicationIntegrationType,
 } from "discord.js";
 import config from "../config.js";
 import { configureLyrixcope, getSongLyrics } from "lyrixcope";
@@ -24,6 +25,10 @@ export default {
         .setDescription("The name of the artist")
         .setRequired(false)
     )
+    .setIntegrationTypes([
+      ApplicationIntegrationType.GuildInstall,
+      ApplicationIntegrationType.UserInstall,
+    ])
     .setContexts([
       InteractionContextType.Guild,
       InteractionContextType.BotDM,

@@ -1,4 +1,8 @@
-import { SlashCommandBuilder, InteractionContextType } from "discord.js";
+import {
+  SlashCommandBuilder,
+  InteractionContextType,
+  ApplicationIntegrationType,
+} from "discord.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -10,6 +14,10 @@ export default {
         .setDescription("The user to display")
         .setRequired(true)
     )
+    .setIntegrationTypes([
+      ApplicationIntegrationType.GuildInstall,
+      ApplicationIntegrationType.UserInstall,
+    ])
     .setContexts([
       InteractionContextType.Guild,
       InteractionContextType.PrivateChannel,

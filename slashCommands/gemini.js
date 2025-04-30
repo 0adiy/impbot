@@ -2,6 +2,7 @@ import {
   SlashCommandBuilder,
   EmbedBuilder,
   InteractionContextType,
+  ApplicationIntegrationType,
 } from "discord.js";
 import {
   logEvent,
@@ -20,6 +21,10 @@ export default {
         .setDescription("Enter your prompt")
         .setRequired(true)
     )
+    .setIntegrationTypes([
+      ApplicationIntegrationType.GuildInstall,
+      ApplicationIntegrationType.UserInstall,
+    ])
     .setContexts([
       InteractionContextType.Guild,
       InteractionContextType.BotDM,

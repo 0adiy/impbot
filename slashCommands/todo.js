@@ -3,6 +3,7 @@ import {
   ActionRowBuilder,
   EmbedBuilder,
   InteractionContextType,
+  ApplicationIntegrationType,
 } from "discord.js";
 import taskSelectMenu from "../components/selectMenus/task.select.js";
 import taskSchema from "../models/task.model.js";
@@ -28,6 +29,10 @@ export default {
         .setMaxLength(90)
         .setRequired(false)
     )
+    .setIntegrationTypes([
+      ApplicationIntegrationType.GuildInstall,
+      ApplicationIntegrationType.UserInstall,
+    ])
     .setContexts([
       InteractionContextType.Guild,
       InteractionContextType.BotDM,

@@ -1,4 +1,8 @@
-import { SlashCommandBuilder, InteractionContextType } from "discord.js";
+import {
+  SlashCommandBuilder,
+  InteractionContextType,
+  ApplicationIntegrationType,
+} from "discord.js";
 import { getRandomItems } from "../utils/generalUtils.js";
 import config from "../config.js";
 
@@ -39,6 +43,10 @@ export default {
   data: new SlashCommandBuilder()
     .setName("pic")
     .setDescription("Search beautiful pictures.")
+    .setIntegrationTypes([
+      ApplicationIntegrationType.GuildInstall,
+      ApplicationIntegrationType.UserInstall,
+    ])
     .setContexts([
       InteractionContextType.Guild,
       InteractionContextType.BotDM,

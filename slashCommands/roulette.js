@@ -1,4 +1,8 @@
-import { SlashCommandBuilder, InteractionContextType } from "discord.js";
+import {
+  SlashCommandBuilder,
+  InteractionContextType,
+  ApplicationIntegrationType,
+} from "discord.js";
 import { sleep } from "../utils/generalUtils.js";
 
 export default {
@@ -11,6 +15,10 @@ export default {
         .setDescription("The second player")
         .setRequired(true)
     )
+    .setIntegrationTypes([
+      ApplicationIntegrationType.GuildInstall,
+      ApplicationIntegrationType.UserInstall,
+    ])
     .setContexts([InteractionContextType.Guild]),
   /**
    *

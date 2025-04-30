@@ -3,6 +3,7 @@ import {
   EmbedBuilder,
   Embed,
   InteractionContextType,
+  ApplicationIntegrationType,
 } from "discord.js";
 import config from "../config.js";
 import { COLORS } from "../utils/enums.js";
@@ -87,6 +88,10 @@ export default {
         .setRequired(true)
         .setAutocomplete(true)
     )
+    .setIntegrationTypes([
+      ApplicationIntegrationType.GuildInstall,
+      ApplicationIntegrationType.UserInstall,
+    ])
     .setContexts([
       InteractionContextType.Guild,
       InteractionContextType.BotDM,
