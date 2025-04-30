@@ -72,7 +72,7 @@ async function getGuildChannels(client, guildId, shouldLog = false) {
   if (shouldLog)
     channels.forEach(channel =>
       console.log(
-        `${channel.name}: ${channel.id} with ${ChannelType[channel.type]}\n`
+        `${channel.name}: ${channel.id} as ${ChannelType[channel.type]}\n`
       )
     );
   return channels;
