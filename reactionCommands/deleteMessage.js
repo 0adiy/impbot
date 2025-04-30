@@ -12,6 +12,6 @@ export default {
    * @param {User} user
    */
   execute: async (client, reaction, user) => {
-    console.log("hi");
+    await reaction.message.delete();
   },
 };

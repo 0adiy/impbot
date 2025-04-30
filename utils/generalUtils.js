@@ -104,9 +104,9 @@ async function logEvent(type, client, information) {
   if (type == "RXN") {
     const { reaction, command, user } = information;
     return logChannel.send(
-      `${reaction.emoji.toString()} ${user.username} : ${command.name} > ${
-        reaction.message.url
-      }`
+      `${reaction.emoji.toString()} \`${user.username}\` : \`:${
+        command.name
+      }:\` > ${reaction.message.url}`
     );
   }
 }
