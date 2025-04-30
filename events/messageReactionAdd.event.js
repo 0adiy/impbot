@@ -10,6 +10,7 @@ export default {
    * @param {Client} client - The client object.
    */
   async execute(reaction, user, client) {
+    console.log(reaction);
     reaction.message.channel.send(`Reaction added by ${user}`);
   },
 };
