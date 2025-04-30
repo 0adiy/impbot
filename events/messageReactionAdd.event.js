@@ -13,12 +13,10 @@ export default {
   async execute(reaction, user, superReaction, client) {
     if (user.bot) return;
     const emoji = reaction.emoji.name.toLowerCase();
-    console.log(client);
-
     const command = client.reactionCommands.find(cmd =>
-      cmd.reactions?.includes(emoji)
+      cmd.reactions.includes(emoji)
     );
-
+    if (!command) return;
     console.log(command.name);
     // reaction.message.channel.send(`Reaction added by ${user}`);
   },

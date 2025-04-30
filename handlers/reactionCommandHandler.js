@@ -11,8 +11,6 @@ export default async function loadReactionCommands(client) {
     const imported = await import("file://" + file);
     const command = imported.default;
     client.reactionCommands.set(command.name, command);
-    console.log(client.reactionCommands);
-
     table.addRow(command.name, "🟥");
   }
   return console.log(table.toString(), "\nReaction Commands loaded");
