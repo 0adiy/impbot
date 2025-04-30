@@ -1,4 +1,4 @@
-import { Events, Message, User, MessageReaction, Client } from "discord.js";
+import { Events, User, MessageReaction, Client } from "discord.js";
 
 export default {
   name: Events.MessageReactionAdd,
@@ -10,7 +10,7 @@ export default {
    * @param {Client} client - The client object.
    */
   async execute(reaction, user, client) {
-    console.log(reaction);
+    if (user.bot) return;
     reaction.message.channel.send(`Reaction added by ${user}`);
   },
 };

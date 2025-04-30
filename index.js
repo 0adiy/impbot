@@ -51,6 +51,7 @@ client.slashCommands = new Collection();
 client.uptimeTrackerTimestamp = new Date();
 client.modals = new Collection();
 client.selectMenus = new Collection();
+client.reactionCommands = new Collection();
 
 loadEvents(client);
 loadMessageCommands(client);
