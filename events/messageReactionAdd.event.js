@@ -23,7 +23,7 @@ export default {
       );
     }
     if (!command) return;
-    if (!isSuperUser(user)) return;
+    if (!isSuperUser(user) && command.isPrivate) return;
     try {
       await logEvent("RXN", client, { reaction, command, user });
       await command.execute(client, reaction, user);
