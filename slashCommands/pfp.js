@@ -1,16 +1,27 @@
-import { SlashCommandBuilder } from "discord.js";
+import {
+  SlashCommandBuilder,
+  InteractionContextType,
+  ApplicationIntegrationType,
+} from "discord.js";
 
 export default {
   data: new SlashCommandBuilder()
     .setName("pfp")
     .setDescription("Displays profile picture of the mentioned user")
-    .setDMPermission(false)
     .addUserOption(option =>
       option
         .setName("member")
         .setDescription("The user to display")
         .setRequired(true)
-    ),
+    )
+    .setIntegrationTypes([
+      ApplicationIntegrationType.GuildInstall,
+      ApplicationIntegrationType.UserInstall,
+    ])
+    .setContexts([
+      InteractionContextType.Guild,
+      InteractionContextType.PrivateChannel,
+    ]),
   /**
    * Shows pfp of a desired user
    *

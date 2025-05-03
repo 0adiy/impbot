@@ -2,133 +2,69 @@ import config from "../config.js";
 import { COLORS, EMOJIS } from "./enums.js";
 import { EmbedBuilder, User } from "discord.js";
 
-// Global list for storing cancellable timeout IDs
-let reminderTimeoutList = [];
+// ─────────────────────────────────────────────
+// Time & Utility
+// ─────────────────────────────────────────────
 
 function getFutureTimestamp(days, hours, minutes, seconds) {
   const now = Date.now();
-
-  const daysInMilliseconds = days * 24 * 60 * 60 * 1000;
-  const hoursInMilliseconds = hours * 60 * 60 * 1000;
-  const minutesInMilliseconds = minutes * 60 * 1000;
-  const secondsInMilliseconds = seconds * 1000;
-
   const futureTimestamp =
-    now +
-    daysInMilliseconds +
-    hoursInMilliseconds +
-    minutesInMilliseconds +
-    secondsInMilliseconds;
-  const futureDate = new Date(futureTimestamp);
-  return futureDate;
+    now + days * 86400000 + hours * 3600000 + minutes * 60000 + seconds * 1000;
+  return new Date(futureTimestamp);
 }
 
-/* REVIEW - the changes here connects a lot of functions to each other, might wanna change how they are structured?
- *  the global variable is also weird, maybe wanna change that too
- *  current logic is to remove all pending reminders, then get all the new 2 days ahead reminders and load them in
- *  this function itself it supposed to be called every 24 hours so there should be no misses
- *  (delete after reading)
- */
-
-/**
- * @param {User | String} user
- * @returns {bool}
- * @description doesn't suport usernames
- */
-function isSuperUser(user) {
-  if (user instanceof User) return config.superUsersArray.includes(user.id);
-  if (user instanceof String) return config.superUsersArray.includes(user);
-  return false;
-}
-
-async function loadAllTasks(taskSchema, client) {
-  let tasks = await taskSchema.find({ completed: false }).exec();
-  tasks = tasks ?? [];
-  return tasks;
-}
-
-async function loadAndSetAllReminders(reminderSchema, client) {
-  // clear the already existing reminders using IDs and clear the list as well
-  reminderTimeoutList.forEach(id => clearTimeout(id));
-  reminderTimeoutList = [];
-
-  let currentDate = new Date();
-  let twoDaysAhead = new Date(currentDate.getTime() + 2 * 24 * 60 * 60 * 1000); // 2 days ahead
-
-  const reminders = await reminderSchema
-    .find({ date: { $gt: currentDate, $lte: twoDaysAhead } })
-    .exec();
-
-  console.log(`Loaded ${reminders.length} reminders`);
-
-  reminders.forEach(reminder => {
-    const offset = new Date(reminder.date) - Date.now();
-    setReminder(reminder, offset, client);
-  });
-}
-
-async function setReminder(reminder, duration, client) {
-  const id = setTimeout(async () => {
-    await sendReminderAlert(client, reminder);
-  }, duration);
-
-  reminderTimeoutList.push(id);
-
-  console.log("Reminder set.");
-}
-
-async function sendReminderAlert(client, reminder) {
-  const channel = await client.channels.fetch(reminder.channelId);
-  const user = await client.users.fetch(reminder.userId);
-  const embed = new EmbedBuilder()
-    .setTitle(":bell: Gentle Reminder")
-    .setDescription(reminder.reminder)
-    .setColor(COLORS.SUCCESS)
-    .setAuthor({
-      name: user.username,
-      iconURL: user.displayAvatarURL(),
-    });
-  channel.send({ content: `<@${reminder.userId}>`, embeds: [embed] });
-}
-
-async function getChannel(param, client, message) {
-  if (/^\d+$/.test(param)) {
-    return client.channels.cache.get(param);
-  } else {
-    param.toLowerCase().replaceAll(" ", "-");
-    return message.guild.channels.cache.find(
-      channel => channel.name.toLowerCase() == param
-    );
-  }
-}
-
-async function create_webhook_if_not_exists(channel, name, pfp) {
-  const previousWebhooks = await channel.fetchWebhooks();
-  const hasWebhookAlready = previousWebhooks.find(
-    webhook => webhook.name == name
-  );
-  if (hasWebhookAlready) return hasWebhookAlready;
-  const newWebhook = await channel.createWebhook({ name: name, avatar: pfp });
-  return newWebhook;
-}
-
-async function send_message_with_webhook(webhook, message) {
-  await webhook.send({ content: message });
+function sleep(ms) {
+  return new Promise(res => setTimeout(res, ms));
 }
 
 function getRandomItems(array, count) {
-  count = count > array.length ? array.length : count;
-  return array.sort(() => 0.5 - Math.random()).slice(0, count);
+  return array
+    .sort(() => 0.5 - Math.random())
+    .slice(0, Math.min(count, array.length));
 }
 
 function capitalizeFirstLetter(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-async function sleep(ms) {
-  await new Promise(r => setTimeout(r, ms));
+function binarySearchLowerBound(array, word) {
+  let low = 0,
+    high = array.length - 1;
+  while (low <= high) {
+    const mid = Math.floor((low + high) / 2);
+    if (array[mid] < word) low = mid + 1;
+    else high = mid - 1;
+  }
+  return low;
 }
 
+function splitResponse(text, maxLength = 1500) {
+  const parts = [];
+  let current = "";
+  for (const line of text.split("\n")) {
+    if (current.length + line.length + 1 > maxLength) {
+      parts.push(current);
+      current = line;
+    } else {
+      current += (current ? "\n" : "") + line;
+    }
+  }
+  if (current) parts.push(current);
+  return parts;
+}
+
+// ─────────────────────────────────────────────
+// Authentication
+// ─────────────────────────────────────────────
+
+function isSuperUser(user) {
+  const id = user instanceof User ? user.id : String(user);
+  return config.superUsersArray.includes(id);
+}
+
+// ─────────────────────────────────────────────
+// Logging
+// ─────────────────────────────────────────────
 async function logEvent(type, client, information) {
   const logChannel = await client.channels.cache.get(config.logChannel);
   if (type == "DM") {
@@ -165,85 +101,134 @@ async function logEvent(type, client, information) {
     console.log(`🚀 ${information}`);
     return logChannel.send(`${EMOJIS.BOOT} ${information}`);
   }
+  if (type == "RXN") {
+    const { reaction, command, user } = information;
+    return logChannel.send(
+      `${reaction.emoji.toString()} \`${user.username}\` : \`:${
+        command.name
+      }:\` > ${reaction.message.url}`
+    );
+  }
 }
 
-function binarySearchLowerBound(array, word) {
-  let low = 0;
-  let high = array.length - 1;
-  let mid;
-  while (low <= high) {
-    mid = Math.floor((low + high) / 2);
-    if (array[mid] < word) {
-      low = mid + 1;
-    } else if (array[mid] > word) {
-      high = mid - 1;
-    } else {
-      return mid;
-    }
+// ─────────────────────────────────────────────
+// Reminder System
+// ─────────────────────────────────────────────
+
+let reminderTimeoutList = [];
+
+async function loadAndSetAllReminders(reminderSchema, client) {
+  reminderTimeoutList.forEach(clearTimeout);
+  reminderTimeoutList = [];
+
+  const now = new Date();
+  const twoDaysAhead = new Date(now.getTime() + 2 * 86400000);
+  const reminders = await reminderSchema
+    .find({ date: { $gt: now, $lte: twoDaysAhead } })
+    .exec();
+
+  console.log(`Loaded ${reminders.length} reminders`);
+  for (const reminder of reminders) {
+    const offset = new Date(reminder.date) - Date.now();
+    setReminder(reminder, offset, client);
   }
-  return low;
+}
+
+async function setReminder(reminder, duration, client) {
+  const timeoutId = setTimeout(
+    () => sendReminderAlert(client, reminder),
+    duration
+  );
+  reminderTimeoutList.push(timeoutId);
+  console.log("Reminder set.");
+}
+
+async function sendReminderAlert(client, reminder) {
+  const channel = await client.channels.fetch(reminder.channelId);
+  const user = await client.users.fetch(reminder.userId);
+
+  const embed = new EmbedBuilder()
+    .setTitle(":bell: Gentle Reminder")
+    .setDescription(reminder.reminder)
+    .setColor(COLORS.SUCCESS)
+    .setAuthor({ name: user.username, iconURL: user.displayAvatarURL() });
+
+  channel.send({ content: `<@${reminder.userId}>`, embeds: [embed] });
+}
+
+// ─────────────────────────────────────────────
+// Webhooks
+// ─────────────────────────────────────────────
+
+async function create_webhook_if_not_exists(channel, name, avatar) {
+  const existing = await channel.fetchWebhooks();
+  const found = existing.find(w => w.name === name);
+  return found || (await channel.createWebhook({ name, avatar }));
+}
+
+async function send_message_with_webhook(webhook, message) {
+  await webhook.send({ content: message });
+}
+
+// ─────────────────────────────────────────────
+// Extra Utils
+// ─────────────────────────────────────────────
+
+async function loadAllTasks(taskSchema) {
+  return (await taskSchema.find({ completed: false }).exec()) ?? [];
 }
 
 async function getChatHistory(channel) {
   let history = "";
   let lastMessageId = null;
-  const allMessages = [];
+  const messagesList = [];
 
   while (history.length < 1500) {
     const messages = await channel.messages.fetch({
       limit: 10,
       before: lastMessageId,
     });
-
     if (messages.size === 0) break;
 
-    messages.forEach(message => allMessages.push(message));
-
+    messages.forEach(msg => messagesList.push(msg));
     lastMessageId = messages.last().id;
 
-    const tempHistory = allMessages.map(msg => msg.content).join("\n");
-    if (tempHistory.length >= 1500) break;
+    const temp = messagesList.map(m => m.content).join("\n");
+    if (temp.length >= 1500) break;
   }
 
-  allMessages.sort((a, b) => a.createdTimestamp - b.createdTimestamp);
+  messagesList.sort((a, b) => a.createdTimestamp - b.createdTimestamp);
 
-  history = allMessages
+  return messagesList
     .filter(msg => !msg.content.startsWith(config.prefix))
     .map(msg => `${msg.author.username.slice(0, 3)}: ${msg.content}`)
     .join("\n");
-
-  return history;
-}
-
-function splitResponse(text, maxLength = 1500) {
-  const parts = [];
-  let currentPart = "";
-  text.split("\n").forEach(line => {
-    if (currentPart.length + line.length + 1 > maxLength) {
-      parts.push(currentPart);
-      currentPart = line;
-    } else {
-      currentPart += (currentPart ? "\n" : "") + line;
-    }
-  });
-  if (currentPart) parts.push(currentPart);
-  return parts;
 }
 
 export {
+  // Time
   getFutureTimestamp,
-  loadAndSetAllReminders,
-  setReminder,
-  getChannel,
-  create_webhook_if_not_exists,
-  send_message_with_webhook,
+  sleep,
   getRandomItems,
   capitalizeFirstLetter,
-  sleep,
-  logEvent,
   binarySearchLowerBound,
-  getChatHistory,
   splitResponse,
-  loadAllTasks,
+
+  // User
   isSuperUser,
+
+  // Logging
+  logEvent,
+
+  // Reminders
+  loadAndSetAllReminders,
+  setReminder,
+
+  // Webhook
+  create_webhook_if_not_exists,
+  send_message_with_webhook,
+
+  // Misc
+  loadAllTasks,
+  getChatHistory,
 };

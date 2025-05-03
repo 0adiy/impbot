@@ -22,7 +22,7 @@ async function loadSlashCommands(client) {
     commandsArray.push(command.data.toJSON());
 
     //formatting
-    table.addRow(command.data.name, "🟩");
+    table.addRow(command.data.name, "🟪");
   }
 
   await rest.put(Routes.applicationCommands(config.CLIENT_ID), {

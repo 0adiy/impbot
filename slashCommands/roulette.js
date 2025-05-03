@@ -1,4 +1,8 @@
-import { SlashCommandBuilder } from "discord.js";
+import {
+  SlashCommandBuilder,
+  InteractionContextType,
+  ApplicationIntegrationType,
+} from "discord.js";
 import { sleep } from "../utils/generalUtils.js";
 
 export default {
@@ -10,7 +14,12 @@ export default {
         .setName("player2")
         .setDescription("The second player")
         .setRequired(true)
-    ),
+    )
+    .setIntegrationTypes([
+      ApplicationIntegrationType.GuildInstall,
+      ApplicationIntegrationType.UserInstall,
+    ])
+    .setContexts([InteractionContextType.Guild]),
   /**
    *
    * @param {ChatInputCommandInteraction} interaction

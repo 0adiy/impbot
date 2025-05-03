@@ -12,7 +12,6 @@ export default {
   data: new StringSelectMenuBuilder()
     .setCustomId("task_select")
     .setPlaceholder("Choose a task to delete"),
-  //auth handled in interactionCreate.event.js:62
   isPrivate: true,
   /**
    *

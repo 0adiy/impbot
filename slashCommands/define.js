@@ -1,4 +1,10 @@
-import { SlashCommandBuilder, EmbedBuilder, Embed } from "discord.js";
+import {
+  SlashCommandBuilder,
+  EmbedBuilder,
+  Embed,
+  InteractionContextType,
+  ApplicationIntegrationType,
+} from "discord.js";
 import config from "../config.js";
 import { COLORS } from "../utils/enums.js";
 import {
@@ -75,14 +81,22 @@ export default {
   data: new SlashCommandBuilder()
     .setName("define")
     .setDescription("Look up definitions of a given word")
-    .setDMPermission(false)
     .addStringOption(option =>
       option
         .setName("word")
         .setDescription("The word to look up")
         .setRequired(true)
         .setAutocomplete(true)
-    ),
+    )
+    .setIntegrationTypes([
+      ApplicationIntegrationType.GuildInstall,
+      ApplicationIntegrationType.UserInstall,
+    ])
+    .setContexts([
+      InteractionContextType.Guild,
+      InteractionContextType.BotDM,
+      InteractionContextType.PrivateChannel,
+    ]),
   /**
    *
    * @param {ChatInputCommandInteraction} interaction
@@ -100,7 +114,6 @@ export default {
   },
   async autocomplete(interaction) {
     const word = interaction.options.getFocused();
-    //NOTE - have to send only the first 10 results
     const wordIndex = binarySearchLowerBound(wordsList, word);
     return interaction.respond(
       wordsList

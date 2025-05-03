@@ -1,10 +1,10 @@
 import { EMOJIS } from "../utils/enums.js";
 import {
-  getChannel,
   create_webhook_if_not_exists,
   send_message_with_webhook,
   logEvent,
 } from "../utils/generalUtils.js";
+import { getChannel } from "../utils/discordUtils.js";
 
 export default {
   name: "move",
@@ -23,7 +23,7 @@ export default {
       let final_channel = args.shift();
       let range = args.shift() ?? 0;
 
-      final_channel = await getChannel(final_channel, client, message);
+      final_channel = await getChannel(client, message.guild, final_channel);
 
       if (
         !message.reference ||

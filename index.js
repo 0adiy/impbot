@@ -15,6 +15,7 @@ import {
   createContextBasedAI,
   createQueryBasedAI,
 } from "./models/googleGenerativeAI.js";
+import loadReactionCommands from "./handlers/reactionCommandHandler.js";
 
 connectDB();
 
@@ -26,6 +27,7 @@ const client = new Client({
     GatewayIntentBits.GuildPresences,
     GatewayIntentBits.MessageContent,
     GatewayIntentBits.DirectMessages,
+    GatewayIntentBits.GuildMessageReactions,
     GatewayIntentBits.DirectMessageReactions,
     GatewayIntentBits.GuildVoiceStates,
   ],
@@ -50,9 +52,11 @@ client.slashCommands = new Collection();
 client.uptimeTrackerTimestamp = new Date();
 client.modals = new Collection();
 client.selectMenus = new Collection();
+client.reactionCommands = new Collection();
 
 loadEvents(client);
 loadMessageCommands(client);
 loadModals(client);
 loadSelectMenus(client);
+loadReactionCommands(client);
 client.login(config.TOKEN);

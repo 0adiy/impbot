@@ -1,4 +1,9 @@
-import { SlashCommandBuilder, time } from "discord.js";
+import {
+  SlashCommandBuilder,
+  time,
+  InteractionContextType,
+  ApplicationIntegrationType,
+} from "discord.js";
 import reminderSchema from "../models/reminder.model.js";
 import { getFutureTimestamp, setReminder } from "../utils/generalUtils.js";
 
@@ -22,7 +27,11 @@ export default {
   data: new SlashCommandBuilder()
     .setName("reminder")
     .setDescription("Sets a reminder for a desired time.")
-    .setDMPermission(false)
+    .setIntegrationTypes([
+      ApplicationIntegrationType.GuildInstall,
+      ApplicationIntegrationType.UserInstall,
+    ])
+    .setContexts([InteractionContextType.Guild, InteractionContextType.BotDM])
     .addStringOption(option =>
       option
         .setName("duration")
