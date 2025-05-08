@@ -43,6 +43,7 @@ export default {
       loop: null,
       playerId: interaction.user.id,
       refreshRate: 1500,
+      controlRow: null,
     };
 
     client.games.set(interaction.user.id, gameState);

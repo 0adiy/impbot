@@ -36,7 +36,7 @@ async function updateInteraction(gameState, interaction, client) {
     return interaction.editReply({ embeds: [gameOverEmbed] });
   await interaction.editReply({
     content: message,
-    component: [gameState.controlRow],
+    components: [gameState.controlRow],
   });
 }
 
