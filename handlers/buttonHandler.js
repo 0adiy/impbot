@@ -11,7 +11,7 @@ export default async function loadButtons(client) {
     const imported = await import("file://" + file);
     const button = imported.default;
     client.buttons.set(button.name, button);
-    table.addRow(button.name, "🟦");
+    table.addRow(button.name, "🟫");
   }
   return console.log(table.toString(), "\nButtons loaded");
 }

@@ -56,6 +56,8 @@ client.selectMenus = new Collection();
 client.reactionCommands = new Collection();
 client.buttons = new Collection();
 
+client.games = new Map();
+
 loadEvents(client);
 loadMessageCommands(client);
 loadModals(client);

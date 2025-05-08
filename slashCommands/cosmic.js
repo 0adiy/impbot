@@ -8,66 +8,7 @@ import {
   ActionRowBuilder,
 } from "discord.js";
 import { COLORS } from "../utils/enums.js";
-
-const state = {
-  width: 4,
-  height: 8,
-  playerPos: Math.floor(4 / 2),
-  aliens: [],
-  display: "",
-  score: 0,
-  isOver: false,
-};
-
-function updateDisplay(state) {
-  let display = "";
-  const emptySpace = " ";
-
-  for (let y = 0; y < state.height; y++) {
-    let row = "";
-    for (let x = 0; x < state.width; x++) {
-      const hasAlien = state.aliens.some(a => a.x === x && a.y === y);
-      row += hasAlien ? "👾" : emptySpace;
-    }
-    display += row + "\n";
-  }
-
-  let playerRow = "";
-  for (let x = 0; x < state.width; x++) {
-    playerRow += x === state.playerPos ? "👩‍🚀" : emptySpace;
-  }
-
-  display += playerRow;
-  state.display = display;
-  return display;
-}
-
-async function updateEmbed(state, controlRow, interaction, client) {
-  const embed = new EmbedBuilder()
-    .setTitle(state.isOver ? `🪐 Cosmic: Game Over` : `🪐 Cosmic: Hellfire`)
-    .setDescription(updateDisplay(state))
-    .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-    .setFooter({ text: `© ${new Date().getFullYear()} The Evil Inc.` })
-    .setColor(state.isOver ? COLORS.ERROR : COLORS.PRIMARY);
-  await interaction.editReply({ embeds: [embed], components: [controlRow] });
-}
-
-function dropAliens(state) {
-  state.aliens = state.aliens.map(a => ({ x: a.x, y: a.y + 1 }));
-  state.aliens.push({
-    x: Math.floor(Math.random() * state.width),
-    y: 0,
-  });
-
-  if (state.aliens.some(a => a.y === state.height && a.x === state.playerPos)) {
-    state.isOver = true;
-  } else {
-    state.aliens = state.aliens.filter(a => a.y <= state.height);
-    state.isOver = false;
-  }
-
-  return state.isOver;
-}
+import { dropAliens, updateEmbed, updateDisplay } from "../utils/gameUtils.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -90,26 +31,40 @@ export default {
   async execute(interaction, client) {
     await interaction.deferReply();
 
-    const leftButton = new ButtonBuilder()
-      .setCustomId("cosmic_LEFT")
-      .setLabel("LEFT")
-      .setStyle(ButtonStyle.Primary);
-    const rightButton = new ButtonBuilder()
-      .setCustomId("cosmic_RIGHT")
-      .setLabel("RIGHT")
-      .setStyle(ButtonStyle.Primary);
-    const controlRow = new ActionRowBuilder().addComponents(
-      leftButton,
-      rightButton
+    const gameState = {
+      width: 4,
+      height: 8,
+      playerPos: Math.floor(4 / 2),
+      aliens: [],
+      display: "",
+      score: 0,
+      isOver: false,
+      loop: null,
+    };
+
+    client.games.set(interaction.user.id, gameState);
+
+    gameState.controlRow = new ActionRowBuilder().addComponents(
+      new ButtonBuilder()
+        .setCustomId("cosmic_LEFT")
+        .setLabel("LEFT")
+        .setStyle(ButtonStyle.Primary),
+      new ButtonBuilder()
+        .setCustomId("cosmic_RIGHT")
+        .setLabel("RIGHT")
+        .setStyle(ButtonStyle.Primary)
     );
-    await updateEmbed(state, controlRow, interaction, client);
-    let gameLoop = setInterval(async () => {
-      if (state.isOver) {
-        clearInterval(gameLoop);
-        return interaction.followUp({ content: "💥 Game Over!" });
+
+    await updateEmbed(gameState, interaction, client);
+
+    gameState.loop = setInterval(async () => {
+      if (gameState.isOver) {
+        clearInterval(gameState.loop);
+        client.games.delete(interaction.user.id);
+        return updateEmbed(gameState, interaction, client);
       }
-      dropAliens(state);
-      await updateEmbed(state, controlRow, interaction, client);
+      dropAliens(gameState);
+      await updateEmbed(gameState, interaction, client);
     }, 1500);
   },
 };
