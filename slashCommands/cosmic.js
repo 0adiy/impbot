@@ -31,9 +31,9 @@ export default {
     await interaction.deferReply();
 
     const gameState = {
-      width: 4,
-      height: 8,
-      playerPos: Math.floor(4 / 2),
+      width: 5,
+      height: 12,
+      playerPos: 3,
       playerAsset: EMOJIS.ASTRONAUT,
       alienAsset: EMOJIS.ALIEN,
       aliens: [],
