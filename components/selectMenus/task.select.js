@@ -4,7 +4,7 @@ import {
   StringSelectMenuInteraction,
   EmbedBuilder,
 } from "discord.js";
-import { COLORS } from "../../utils/enums.js";
+import { COLORS, ANIMATIONS } from "../../utils/enums.js";
 import taskSchema from "../../models/task.model.js";
 
 export default {
@@ -36,6 +36,7 @@ export default {
     const embed = new EmbedBuilder()
       .setTitle(title)
       .setDescription(description)
+      .setThumbnail(ANIMATIONS.CHECK)
       .setColor(colour)
       .setTimestamp();
 

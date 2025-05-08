@@ -8,7 +8,7 @@ import {
   ActionRowBuilder,
 } from "discord.js";
 import { dropAliens, updateEmbed, updateDisplay } from "../utils/gameUtils.js";
-
+import { EMOJIS } from "../utils/enums.js";
 export default {
   data: new SlashCommandBuilder()
     .setName("cosmic")
@@ -47,11 +47,11 @@ export default {
     gameState.controlRow = new ActionRowBuilder().addComponents(
       new ButtonBuilder()
         .setCustomId("cosmic_LEFT")
-        .setLabel("⇐")
+        .setEmoji(EMOJIS.ARROW_LEFT)
         .setStyle(ButtonStyle.Primary),
       new ButtonBuilder()
         .setCustomId("cosmic_RIGHT")
-        .setLabel("⇒")
+        .setEmoji(EMOJIS.ARROW_RIGHT)
         .setStyle(ButtonStyle.Primary)
     );
 

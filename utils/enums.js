@@ -12,6 +12,12 @@ const EMOJIS = {
   SLASHCMD: "<:slashcmd:1272652769194541249>",
   MSGCMD: "<:msgcmd:1272656123840958476>",
   BOOT: "<:startup:1305494476734857236>",
+  ARROW_RIGHT: "<:arrowright:1369996931723690055>",
+  ARROW_LEFT: "<:arrowleft:1369996978842243163>",
+};
+
+const ANIMATIONS = {
+  CHECK: "https://i.ibb.co/fVjShNTz/Animation-1746703373021.gif",
 };
 
 export { COLORS, EMOJIS };
