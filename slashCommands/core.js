@@ -3,8 +3,10 @@ import {
   ModalBuilder,
   InteractionContextType,
   ApplicationIntegrationType,
+  TextInputBuilder,
+  TextInputStyle,
+  ActionRowBuilder,
 } from "discord.js";
-import { COLORS } from "../utils/enums.js";
 
 export default {
   data: new SlashCommandBuilder()
