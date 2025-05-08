@@ -40,8 +40,6 @@ export default {
       isOver: false,
       loop: null,
       playerId: interaction.user.id,
-      tick: 0,
-      spawnCooldown: Array(4).fill(0),
     };
 
     client.games.set(interaction.user.id, gameState);
