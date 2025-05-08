@@ -1,4 +1,3 @@
-import { log } from "console";
 import {
   SlashCommandBuilder,
   ModalBuilder,
@@ -8,7 +7,7 @@ import {
   TextInputStyle,
   ActionRowBuilder,
 } from "discord.js";
-const fs = require("fs/promises");
+import fs from "fs/promises";
 
 export default {
   data: new SlashCommandBuilder()
