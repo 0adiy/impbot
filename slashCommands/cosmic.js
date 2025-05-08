@@ -41,10 +41,9 @@ export default {
       loop: null,
       playerId: interaction.user.id,
       tick: 0,
-      spawnCooldown: null,
+      spawnCooldown: Array(4).fill(0),
     };
 
-    gameState.spawnCooldown = new Array(gameState.width).fill(0);
     client.games.set(interaction.user.id, gameState);
 
     gameState.controlRow = new ActionRowBuilder().addComponents(
