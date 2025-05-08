@@ -1,5 +1,5 @@
 import { EmbedBuilder } from "discord.js";
-import { COLORS } from "../utils/enums.js";
+import { COLORS, ANIMATIONS } from "../utils/enums.js";
 function dropAliens(gameState) {
   gameState.aliens = gameState.aliens.map(a => ({ x: a.x, y: a.y + 1 }));
 
@@ -32,7 +32,9 @@ async function updateEmbed(gameState, interaction, client) {
   const embed = new EmbedBuilder()
     .setTitle(gameState.isOver ? `Game Over` : `🪐 Cosmic: Hellfire`)
     .setDescription(updateDisplay(gameState))
-    .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
+    .setThumbnail(
+      gameState.isOver ? ANIMATIONS.GAME_OVER : ANIMATIONS.SPACE_ROCKET
+    )
     .setFooter({
       text: `Score: ${
         gameState.score
