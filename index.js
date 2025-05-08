@@ -16,6 +16,7 @@ import {
   createQueryBasedAI,
 } from "./models/googleGenerativeAI.js";
 import loadReactionCommands from "./handlers/reactionCommandHandler.js";
+import loadButtons from "./handlers/buttonHandler.js";
 
 connectDB();
 
@@ -53,10 +54,12 @@ client.uptimeTrackerTimestamp = new Date();
 client.modals = new Collection();
 client.selectMenus = new Collection();
 client.reactionCommands = new Collection();
+client.buttons = new Collection();
 
 loadEvents(client);
 loadMessageCommands(client);
 loadModals(client);
 loadSelectMenus(client);
 loadReactionCommands(client);
+loadButtons(client);
 client.login(config.TOKEN);

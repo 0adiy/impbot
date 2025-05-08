@@ -44,11 +44,11 @@ function updateDisplay(state) {
 
 async function updateEmbed(state, controlRow, interaction, client) {
   const embed = new EmbedBuilder()
-    .setTitle(`🪐 Cosmic: Hellfire`)
+    .setTitle(state.isOver ? `🪐 Cosmic: Game Over` : `🪐 Cosmic: Hellfire`)
     .setDescription(updateDisplay(state))
+    .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
     .setFooter({ text: `© ${new Date().getFullYear()} The Evil Inc.` })
-    .setColor(COLORS.PRIMARY);
-
+    .setColor(state.isOver ? COLORS.ERROR : COLORS.PRIMARY);
   await interaction.editReply({ embeds: [embed], components: [controlRow] });
 }
 
@@ -105,7 +105,7 @@ export default {
     await updateEmbed(state, controlRow, interaction, client);
     let gameLoop = setInterval(async () => {
       if (state.isOver) {
-        clearInterval(interval);
+        clearInterval(gameLoop);
         return interaction.followUp({ content: "💥 Game Over!" });
       }
       dropAliens(state);
