@@ -14,6 +14,7 @@ const EMOJIS = {
   BOOT: "<:startup:1305494476734857236>",
   ARROW_RIGHT: "<:arrowright:1369996931723690055>",
   ARROW_LEFT: "<:arrowleft:1369996978842243163>",
+  ASTRONAUT: "<:astronautplayer:1370011289757159615>",
 };
 
 const ANIMATIONS = {

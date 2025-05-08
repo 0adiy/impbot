@@ -51,14 +51,14 @@ function updateDisplay(gameState) {
     let row = "";
     for (let x = 0; x < gameState.width; x++) {
       const hasAlien = gameState.aliens.some(a => a.x === x && a.y === y);
-      row += hasAlien ? "👾" : emptySpace;
+      row += hasAlien ? gameState.alienAsset : emptySpace;
     }
     display += row + "\n";
   }
 
   let playerRow = "";
   for (let x = 0; x < gameState.width; x++) {
-    playerRow += x === gameState.playerPos ? "👩‍🚀" : emptySpace;
+    playerRow += x === gameState.playerPos ? gameState.playerAsset : emptySpace;
   }
 
   display += playerRow;

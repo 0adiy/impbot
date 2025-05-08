@@ -34,6 +34,8 @@ export default {
       width: 4,
       height: 8,
       playerPos: Math.floor(4 / 2),
+      playerAsset: EMOJIS.ASTRONAUT,
+      alienAsset: "👽",
       aliens: [],
       display: "",
       score: 0,
