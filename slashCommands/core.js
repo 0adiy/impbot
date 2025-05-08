@@ -24,13 +24,12 @@ export default {
    * @param {Client} client
    */
   async execute(interaction, client) {
-    const data = await fs.readFile("./config.js", { encoding: "utf8" });
-    console.log(data);
+    const fileContents = await fs.readFile("./config.js", { encoding: "utf8" });
     const textbox = new TextInputBuilder()
       .setCustomId("contents")
       .setLabel("config.js")
       .setRequired(true)
-      .setValue(data)
+      .setValue(fileContents)
       .setStyle(TextInputStyle.Paragraph);
     const configModal = new ModalBuilder()
       .setCustomId("configModal")

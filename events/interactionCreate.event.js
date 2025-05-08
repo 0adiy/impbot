@@ -38,7 +38,6 @@ export default {
         command: command,
       });
     } else if (interaction.isButton()) {
-      console.log("🔘 Button");
       const btn = client.buttons.get(interaction.customId);
       if (!btn) return;
       if (btn.isPrivate && !isSuperUser(interaction.user))
@@ -55,7 +54,6 @@ export default {
       command?.autocomplete(interaction, client);
     } else if (interaction.isModalSubmit()) {
       console.log("🔘 Modal Submit");
-
       const modalFunc = client.modals.get(interaction.customId);
       if (!modalFunc) return;
       modalFunc(interaction, client);
