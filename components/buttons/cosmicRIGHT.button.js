@@ -1,4 +1,4 @@
-import { updateEmbed } from "../utils/gameUtils.js";
+import { updateEmbed } from "../../utils/gameUtils.js";
 export default {
   name: "cosmic_RIGHT",
   isPrivate: false,
