@@ -15,6 +15,7 @@ const EMOJIS = {
   ARROW_RIGHT: "<:arrowright:1369996931723690055>",
   ARROW_LEFT: "<:arrowleft:1369996978842243163>",
   ASTRONAUT: "<:astronautplayer:1370011289757159615>",
+  ALIEN: "<:alienenemy:1370008677251027044>",
 };
 
 const ANIMATIONS = {
