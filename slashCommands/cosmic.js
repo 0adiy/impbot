@@ -46,7 +46,6 @@ async function updateEmbed(state, controlRow, interaction, client) {
   const embed = new EmbedBuilder()
     .setTitle(`🪐 Cosmic: Hellfire`)
     .setDescription(updateDisplay(state))
-    .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
     .setFooter({ text: `© ${new Date().getFullYear()} The Evil Inc.` })
     .setColor(COLORS.PRIMARY);
 
@@ -104,5 +103,13 @@ export default {
       rightButton
     );
     await updateEmbed(state, controlRow, interaction, client);
+    let gameLoop = setInterval(async () => {
+      if (state.isOver) {
+        clearInterval(interval);
+        return interaction.followUp({ content: "💥 Game Over!" });
+      }
+      dropAliens(state);
+      await updateEmbed(state, controlRow, interaction, client);
+    }, 1500);
   },
 };
