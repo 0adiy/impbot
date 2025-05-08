@@ -1,13 +1,9 @@
 import {
   SlashCommandBuilder,
-  ModalBuilder,
   InteractionContextType,
   ApplicationIntegrationType,
-  TextInputBuilder,
-  TextInputStyle,
-  ActionRowBuilder,
 } from "discord.js";
-import fs from "fs/promises";
+import configModal from "../components/modals/config.modal.js";
 
 export default {
   data: new SlashCommandBuilder()
@@ -18,23 +14,14 @@ export default {
       InteractionContextType.Guild,
       InteractionContextType.PrivateChannel,
     ]),
+  isPrivate: true,
   /**
    *
    * @param {ChatInputCommandInteraction} interaction
    * @param {Client} client
    */
   async execute(interaction, client) {
-    const fileContents = await fs.readFile("./config.js", { encoding: "utf8" });
-    const textbox = new TextInputBuilder()
-      .setCustomId("contents")
-      .setLabel("config.js")
-      .setRequired(true)
-      .setValue(fileContents)
-      .setStyle(TextInputStyle.Paragraph);
-    const configModal = new ModalBuilder()
-      .setCustomId("configModal")
-      .setTitle("Configuration")
-      .addComponents(new ActionRowBuilder().addComponents(textbox));
-    await interaction.showModal(configModal);
+    const modal = configModal.data;
+    await interaction.showModal(modal);
   },
 };
