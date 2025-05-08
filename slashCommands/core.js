@@ -1,3 +1,4 @@
+import { log } from "console";
 import {
   SlashCommandBuilder,
   ModalBuilder,
@@ -7,6 +8,7 @@ import {
   TextInputStyle,
   ActionRowBuilder,
 } from "discord.js";
+const fs = require("fs/promises");
 
 export default {
   data: new SlashCommandBuilder()
@@ -23,48 +25,18 @@ export default {
    * @param {Client} client
    */
   async execute(interaction, client) {
-    const name = "reminder";
-
-    const days = new TextInputBuilder()
-      .setCustomId("days")
-      .setLabel("Days")
+    const data = await fs.readFile("./config.js", { encoding: "utf8" });
+    console.log(data);
+    const textbox = new TextInputBuilder()
+      .setCustomId("contents")
+      .setLabel("config.js")
       .setRequired(true)
-      .setStyle(TextInputStyle.Short);
-
-    const hours = new TextInputBuilder()
-      .setCustomId("hours")
-      .setLabel("Hours")
-      .setRequired(true)
-      .setStyle(TextInputStyle.Short);
-
-    const minutes = new TextInputBuilder()
-      .setCustomId("minutes")
-      .setLabel("Minutes")
-      .setRequired(true)
-      .setStyle(TextInputStyle.Short);
-
-    const seconds = new TextInputBuilder()
-      .setCustomId("seconds")
-      .setLabel("Seconds")
-      .setRequired(true)
-      .setStyle(TextInputStyle.Short);
-
-    const reminder = new TextInputBuilder()
-      .setCustomId(name)
-      .setLabel("Reminder")
-      .setRequired(true)
+      .setValue(data)
       .setStyle(TextInputStyle.Paragraph);
-
-    const reminderModal = new ModalBuilder()
-      .setCustomId("reminder")
-      .setTitle("Reminder")
-      .addComponents(
-        new ActionRowBuilder().addComponents(days),
-        new ActionRowBuilder().addComponents(hours),
-        new ActionRowBuilder().addComponents(minutes),
-        new ActionRowBuilder().addComponents(seconds),
-        new ActionRowBuilder().addComponents(reminder)
-      );
-    await interaction.showModal(reminderModal);
+    const configModal = new ModalBuilder()
+      .setCustomId("configModal")
+      .setTitle("Configuration")
+      .addComponents(new ActionRowBuilder().addComponents(textbox));
+    await interaction.showModal(configModal);
   },
 };
