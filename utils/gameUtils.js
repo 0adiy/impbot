@@ -25,20 +25,27 @@ function dropAliens(gameState) {
 }
 
 async function updateEmbed(gameState, interaction, client) {
-  const embed = new EmbedBuilder()
-    .setTitle(gameState.isOver ? `Game Over` : `🪐 Cosmic: Hellfire`)
-    .setDescription(updateDisplay(gameState))
-    .setThumbnail(
-      gameState.isOver ? ANIMATIONS.GAME_OVER : ANIMATIONS.SPACE_ROCKET
-    )
-    .setFooter({
-      text: `Score: ${
-        gameState.score
-      } | © ${new Date().getFullYear()} The Evil Inc.`,
-    })
-    .setColor(gameState.isOver ? COLORS.ERROR : COLORS.PRIMARY);
+  // const embed = new EmbedBuilder()
+  //   .setTitle(gameState.isOver ? `Game Over` : `🪐 Cosmic: Hellfire`)
+  //   .setDescription(updateDisplay(gameState))
+  //   .setThumbnail(
+  //     gameState.isOver ? ANIMATIONS.GAME_OVER : ANIMATIONS.SPACE_ROCKET
+  //   )
+  //   .setFooter({
+  //     text: `Score: ${
+  //       gameState.score
+  //     } | © ${new Date().getFullYear()} The Evil Inc.`,
+  //   })
+  //   .setColor(gameState.isOver ? COLORS.ERROR : COLORS.PRIMARY);
+  // await interaction.editReply({
+  //   embeds: [embed],
+  //   components: [gameState.controlRow],
+  // });
+  const message = gameState.isOver
+    ? `Game Over | Score: ${gameState.score}`
+    : updateDisplay(gameState);
   await interaction.editReply({
-    embeds: [embed],
+    content: message,
     components: [gameState.controlRow],
   });
 }

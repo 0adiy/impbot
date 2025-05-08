@@ -42,6 +42,7 @@ export default {
       isOver: false,
       loop: null,
       playerId: interaction.user.id,
+      refreshRate: 1500,
     };
 
     client.games.set(interaction.user.id, gameState);
@@ -68,6 +69,6 @@ export default {
       dropAliens(gameState);
       gameState.score++;
       await updateEmbed(gameState, interaction, client);
-    }, 1500);
+    }, gameState.refreshRate);
   },
 };
