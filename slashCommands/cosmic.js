@@ -7,7 +7,6 @@ import {
   ButtonStyle,
   ActionRowBuilder,
 } from "discord.js";
-import { COLORS } from "../utils/enums.js";
 import { dropAliens, updateEmbed, updateDisplay } from "../utils/gameUtils.js";
 
 export default {

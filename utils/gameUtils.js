@@ -1,3 +1,5 @@
+import { EmbedBuilder } from "discord.js";
+import { COLORS } from "../utils/enums.js";
 function dropAliens(gameState) {
   gameState.aliens = gameState.aliens.map(a => ({ x: a.x, y: a.y + 1 }));
   gameState.aliens.push({
