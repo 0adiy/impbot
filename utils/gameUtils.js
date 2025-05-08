@@ -23,10 +23,14 @@ function dropAliens(gameState) {
 
 async function updateEmbed(gameState, interaction, client) {
   const embed = new EmbedBuilder()
-    .setTitle(gameState.isOver ? `🪐 Cosmic: Game Over` : `🪐 Cosmic: Hellfire`)
+    .setTitle(gameState.isOver ? `Game Over` : `🪐 Cosmic: Hellfire`)
     .setDescription(updateDisplay(gameState))
     .setThumbnail(client.user.displayAvatarURL({ dynamic: true }))
-    .setFooter({ text: `© ${new Date().getFullYear()} The Evil Inc.` })
+    .setFooter({
+      text: `Score: ${
+        gameState.score
+      } | © ${new Date().getFullYear()} The Evil Inc.`,
+    })
     .setColor(gameState.isOver ? COLORS.ERROR : COLORS.PRIMARY);
   await interaction.editReply({
     embeds: [embed],

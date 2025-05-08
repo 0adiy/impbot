@@ -39,6 +39,7 @@ export default {
       score: 0,
       isOver: false,
       loop: null,
+      playerId: interaction.user.id,
     };
 
     client.games.set(interaction.user.id, gameState);
@@ -46,11 +47,11 @@ export default {
     gameState.controlRow = new ActionRowBuilder().addComponents(
       new ButtonBuilder()
         .setCustomId("cosmic_LEFT")
-        .setLabel("LEFT")
+        .setLabel("⇒")
         .setStyle(ButtonStyle.Primary),
       new ButtonBuilder()
         .setCustomId("cosmic_RIGHT")
-        .setLabel("RIGHT")
+        .setLabel("⇐")
         .setStyle(ButtonStyle.Primary)
     );
 
@@ -63,6 +64,7 @@ export default {
         return updateEmbed(gameState, interaction, client);
       }
       dropAliens(gameState);
+      gameState.score++;
       await updateEmbed(gameState, interaction, client);
     }, 1500);
   },
