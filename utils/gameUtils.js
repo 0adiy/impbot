@@ -2,10 +2,17 @@ import { EmbedBuilder } from "discord.js";
 import { COLORS } from "../utils/enums.js";
 function dropAliens(gameState) {
   gameState.aliens = gameState.aliens.map(a => ({ x: a.x, y: a.y + 1 }));
-  gameState.aliens.push({
-    x: Math.floor(Math.random() * gameState.width),
-    y: 0,
-  });
+
+  const validColumns = [];
+  for (let x = 0; x < gameState.width; x++) {
+    const crowded = gameState.aliens.some(a => a.x === x && a.y <= 2);
+    if (!crowded) validColumns.push(x);
+  }
+
+  if (validColumns.length > 0) {
+    const x = validColumns[Math.floor(Math.random() * validColumns.length)];
+    gameState.aliens.push({ x, y: 0 });
+  }
 
   if (
     gameState.aliens.some(

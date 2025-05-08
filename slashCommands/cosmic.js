@@ -47,11 +47,11 @@ export default {
     gameState.controlRow = new ActionRowBuilder().addComponents(
       new ButtonBuilder()
         .setCustomId("cosmic_LEFT")
-        .setLabel("⇒")
+        .setLabel("⇐")
         .setStyle(ButtonStyle.Primary),
       new ButtonBuilder()
         .setCustomId("cosmic_RIGHT")
-        .setLabel("⇐")
+        .setLabel("⇒")
         .setStyle(ButtonStyle.Primary)
     );
 
