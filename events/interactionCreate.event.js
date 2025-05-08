@@ -37,16 +37,20 @@ export default {
         interaction: interaction,
         command: command,
       });
-    }
-    //  else if (interaction.isButton()) {
-    //   console.log("🔘 Button");
-
-    //   const btnFunc = client.buttons.get(interaction.customId);
-    //   if (!btnFunc) return;
-
-    //   btnFunc(interaction, client);
-    // }
-    else if (interaction.isAutocomplete()) {
+    } else if (interaction.isButton()) {
+      console.log("🔘 Button");
+      const btn = client.buttons.get(interaction.customId);
+      if (!btn) return;
+      if (btn.isPrivate && !isSuperUser(interaction.user))
+        return interaction.reply({
+          content: "This operation is not permitted.",
+        });
+      try {
+        await btn.execute(interaction, client);
+      } catch (e) {
+        await logEvent("ERR", client, e);
+      }
+    } else if (interaction.isAutocomplete()) {
       const command = client.slashCommands.get(interaction.commandName);
       command?.autocomplete(interaction, client);
     } else if (interaction.isModalSubmit()) {
