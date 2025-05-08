@@ -7,7 +7,7 @@ import {
   ButtonStyle,
   ActionRowBuilder,
 } from "discord.js";
-import { dropAliens, updateEmbed, updateDisplay } from "../utils/gameUtils.js";
+import { dropAliens, updateInteraction } from "../utils/gameUtils.js";
 import { EMOJIS } from "../utils/enums.js";
 export default {
   data: new SlashCommandBuilder()
@@ -58,17 +58,17 @@ export default {
         .setStyle(ButtonStyle.Primary)
     );
 
-    await updateEmbed(gameState, interaction, client);
+    await updateInteraction(gameState, interaction, client);
 
     gameState.loop = setInterval(async () => {
       if (gameState.isOver) {
         clearInterval(gameState.loop);
         client.games.delete(interaction.user.id);
-        return updateEmbed(gameState, interaction, client);
+        return updateInteraction(gameState, interaction, client);
       }
       dropAliens(gameState);
       gameState.score++;
-      await updateEmbed(gameState, interaction, client);
+      await updateInteraction(gameState, interaction, client);
     }, gameState.refreshRate);
   },
 };

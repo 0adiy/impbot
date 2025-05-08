@@ -1,4 +1,4 @@
-import { updateEmbed } from "../../utils/gameUtils.js";
+import { updateInteraction } from "../../utils/gameUtils.js";
 
 export default {
   name: "cosmic_RIGHT",
@@ -18,6 +18,6 @@ export default {
       gameState.playerPos + 1
     );
     await interaction.deferUpdate();
-    await updateEmbed(gameState, interaction, client);
+    await updateInteraction(gameState, interaction, client);
   },
 };

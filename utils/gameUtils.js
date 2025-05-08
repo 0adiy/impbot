@@ -1,5 +1,5 @@
-import { EmbedBuilder } from "discord.js";
-import { COLORS, ANIMATIONS } from "../utils/enums.js";
+import { EmbedBuilder, Emoji } from "discord.js";
+import { COLORS, ANIMATIONS, EMOJIS } from "../utils/enums.js";
 function dropAliens(gameState) {
   gameState.aliens = gameState.aliens.map(a => ({ x: a.x, y: a.y + 1 }));
   const validColumns = [];
@@ -24,35 +24,25 @@ function dropAliens(gameState) {
   return gameState.isOver;
 }
 
-async function updateEmbed(gameState, interaction, client) {
-  // const embed = new EmbedBuilder()
-  //   .setTitle(gameState.isOver ? `Game Over` : `🪐 Cosmic: Hellfire`)
-  //   .setDescription(updateDisplay(gameState))
-  //   .setThumbnail(
-  //     gameState.isOver ? ANIMATIONS.GAME_OVER : ANIMATIONS.SPACE_ROCKET
-  //   )
-  //   .setFooter({
-  //     text: `Score: ${
-  //       gameState.score
-  //     } | © ${new Date().getFullYear()} The Evil Inc.`,
-  //   })
-  //   .setColor(gameState.isOver ? COLORS.ERROR : COLORS.PRIMARY);
-  // await interaction.editReply({
-  //   embeds: [embed],
-  //   components: [gameState.controlRow],
-  // });
-  const message = gameState.isOver
-    ? `Game Over | Score: ${gameState.score}`
-    : updateDisplay(gameState);
+async function updateInteraction(gameState, interaction, client) {
+  const gameOverEmbed = new EmbedBuilder()
+    .setTitle(`🪐 Cosmic: Hellfire`)
+    .setDescription(`Game Over | Score: **${gameState.score}**`)
+    .setImage(ANIMATIONS.GAME_OVER)
+    .setFooter({ text: `© ${new Date().getFullYear()} The Evil Inc.` })
+    .setColor(COLORS.ERROR);
+  const message = updateDisplay(gameState);
+  if (gameState.isOver)
+    return interaction.editReply({ embeds: [gameOverEmbed] });
   await interaction.editReply({
     content: message,
-    components: [gameState.controlRow],
+    component: [gameState.controlRow],
   });
 }
 
 function updateDisplay(gameState) {
   let display = "";
-  const emptySpace = " ";
+  const emptySpace = EMOJIS.BLANK_SPACE;
 
   for (let y = 0; y < gameState.height; y++) {
     let row = "";
@@ -73,4 +63,4 @@ function updateDisplay(gameState) {
   return display;
 }
 
-export { dropAliens, updateEmbed, updateDisplay };
+export { dropAliens, updateInteraction, updateDisplay };
