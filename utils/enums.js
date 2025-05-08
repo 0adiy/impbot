@@ -20,4 +20,4 @@ const ANIMATIONS = {
   CHECK: "https://i.ibb.co/fVjShNTz/Animation-1746703373021.gif",
 };
 
-export { COLORS, EMOJIS };
+export { COLORS, EMOJIS, ANIMATIONS };
