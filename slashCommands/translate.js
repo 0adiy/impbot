@@ -7,7 +7,7 @@ import {
 export default {
   data: new SlashCommandBuilder()
     .setName("translate")
-    .setDescription("Translates given text into desired language")
+    .setDescription("Translates text into desired language (AI based)")
     .addStringOption(option =>
       option
         .setName("text")
@@ -44,10 +44,8 @@ export default {
     const text = interaction.options.getString("text");
     const language = interaction.options.getString("language") ?? "English";
     const source = interaction.options.getString("source") ?? "Auto Detect";
-    console.log(source, language, text);
     const request = `Translate to: ${language}\nText language: ${source}\n Translate: ${text}`;
-    const translation = client.translatorAI.generateContent(request);
-    console.log(translation);
+    const translation = await client.translatorAI.generateContent(request);
     interaction.reply(translation);
   },
 };
