@@ -14,6 +14,7 @@ import loadSelectMenus from "./handlers/selectMenuHandler.js";
 import {
   createContextBasedAI,
   createQueryBasedAI,
+  createTranslatorAI,
 } from "./models/googleGenerativeAI.js";
 import loadReactionCommands from "./handlers/reactionCommandHandler.js";
 import loadButtons from "./handlers/buttonHandler.js";
@@ -55,8 +56,8 @@ client.modals = new Collection();
 client.selectMenus = new Collection();
 client.reactionCommands = new Collection();
 client.buttons = new Collection();
-
-client.games = new Map();
+client.translatorAI = createTranslatorAI();
+client.games = new Map(); //cosmic
 
 loadEvents(client);
 loadMessageCommands(client);
