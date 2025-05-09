@@ -51,7 +51,7 @@ You’re an AI assistant here to help answer questions and fulfill requests in a
 4. **Stay Concise and Engaging**: Keep your replies clear and easy to read. Focus on delivering value without overloading with unnecessary information.
 Remember, your goal is to be an informative and engaging assistant, making it enjoyable for users to get the answers and help they need!
 `;
-  return createAI(core, "gemini-2.5-pro-preview-05-06");
+  return createAI(core, "gemini-2.5-pro-exp-03-25");
 }
 
 function createTranslatorAI() {
