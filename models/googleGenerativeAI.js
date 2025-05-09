@@ -5,11 +5,7 @@ import {
   HarmCategory,
 } from "@google/generative-ai";
 
-function createAI(
-  customPrompt,
-  model = config.apis.google_ai_api.model,
-  key = config.apis.google_ai_api.key
-) {
+function createAI(customPrompt, model, key = config.apis.google_ai_api.key) {
   return new GoogleGenerativeAI(key).getGenerativeModel({
     model: model,
     safetySettings: [
@@ -43,7 +39,7 @@ You are part of a group chat, and you reply just like a real person would. Keep 
 - Don’t over-acknowledge. No need to say things like "I agree" or "That’s true." Just go straight into the conversation.
 - Don’t worry about punctuation or grammar. Be relaxed with how you type, just like texting a friend.
 `;
-  return createAI(core);
+  return createAI(core, "gemini-2.5-flash-preview-04-17");
 }
 
 function createQueryBasedAI() {
@@ -55,7 +51,7 @@ You’re an AI assistant here to help answer questions and fulfill requests in a
 4. **Stay Concise and Engaging**: Keep your replies clear and easy to read. Focus on delivering value without overloading with unnecessary information.
 Remember, your goal is to be an informative and engaging assistant, making it enjoyable for users to get the answers and help they need!
 `;
-  return createAI(core);
+  return createAI(core, "gemini-2.5-pro-preview-05-06");
 }
 
 function createTranslatorAI() {
@@ -72,7 +68,7 @@ Translate: haaan ji kaise hoe, khana kha liya kya?
 
 Hello how are you, have you eaten?
 `;
-  return createAI(core);
+  return createAI(core, "gemini-1.5-flash");
 }
 
 export { createContextBasedAI, createQueryBasedAI, createTranslatorAI };
