@@ -26,12 +26,11 @@ export default {
   isPrivate: true,
   async execute(interaction, client) {
     const newContent = interaction.fields.getTextInputValue("content");
-    const oldContent = await fs.readFile("./config.js", { encoding: "utf8" });
-    await fs.writeFile("./config.backup.js", oldContent);
+    // const oldContent = await fs.readFile("./config.js", { encoding: "utf8" });
+    // await fs.writeFile("./config.backup.js", oldContent);
     await fs.writeFile("./config.js", newContent);
     await interaction.reply({
-      content:
-        "Successfully updated `config.js`.\nPrevious configuration backed up as `config.backup.js`.",
+      content: "Successfully updated `config.js`.",
     });
   },
 };
