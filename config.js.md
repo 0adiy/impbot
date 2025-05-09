@@ -55,7 +55,7 @@ The file name must be written in lowercase letters.
 | **Text to Colour** | `https://singlecolorimage.com/get/`                | (no key needed)                                 |
 | **Dictionary API** | `https://api.dictionaryapi.dev/api/v2/entries/en/` | (no key needed)                                 |
 | **Lyrics API**     | `https://www.stands4.com/services/v2/lyrics.php`   | `YOUR_LYRICS_USER_ID` + `YOUR_LYRICS_API_TOKEN` |
-| **Google AI API**  | `MODEL_NAME`                                       | `GOOGLE_AI_API_KEY`                             |
+| **Google AI API**  | (Not required)                                     | `GOOGLE_AI_API_KEY`                             |
 
 ### Sample File
 
@@ -108,7 +108,6 @@ const config = {
     },
     google_ai_api: {
       key: "GOOGLE_AI_API_KEY",
-      model: "gemini-1.5-flash",
     },
   },
 };
