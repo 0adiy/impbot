@@ -45,8 +45,8 @@ export default {
     const language = interaction.options.getString("language") ?? "English";
     const source = interaction.options.getString("source") ?? "Auto Detect";
     const request = `Translate to: ${language}\nText language: ${source}\n Translate: ${text}`;
-    const translation = await client.translatorAI.generateContent(request);
-    console.log(text, language, source, translation);
+    const result = await client.translatorAI.generateContent(request);
+    const translation = await result.response.text();
     interaction.reply(translation);
   },
 };
