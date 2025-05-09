@@ -110,7 +110,12 @@ async function logEvent(type, client, information) {
     );
   }
   if(type == "CTX"){
-    return logChannel.send(`\`\`\`js\n${information}\n\`\`\``);
+    let embed = new EmbedBuilder()
+      .setTitle("Chat Context")
+      .setDescription(information)
+      .setColor(COLORS.PRIMARY)
+      .setTimestamp(new Date());
+    return logChannel.send({ embeds: [embed] });
   }
 }
 
