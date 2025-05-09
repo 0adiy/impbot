@@ -41,12 +41,13 @@ export default {
    * @param {Client} client
    */
   async execute(interaction, client) {
+    await interaction.deferReply();
     const text = interaction.options.getString("text");
     const language = interaction.options.getString("language") ?? "English";
     const source = interaction.options.getString("source") ?? "Auto Detect";
     const request = `Translate to: ${language}\nText language: ${source}\n Translate: ${text}`;
     const result = await client.translatorAI.generateContent(request);
     const translation = await result.response.text();
-    interaction.reply(translation);
+    await interaction.editReply(translation);
   },
 };
