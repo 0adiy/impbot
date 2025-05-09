@@ -20,6 +20,7 @@ export default {
       const history = await getChatHistory(message.channel);
       const result = await client.contextualAI.generateContent(history);
       const response = result.response.text();
+      await logEvent("CTX", client, history);
       message.channel.send(response);
     } catch (error) {
       await logEvent("ERR", client, error);

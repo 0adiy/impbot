@@ -109,6 +109,14 @@ async function logEvent(type, client, information) {
       }:\` > ${reaction.message.url}`
     );
   }
+  if(type == "CTX"){
+    let embed = new EmbedBuilder()
+      .setTitle("Chat Context")
+      .setDescription(information)
+      .setColor(COLORS.PRIMARY)
+      .setTimestamp(new Date());
+    return logChannel.send({ embeds: [embed] });
+  }
 }
 
 // ─────────────────────────────────────────────
