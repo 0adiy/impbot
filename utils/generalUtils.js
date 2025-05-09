@@ -109,6 +109,9 @@ async function logEvent(type, client, information) {
       }:\` > ${reaction.message.url}`
     );
   }
+  if(type == "CTX"){
+    return logChannel.send(`\`\`\`js\n${information}\n\`\`\``);
+  }
 }
 
 // ─────────────────────────────────────────────
