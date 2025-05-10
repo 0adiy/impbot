@@ -1,18 +1,17 @@
 import { EmbedBuilder, Emoji } from "discord.js";
 import { COLORS, ANIMATIONS, EMOJIS } from "../utils/enums.js";
+
 function dropAliens(gameState) {
-  gameState.aliens = gameState.aliens.map(a => ({ x: a.x, y: a.y + 1 }));
   const validColumns = [];
   for (let x = 0; x < gameState.width; x++) {
     const topOccupied = gameState.aliens.some(a => a.x === x && a.y === 0);
-    if (!topOccupied) {
-      validColumns.push(x);
-    }
+    if (!topOccupied) validColumns.push(x);
   }
   if (validColumns.length > 0) {
     const x = validColumns[Math.floor(Math.random() * validColumns.length)];
     gameState.aliens.push({ x, y: 0 });
   }
+  gameState.aliens = gameState.aliens.map(a => ({ x: a.x, y: a.y + 1 }));
   if (
     gameState.aliens.some(
       a => a.y === gameState.height && a.x === gameState.playerPos
