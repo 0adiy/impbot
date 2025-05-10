@@ -1,14 +1,17 @@
 import { updateInteraction, validatePlayer } from "../../utils/gameUtils.js";
 
 export default {
-  name: "cosmic_LEFT",
+  name: "cosmic_SHOOT",
   isPrivate: false,
-  description: "Move your character to the left",
+  description: "Fire a projectile towards the aliens",
   async execute(interaction, client) {
     await interaction.deferUpdate();
     const gameState = client.games.get(interaction.user.id);
     if (!validatePlayer(gameState, interaction)) return;
-    gameState.playerPos = Math.max(0, gameState.playerPos - 1);
+    gameState.projectiles.push({
+      x: gameState.playerPos,
+      y: gameState.height - 1,
+    });
     await updateInteraction(gameState, interaction, client);
   },
 };

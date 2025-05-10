@@ -7,7 +7,11 @@ import {
   ButtonStyle,
   ActionRowBuilder,
 } from "discord.js";
-import { dropAliens, updateInteraction } from "../utils/gameUtils.js";
+import {
+  dropAliens,
+  updateInteraction,
+  processProjectiles,
+} from "../utils/gameUtils.js";
 import { EMOJIS } from "../utils/enums.js";
 export default {
   data: new SlashCommandBuilder()
@@ -37,6 +41,8 @@ export default {
       playerAsset: "👨🏻‍🚀",
       alienAsset: "👾",
       aliens: [],
+      projectiles: [],
+      projectileAsset: "🔺",
       display: "",
       score: 0,
       isOver: false,
@@ -54,6 +60,10 @@ export default {
         .setEmoji(EMOJIS.ARROW_LEFT)
         .setStyle(ButtonStyle.Primary),
       new ButtonBuilder()
+        .setCustomId("cosmic_SHOOT")
+        .setEmoji("🔫")
+        .setStyle(ButtonStyle.Danger),
+      new ButtonBuilder()
         .setCustomId("cosmic_RIGHT")
         .setEmoji(EMOJIS.ARROW_RIGHT)
         .setStyle(ButtonStyle.Primary)
@@ -68,6 +78,7 @@ export default {
         return updateInteraction(gameState, interaction, client);
       }
       dropAliens(gameState);
+      processProjectiles(gameState);
       gameState.score++;
       await updateInteraction(gameState, interaction, client);
     }, gameState.refreshRate);

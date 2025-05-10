@@ -64,4 +64,38 @@ function updateDisplay(gameState) {
   return display;
 }
 
-export { dropAliens, updateInteraction, updateDisplay };
+function processProjectiles(gameState) {
+  gameState.projectiles = gameState.projectiles.map(p => ({
+    x: p.x,
+    y: p.y - 1,
+  }));
+  gameState.projectiles = gameState.projectiles.filter(p => p.y >= 0);
+  gameState.projectiles.forEach(p => {
+    const index = gameState.aliens.findIndex(a => a.x === p.x && a.y === p.y);
+    if (index !== -1) {
+      gameState.aliens.splice(index, 1);
+      //bonus for hitting
+      gameState.score += 3;
+      p.hit = true;
+    }
+  });
+  gameState.projectiles = gameState.projectiles.filter(p => !p.hit);
+}
+
+function validatePlayer(gameState, interaction) {
+  if (
+    !gameState ||
+    gameState.isOver ||
+    interaction.user.id !== gameState.playerId
+  )
+    return false;
+  return true;
+}
+
+export {
+  dropAliens,
+  updateInteraction,
+  updateDisplay,
+  processProjectiles,
+  validatePlayer,
+};
