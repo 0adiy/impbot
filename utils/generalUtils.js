@@ -213,6 +213,15 @@ async function getChatHistory(channel) {
     .join("\n");
 }
 
+function generateRandomFilename(extension = "jpg", length = 12) {
+  const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
+  let name = "";
+  for (let i = 0; i < length; i++) {
+    name += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return `${name}.${extension}`;
+}
+
 export {
   // Time
   getFutureTimestamp,
@@ -239,4 +248,5 @@ export {
   // Misc
   loadAllTasks,
   getChatHistory,
+  generateRandomFilename,
 };
