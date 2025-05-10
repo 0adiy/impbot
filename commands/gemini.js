@@ -17,6 +17,7 @@ export default {
    */
   execute: async (client, message) => {
     try {
+      await message.channel.sendTyping();
       const history = await getChatHistory(message.channel);
       let payload = history;
       if (message.content.split(" ").length > 1) {

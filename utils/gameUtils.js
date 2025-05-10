@@ -29,8 +29,8 @@ async function updateInteraction(gameState, interaction, client) {
   const gameOverEmbed = new EmbedBuilder()
     .setTitle(`🪐 Cosmic: Hellfire`)
     .setDescription(`Game Over | Score: **${gameState.score}**`)
-    .setImage(ANIMATIONS.GAME_OVER)
-    .setThumbnail(ANIMATIONS.SPACE_ROCKET)
+    .setImage(ANIMATIONS.SPACE_ROCKET)
+    .setThumbnail(ANIMATIONS.GAME_OVER)
     .setFooter({ text: `© ${new Date().getFullYear()} The Evil Inc.` })
     .setColor(COLORS.ERROR);
   const message = updateDisplay(gameState);

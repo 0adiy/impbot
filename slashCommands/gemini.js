@@ -50,7 +50,8 @@ export default {
       await interaction.editReply(parts[0]);
       if (!(parts.length > 0)) return;
       for (let i = 1; i < parts.length; i++) {
-        await interaction.channel.send(parts[i]);
+        if (interaction.guild != null) interaction.channel.send(parts[i]);
+        else interaction.followUp(parts[i]);
       }
     } catch (error) {
       await logEvent("ERR", client, error);

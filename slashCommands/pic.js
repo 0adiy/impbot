@@ -88,7 +88,8 @@ export default {
     const response = await getPic(api, query, limit);
     interaction.reply(`Found ${response.length} images on ${query}`);
     for (const url of response) {
-      interaction.channel.send(url);
+      if (interaction.guild != null) interaction.channel.send(url);
+      else interaction.followUp(url);
     }
   },
 };
