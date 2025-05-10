@@ -77,8 +77,8 @@ export default {
         client.games.delete(interaction.user.id);
         return updateInteraction(gameState, interaction, client);
       }
-      dropAliens(gameState);
       processProjectiles(gameState);
+      dropAliens(gameState);
       gameState.score++;
       await updateInteraction(gameState, interaction, client);
     }, gameState.refreshRate);

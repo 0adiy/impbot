@@ -75,17 +75,20 @@ function processProjectiles(gameState) {
     x: p.x,
     y: p.y - 1,
   }));
-  gameState.projectiles = gameState.projectiles.filter(p => p.y >= 0);
-  gameState.projectiles.forEach(p => {
-    const index = gameState.aliens.findIndex(a => a.x === p.x && a.y === p.y);
-    if (index !== -1) {
-      gameState.aliens.splice(index, 1);
-      //bonus for hitting
-      gameState.score += 3;
-      p.hit = true;
+  const newProjectiles = [];
+  for (const projectile of gameState.projectiles) {
+    if (projectile.y < 0) continue;
+    const alienIndex = gameState.aliens.findIndex(
+      a => a.x === projectile.x && a.y === projectile.y
+    );
+    if (alienIndex !== -1) {
+      gameState.aliens.splice(alienIndex, 1);
+      gameState.score += 5;
+    } else {
+      newProjectiles.push(projectile);
     }
-  });
-  gameState.projectiles = gameState.projectiles.filter(p => !p.hit);
+  }
+  gameState.projectiles = newProjectiles;
 }
 
 function validatePlayer(gameState, interaction) {
