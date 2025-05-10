@@ -18,13 +18,15 @@ export default {
   execute: async (client, message) => {
     try {
       const history = await getChatHistory(message.channel);
-      const request = `Request:\n${message.content.replace(
-        config.prefix,
-        ""
-      )}\nChat context:\n${history}`;
-      const result = await client.contextualAI.generateContent(request);
+      let payload = history;
+      if (message.content.split(" ").length > 1) {
+        payload = `Request:\n${message.content.substr(
+          message.content.indexOf(" ") + 1
+        )}\n\nChat context:\n${history}`;
+      }
+      const result = await client.contextualAI.generateContent(payload);
       const response = result.response.text();
-      await logEvent("CTX", client, request);
+      await logEvent("CTX", client, payload);
       message.channel.send(response);
     } catch (error) {
       await logEvent("ERR", client, error);
