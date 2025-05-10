@@ -58,15 +58,15 @@ export default {
       new ButtonBuilder()
         .setCustomId("cosmic_LEFT")
         .setEmoji(EMOJIS.ARROW_LEFT)
-        .setStyle(ButtonStyle.Primary),
+        .setStyle(ButtonStyle.Secondary),
       new ButtonBuilder()
         .setCustomId("cosmic_SHOOT")
         .setEmoji("🔫")
-        .setStyle(ButtonStyle.Danger),
+        .setStyle(ButtonStyle.Primary),
       new ButtonBuilder()
         .setCustomId("cosmic_RIGHT")
         .setEmoji(EMOJIS.ARROW_RIGHT)
-        .setStyle(ButtonStyle.Primary)
+        .setStyle(ButtonStyle.Secondary)
     );
 
     await updateInteraction(gameState, interaction, client);
