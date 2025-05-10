@@ -5,7 +5,12 @@ function dropAliens(gameState) {
   const validColumns = [];
   for (let x = 0; x < gameState.width; x++) {
     const crowded = gameState.aliens.some(a => a.x === x && a.y <= 2);
-    if (!crowded) validColumns.push(x);
+    const blockedByProjectile = gameState.projectiles.some(
+      p => p.x === x && p.y <= 2
+    );
+    if (!crowded && !blockedByProjectile) {
+      validColumns.push(x);
+    }
   }
   if (validColumns.length > 0) {
     const x = validColumns[Math.floor(Math.random() * validColumns.length)];
@@ -71,24 +76,23 @@ function updateDisplay(gameState) {
 }
 
 function processProjectiles(gameState) {
-  gameState.projectiles = gameState.projectiles.map(p => ({
-    x: p.x,
-    y: p.y - 1,
-  }));
-  const newProjectiles = [];
+  const remainingProjectiles = [];
   for (const projectile of gameState.projectiles) {
-    if (projectile.y < 0) continue;
+    const newY = projectile.y - 1;
+    if (newY < 0) {
+      continue;
+    }
     const alienIndex = gameState.aliens.findIndex(
-      a => a.x === projectile.x && a.y === projectile.y
+      a => a.x === projectile.x && a.y === newY
     );
     if (alienIndex !== -1) {
       gameState.aliens.splice(alienIndex, 1);
       gameState.score += 5;
     } else {
-      newProjectiles.push(projectile);
+      remainingProjectiles.push({ x: projectile.x, y: newY });
     }
   }
-  gameState.projectiles = newProjectiles;
+  gameState.projectiles = remainingProjectiles;
 }
 
 function validatePlayer(gameState, interaction) {
