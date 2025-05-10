@@ -44,21 +44,27 @@ async function updateInteraction(gameState, interaction, client) {
 function updateDisplay(gameState) {
   let display = "";
   const emptySpace = EMOJIS.BLANK_SPACE;
-
   for (let y = 0; y < gameState.height; y++) {
     let row = "";
     for (let x = 0; x < gameState.width; x++) {
+      const hasProjectile = gameState.projectiles.some(
+        p => p.x === x && p.y === y
+      );
       const hasAlien = gameState.aliens.some(a => a.x === x && a.y === y);
-      row += hasAlien ? gameState.alienAsset : emptySpace;
+      if (hasProjectile) {
+        row += gameState.projectileAsset;
+      } else if (hasAlien) {
+        row += gameState.alienAsset;
+      } else {
+        row += emptySpace;
+      }
     }
     display += row + "\n";
   }
-
   let playerRow = "";
   for (let x = 0; x < gameState.width; x++) {
     playerRow += x === gameState.playerPos ? gameState.playerAsset : emptySpace;
   }
-
   display += playerRow;
   gameState.display = display;
   return display;
