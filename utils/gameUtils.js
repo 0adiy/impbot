@@ -1,33 +1,34 @@
 import { EmbedBuilder, Emoji } from "discord.js";
 import { COLORS, ANIMATIONS, EMOJIS } from "../utils/enums.js";
+
 function dropAliens(gameState) {
   gameState.aliens = gameState.aliens.map(a => ({ x: a.x, y: a.y + 1 }));
-  const validColumns = [];
-  for (let x = 0; x < gameState.width; x++) {
-    const crowded = gameState.aliens.some(a => a.x === x && a.y <= 2);
-    if (!crowded) validColumns.push(x);
-  }
-  if (validColumns.length > 0) {
-    const x = validColumns[Math.floor(Math.random() * validColumns.length)];
-    gameState.aliens.push({ x, y: 0 });
-  }
   if (
     gameState.aliens.some(
       a => a.y === gameState.height && a.x === gameState.playerPos
     )
   ) {
     gameState.isOver = true;
-  } else {
-    gameState.aliens = gameState.aliens.filter(a => a.y <= gameState.height);
-    gameState.isOver = false;
+    return true;
   }
-  return gameState.isOver;
+  gameState.aliens = gameState.aliens.filter(a => a.y <= gameState.height);
+  gameState.isOver = false;
+  const validColumns = [];
+  for (let x = 0; x < gameState.width; x++) {
+    const topOccupied = gameState.aliens.some(a => a.x === x && a.y === 0);
+    if (!topOccupied) validColumns.push(x);
+  }
+  if (validColumns.length > 0) {
+    const x = validColumns[Math.floor(Math.random() * validColumns.length)];
+    gameState.aliens.push({ x, y: 0 });
+  }
+  return false;
 }
 
 async function updateInteraction(gameState, interaction, client) {
   const gameOverEmbed = new EmbedBuilder()
     .setTitle(`🪐 Cosmic: Hellfire`)
-    .setDescription(`Game Over | Score: **${gameState.score}**`)
+    .setDescription(`**Game Over**\n**Score: ${gameState.score}**`)
     .setImage(ANIMATIONS.GAME_OVER)
     .setThumbnail(ANIMATIONS.SPACE_ROCKET)
     .setFooter({ text: `© ${new Date().getFullYear()} The Evil Inc.` })
@@ -71,24 +72,23 @@ function updateDisplay(gameState) {
 }
 
 function processProjectiles(gameState) {
-  gameState.projectiles = gameState.projectiles.map(p => ({
-    x: p.x,
-    y: p.y - 1,
-  }));
-  const newProjectiles = [];
+  const remainingProjectiles = [];
   for (const projectile of gameState.projectiles) {
-    if (projectile.y < 0) continue;
+    const newY = projectile.y - 1;
+    if (newY < 0) {
+      continue;
+    }
     const alienIndex = gameState.aliens.findIndex(
-      a => a.x === projectile.x && a.y === projectile.y
+      a => a.x === projectile.x && a.y === newY
     );
     if (alienIndex !== -1) {
       gameState.aliens.splice(alienIndex, 1);
       gameState.score += 5;
     } else {
-      newProjectiles.push(projectile);
+      remainingProjectiles.push({ x: projectile.x, y: newY });
     }
   }
-  gameState.projectiles = newProjectiles;
+  gameState.projectiles = remainingProjectiles;
 }
 
 function validatePlayer(gameState, interaction) {

@@ -20,6 +20,7 @@
     "chalk": "^5.3.0",
     "cheerio": "^1.0.0-rc.12",
     "discord.js": "^14.16.3",
+    "drop-the-cap": "^0.0.0",
     "glob": "^10.3.10",
     "lyrixcope": "^1.0.1",
     "mongoose": "^8.0.3"

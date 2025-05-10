@@ -17,10 +17,17 @@ export default {
    */
   execute: async (client, message) => {
     try {
+      await message.channel.sendTyping();
       const history = await getChatHistory(message.channel);
-      const result = await client.contextualAI.generateContent(history);
+      let payload = history;
+      if (message.content.split(" ").length > 1) {
+        payload = `Request:\n${message.content.substr(
+          message.content.indexOf(" ") + 1
+        )}\n\nChat context:\n${history}`;
+      }
+      const result = await client.contextualAI.generateContent(payload);
       const response = result.response.text();
-      await logEvent("CTX", client, history);
+      await logEvent("CTX", client, payload);
       message.channel.send(response);
     } catch (error) {
       await logEvent("ERR", client, error);
