@@ -82,7 +82,7 @@ export default {
     const timeColor = interaction.options.getString("time_color");
     const time = interaction.options.getString("time");
     const xOffset = interaction.options.getNumber("x-offset");
-    const outputPath = `/temp/${generateRandomFilename("jpg", 8)}`;
+    const outputPath = generateRandomFilename("jpg", 8);
     const screenshot = await generateDiscordMessage({
       pfpPath: user.displayAvatarURL(),
       outputPath,
