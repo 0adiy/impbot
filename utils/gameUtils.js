@@ -2,6 +2,17 @@ import { EmbedBuilder, Emoji } from "discord.js";
 import { COLORS, ANIMATIONS, EMOJIS } from "../utils/enums.js";
 
 function dropAliens(gameState) {
+  gameState.aliens = gameState.aliens.map(a => ({ x: a.x, y: a.y + 1 }));
+  if (
+    gameState.aliens.some(
+      a => a.y === gameState.height && a.x === gameState.playerPos
+    )
+  ) {
+    gameState.isOver = true;
+    return true;
+  }
+  gameState.aliens = gameState.aliens.filter(a => a.y <= gameState.height);
+  gameState.isOver = false;
   const validColumns = [];
   for (let x = 0; x < gameState.width; x++) {
     const topOccupied = gameState.aliens.some(a => a.x === x && a.y === 0);
@@ -11,18 +22,7 @@ function dropAliens(gameState) {
     const x = validColumns[Math.floor(Math.random() * validColumns.length)];
     gameState.aliens.push({ x, y: 0 });
   }
-  gameState.aliens = gameState.aliens.map(a => ({ x: a.x, y: a.y + 1 }));
-  if (
-    gameState.aliens.some(
-      a => a.y === gameState.height && a.x === gameState.playerPos
-    )
-  ) {
-    gameState.isOver = true;
-  } else {
-    gameState.aliens = gameState.aliens.filter(a => a.y <= gameState.height);
-    gameState.isOver = false;
-  }
-  return gameState.isOver;
+  return false;
 }
 
 async function updateInteraction(gameState, interaction, client) {
