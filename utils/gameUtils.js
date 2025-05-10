@@ -4,11 +4,8 @@ function dropAliens(gameState) {
   gameState.aliens = gameState.aliens.map(a => ({ x: a.x, y: a.y + 1 }));
   const validColumns = [];
   for (let x = 0; x < gameState.width; x++) {
-    const crowded = gameState.aliens.some(a => a.x === x && a.y <= 2);
-    const blockedByProjectile = gameState.projectiles.some(
-      p => p.x === x && p.y <= 2
-    );
-    if (!crowded && !blockedByProjectile) {
+    const topOccupied = gameState.aliens.some(a => a.x === x && a.y === 0);
+    if (!topOccupied) {
       validColumns.push(x);
     }
   }
