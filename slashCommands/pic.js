@@ -81,12 +81,13 @@ export default {
    * @param {Client} client
    */
   async execute(interaction, client) {
+    await interaction.deferReply();
     const limit = interaction.options.getInteger("limit") ?? 4;
     const query = interaction.options.getString("search");
     const api = interaction.options.getString("service");
 
     const response = await getPic(api, query, limit);
-    interaction.reply(`Found ${response.length} images on ${query}`);
+    interaction.editReply(`Found ${response.length} images on ${query}`);
     for (const url of response) {
       if (interaction.guild != null) interaction.channel.send(url);
       else interaction.followUp(url);
