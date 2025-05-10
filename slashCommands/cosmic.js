@@ -77,8 +77,14 @@ export default {
         client.games.delete(interaction.user.id);
         return updateInteraction(gameState, interaction, client);
       }
+      const gameOver = dropAliens(gameState);
       processProjectiles(gameState);
-      dropAliens(gameState);
+      if (gameOver || gameState.isOver) {
+        gameState.isOver = true;
+        clearInterval(gameState.loop);
+        client.games.delete(interaction.user.id);
+        return updateInteraction(gameState, interaction, client);
+      }
       gameState.score++;
       await updateInteraction(gameState, interaction, client);
     }, gameState.refreshRate);
