@@ -15,7 +15,7 @@ import {
   createContextBasedAI,
   createQueryBasedAI,
   createTranslatorAI,
-} from "./models/googleGenerativeAI.js";
+} from "./utils/googleGenerativeAI.js";
 import loadReactionCommands from "./handlers/reactionCommandHandler.js";
 import loadButtons from "./handlers/buttonHandler.js";
 
