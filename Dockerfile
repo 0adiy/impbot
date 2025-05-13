@@ -1,16 +1,26 @@
-FROM node:20-alpine
+FROM node:20
 
-# Set working directory inside the container
+# Install build tools and Python for canvas
+RUN apt-get update && apt-get install -y \
+	build-essential \
+	python3 \
+	pkg-config \
+	libcairo2-dev \
+	libpango1.0-dev \
+	libjpeg-dev \
+	libgif-dev \
+	librsvg2-dev
+
+# Set working directory
 WORKDIR /app
 
-# Copy only package files first for better caching
+# Copy package files and install
 COPY package*.json ./
+RUN npm install --omit=dev
 
-# Install dependencies
-RUN npm install --production
-
-# Copy the rest of the app files
+# Copy source
 COPY . .
 
-# Run the app
-CMD ["node", "index.js"]
+# Use PM2 to run the bot
+RUN npm install -g pm2
+CMD ["pm2-runtime", "index.js"]
