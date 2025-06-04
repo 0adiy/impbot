@@ -13,7 +13,8 @@ import {
   logEvent,
   binarySearchLowerBound,
 } from "../utils/generalUtils.js";
-import wordsList from "an-array-of-english-words" with { type: "json" }; //eslint-disable-line
+
+import wordsList from "an-array-of-english-words" assert { type: "json" };
 
 async function get_Definition_Of_Given_Word(interaction, word) {
   let title = "",

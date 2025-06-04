@@ -359,7 +359,7 @@ async function purgeMessages(
     return { status: false, message: "Invalid or non-text channel provided." };
   }
 
-  // Check executor permissions
+  // check executor permissions
   if (!channel.permissionsFor(executor)?.has("ManageMessages")) {
     return {
       status: false,
