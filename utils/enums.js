@@ -26,6 +26,7 @@ const PICS = {
 
 const ANIMATIONS = {
   CHECK: "https://i.ibb.co/fVjShNTz/Animation-1746703373021.gif",
+  CROSS: "https://i.ibb.co/tPZ4CkDj/Animation-1749028419403.gif",
   SPACE_ROCKET: "https://i.ibb.co/ccGktK7G/Animation-1746704134361.gif",
   GAME_OVER: "https://i.ibb.co/5fFDXpM/Animation-1746704364095-1.gif",
 };
