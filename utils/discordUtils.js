@@ -156,30 +156,36 @@ async function getGuildRoles(client, guildId, shouldLog = false) {
  */
 async function getChannel(client, guildInput, channelInput) {
   const guild = await getGuild(client, guildInput);
-  if (!guild) return null;
+  if (!guild || !channelInput) return null;
 
-  // extract channel ID from mention or link
+  //if already a channel object, return if it's in the guild
+  if (typeof channelInput === "object" && channelInput.id) {
+    return guild.channels.cache.get(channelInput.id) || null;
+  }
+
+  // ensure it's a string before using .match()
+  if (typeof channelInput !== "string") return null;
+
+  // extract from mention like
   const mentionMatch = channelInput.match(/^<#(\d{17,19})>$/);
   if (mentionMatch) channelInput = mentionMatch[1];
 
+  // handle channel link
   const linkMatch = channelInput.match(
     /discord(?:app)?\.com\/channels\/\d+\/(\d{17,19})/
   );
   if (linkMatch) channelInput = linkMatch[1];
 
-  // id always first
-  try {
-    const channelById = await guild.channels.fetch(channelInput);
-    if (channelById) return channelById;
-  } catch {
-    // ignore fetch errors and fallback to cache search
-  }
+  // try to fetch by ID
+  const channelById = await guild.channels.fetch(channelInput);
+  if (channelById) return channelById;
 
-  // fallback: by name (case-insensitive)
-  const channelByName = guild.channels.cache.find(
-    c => c.name.toLowerCase() === channelInput.toLowerCase()
+  // fallback: find by name
+  return (
+    guild.channels.cache.find(
+      c => c.name.toLowerCase() === channelInput.toLowerCase()
+    ) || null
   );
-  return channelByName || null;
 }
 
 /**
@@ -329,6 +335,69 @@ async function unbanMember(
   }
 }
 
+/**
+ * Attempts to purge a specified amount of messages from a text channel.
+ *
+ * @param {Client} client - The Discord client.
+ * @param {GuildMember} executor - The member issuing the purge command.
+ * @param {string|Guild} guildInput - The guild to purge messages from.
+ * @param {string|Channel} channelInput - The ID, mention, or name of the channel to purge.
+ * @param {number} amount - The number of messages to purge (1-100).
+ * @returns {Promise<{status: boolean, message: string, channel?: TextChannel}>}
+ */
+async function purgeMessages(
+  client,
+  executor,
+  guildInput,
+  channelInput,
+  amount
+) {
+  const channel = await getChannel(client, guildInput, channelInput);
+  amount = Number(amount);
+
+  if (!channel || !channel.isTextBased?.() || !channel.messages) {
+    return { status: false, message: "Invalid or non-text channel provided." };
+  }
+
+  // Check executor permissions
+  if (!channel.permissionsFor(executor)?.has("ManageMessages")) {
+    return {
+      status: false,
+      message: "You don't have permission to manage messages in this channel.",
+    };
+  }
+
+  // check bot permissions
+  const botMember = channel.guild.members.me || channel.guild.me;
+  if (!channel.permissionsFor(botMember)?.has("ManageMessages")) {
+    return {
+      status: false,
+      message: "Bot lacks permission to manage messages in this channel.",
+    };
+  }
+
+  if (!Number.isInteger(amount) || amount <= 0 || amount > 100) {
+    return {
+      status: false,
+      message: "Please provide a number between 1 and 100.",
+    };
+  }
+
+  try {
+    const deletedMessages = await channel.bulkDelete(amount, true); // true = filterOld
+    return {
+      status: true,
+      message: `Successfully deleted ${deletedMessages.size} message(s).`,
+      channel,
+    };
+  } catch (error) {
+    return {
+      status: false,
+      message: `Failed to delete messages: ${error.message}`,
+    };
+  }
+}
+
 export {
   getClientGuilds,
   getGuildDetails,
@@ -339,4 +408,5 @@ export {
   getUser,
   banMember,
   unbanMember,
+  purgeMessages,
 };
