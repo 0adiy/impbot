@@ -54,7 +54,7 @@ async function getGuild(client, guildInput) {
   const cached = client.guilds.cache.get(guildId);
   if (cached) return cached;
 
-  // Fall back to fetch from API
+  // fall back to api if no cigar
   return await client.guilds.fetch(guildId).catch(() => null);
 }
 
@@ -147,18 +147,39 @@ async function getGuildRoles(client, guildId, shouldLog = false) {
 }
 
 /**
- * Retrieves a specific channel from a guild.
+ * Retrieves a specific text channel from a guild.
  *
  * @param {Client} client - The Discord client.
  * @param {string|Guild} guildInput - The guild to retrieve the channel from.
- * @param {string} channelInput - The ID or name of the channel to retrieve.
- * @returns {GuildChannel|null} The retrieved channel, or null if not found.
+ * @param {string} channelInput - The channel ID, mention, link, or name.
+ * @returns {Promise<GuildChannel|null>} The retrieved channel, or null if not found.
  */
 async function getChannel(client, guildInput, channelInput) {
   const guild = await getGuild(client, guildInput);
-  const byId = await guild.channels.fetch(channelInput).catch(() => null);
-  if (byId) return byId;
-  return guild.channels.cache.find(c => c.name === channelInput) || null;
+  if (!guild) return null;
+
+  // extract channel ID from mention or link
+  const mentionMatch = channelInput.match(/^<#(\d{17,19})>$/);
+  if (mentionMatch) channelInput = mentionMatch[1];
+
+  const linkMatch = channelInput.match(
+    /discord(?:app)?\.com\/channels\/\d+\/(\d{17,19})/
+  );
+  if (linkMatch) channelInput = linkMatch[1];
+
+  // id always first
+  try {
+    const channelById = await guild.channels.fetch(channelInput);
+    if (channelById) return channelById;
+  } catch {
+    // ignore fetch errors and fallback to cache search
+  }
+
+  // fallback: by name (case-insensitive)
+  const channelByName = guild.channels.cache.find(
+    c => c.name.toLowerCase() === channelInput.toLowerCase()
+  );
+  return channelByName || null;
 }
 
 /**
@@ -174,28 +195,28 @@ async function getUser(client, guildInput, userInput) {
   const guild = await getGuild(client, guildInput);
   if (!guild) return null;
 
-  // If already a GuildMember, ensure it belongs to the right guild
+  // if already a GuildMember, ensure its in right guild
   if (userInput instanceof GuildMember && userInput.guild.id === guild.id) {
     return userInput;
   }
 
-  // If User instance, fetch from guild
+  // if User instance, fetch from guild
   if (userInput instanceof User) {
     return await guild.members.fetch(userInput.id).catch(() => null);
   }
 
-  // Normalize mention -> ID
+  // mention -> id
   if (typeof userInput === "string") {
     const mentionMatch = userInput.match(/^<@!?(\d+)>$/);
     const id = mentionMatch ? mentionMatch[1] : userInput;
 
-    // Try fetching by ID
+    // try fetching by id
     if (/^\d{17,19}$/.test(id)) {
       const byId = await guild.members.fetch(id).catch(() => null);
       if (byId) return byId;
     }
 
-    // Try matching by username or display name
+    // try matching by username or display name
     const lowerInput = userInput.toLowerCase();
     return (
       guild.members.cache.find(
@@ -209,6 +230,105 @@ async function getUser(client, guildInput, userInput) {
   return null;
 }
 
+/**
+ * Attempts to ban a member from the guild.
+ *
+ * @param {GuildMember} executor - The member trying to ban (command author).
+ * @param {GuildMember} target - The member to be banned.
+ * @param {string} [reason] - Optional reason for the ban.
+ * @returns {Promise<{status: boolean, message: string}>}
+ */
+async function banMember(executor, target, reason = "No reason provided") {
+  // check executor perms
+  if (!executor.permissions.has("BanMembers")) {
+    return {
+      status: false,
+      message: "You don't have permission to ban members.",
+    };
+  }
+
+  // prevent suicide
+  if (executor.id === target.id) {
+    return { status: false, message: "You cannot ban yourself." };
+  }
+
+  // don't let a normie ban a chad
+  if (executor.roles.highest.position <= target.roles.highest.position) {
+    return {
+      status: false,
+      message: "You cannot ban a member with an equal or higher role.",
+    };
+  }
+
+  // check if bot can ban the target
+  if (!target.bannable) {
+    return {
+      status: false,
+      message:
+        "The user can not be banned because of role hierarchy or missing permissions.",
+    };
+  }
+
+  try {
+    await target.ban({ reason });
+    return { status: true, message: `Successfully banned ${target.user.tag}.` };
+  } catch (error) {
+    return {
+      status: false,
+      message: `Failed to ban ${target.user.tag}: ${error.message}`,
+    };
+  }
+}
+
+/**
+ * Attempts to unban a user from a guild.
+ *
+ * @param {GuildMember} executor - The member issuing the unban command.
+ * @param {Guild} guild - The guild where to unban.
+ * @param {string} userInput - User ID or mention
+ * @param {string} [reason] - Reason for the unban (optional).
+ * @returns {Promise<{status: boolean, message: string}>}
+ */
+async function unbanMember(
+  executor,
+  guild,
+  userInput,
+  reason = "No reason provided"
+) {
+  if (!executor.permissions.has("BanMembers")) {
+    return {
+      status: false,
+      message: "You don't have permission to unban members.",
+    };
+  }
+
+  // extract user id from mention
+  const mentionMatch = userInput.match(/^<@!?(\d+)>$/);
+  const userId = mentionMatch ? mentionMatch[1] : userInput;
+
+  if (!/^\d{17,19}$/.test(userId)) {
+    return {
+      status: false,
+      message: "Please provide a valid user ID or mention.",
+    };
+  }
+
+  try {
+    const bans = await guild.bans.fetch();
+    if (!bans.has(userId)) {
+      return { status: false, message: "That user is not banned." };
+    }
+
+    await guild.bans.remove(userId, reason);
+    return {
+      status: true,
+      message: `Successfully unbanned user with ID ${userId}.`,
+    };
+  } catch (error) {
+    return { status: false, message: `Failed to unban user: ${error.message}` };
+  }
+}
+
 export {
   getClientGuilds,
   getGuildDetails,
@@ -217,4 +337,6 @@ export {
   getGuildRoles,
   getChannel,
   getUser,
+  banMember,
+  unbanMember,
 };
