@@ -15,15 +15,47 @@ async function getClientGuilds(client, shouldLog = false) {
 }
 
 /**
- * Returns a Guild object by either ID or Guild object.
+ * Resolves a Guild from the client. Supports Guild instance, ID, name, or object with an ID.
  *
  * @param {Client} client - The Discord client.
- * @param {Guild|String} guild - The guild to retrieve.
- * @returns {Promise<Guild>} A promise that resolves with the Guild object.
+ * @param {string|Guild|{ id: string }} guildInput - Various formats for a guild.
+ * @returns {Promise<Guild|null>} - The resolved guild or null if not found.
  */
-async function getGuild(client, guild) {
-  if (guild instanceof Guild) return guild;
-  return client.guilds.cache.get(guild);
+async function getGuild(client, guildInput) {
+  if (!guildInput || typeof client?.guilds?.fetch !== "function") return null;
+
+  // already a guild
+  if (guildInput instanceof Guild) return guildInput;
+
+  // extract if possible
+  let guildId = null;
+
+  if (typeof guildInput === "string") {
+    // if it was id and not name
+    if (/^\d{17,19}$/.test(guildInput)) {
+      guildId = guildInput;
+    } else {
+      // look up by name
+      const byName = client.guilds.cache.find(
+        g => g.name.toLowerCase() === guildInput.toLowerCase()
+      );
+      if (byName) return byName;
+    }
+  } else if (
+    typeof guildInput === "object" &&
+    typeof guildInput.id === "string"
+  ) {
+    guildId = guildInput.id;
+  }
+
+  if (!guildId) return null;
+
+  //try cache first
+  const cached = client.guilds.cache.get(guildId);
+  if (cached) return cached;
+
+  // Fall back to fetch from API
+  return await client.guilds.fetch(guildId).catch(() => null);
 }
 
 /**
@@ -130,22 +162,51 @@ async function getChannel(client, guildInput, channelInput) {
 }
 
 /**
- * Retrieves a user from a guild. If the user is already an instance of User,
- * that user is returned. Otherwise, the function attempts to fetch the user
- * by ID and username.
+ * Retrieves a user from a guild. Supports User instance, GuildMember, ID, username,
+ * display name, and mention formats.
  *
  * @param {Client} client - The Discord client.
- * @param {string|Guild} guildInput - The guild to retrieve the user from.
- * @param {string|User} userInput - The ID or username of the user to retrieve,
- * or an instance of User.
- * @returns {GuildMember|null} The retrieved user, or null if not found.
+ * @param {string|Guild} guildInput - The guild or guild ID to retrieve the user from.
+ * @param {string|User|GuildMember} userInput - Various formats of user input.
+ * @returns {Promise<GuildMember|null>} The retrieved member or null if not found.
  */
 async function getUser(client, guildInput, userInput) {
-  if (userInput instanceof User) return userInput;
   const guild = await getGuild(client, guildInput);
-  const byId = await guild.members.fetch(userInput).catch(() => null);
-  if (byId) return byId;
-  return guild.members.cache.find(c => c.username === userInput) || null;
+  if (!guild) return null;
+
+  // If already a GuildMember, ensure it belongs to the right guild
+  if (userInput instanceof GuildMember && userInput.guild.id === guild.id) {
+    return userInput;
+  }
+
+  // If User instance, fetch from guild
+  if (userInput instanceof User) {
+    return await guild.members.fetch(userInput.id).catch(() => null);
+  }
+
+  // Normalize mention -> ID
+  if (typeof userInput === "string") {
+    const mentionMatch = userInput.match(/^<@!?(\d+)>$/);
+    const id = mentionMatch ? mentionMatch[1] : userInput;
+
+    // Try fetching by ID
+    if (/^\d{17,19}$/.test(id)) {
+      const byId = await guild.members.fetch(id).catch(() => null);
+      if (byId) return byId;
+    }
+
+    // Try matching by username or display name
+    const lowerInput = userInput.toLowerCase();
+    return (
+      guild.members.cache.find(
+        m =>
+          m.user.username.toLowerCase() === lowerInput ||
+          m.displayName.toLowerCase() === lowerInput
+      ) || null
+    );
+  }
+
+  return null;
 }
 
 export {
