@@ -19,10 +19,15 @@ const EMOJIS = {
   BLANK_SPACE: "<:blank:1370019726826143835>",
 };
 
+const PICS = {
+  HAMMER: "https://i.ibb.co/sdjz5Khj/image.png",
+  SHIELD: "https://i.ibb.co/JjDdh2Zp/1151c920-ae33-41d5-aac5-2d231286b6b9.png",
+};
+
 const ANIMATIONS = {
   CHECK: "https://i.ibb.co/fVjShNTz/Animation-1746703373021.gif",
   SPACE_ROCKET: "https://i.ibb.co/ccGktK7G/Animation-1746704134361.gif",
   GAME_OVER: "https://i.ibb.co/5fFDXpM/Animation-1746704364095-1.gif",
 };
 
-export { COLORS, EMOJIS, ANIMATIONS };
+export { COLORS, EMOJIS, ANIMATIONS, PICS };
