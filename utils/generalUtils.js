@@ -222,6 +222,15 @@ function generateRandomFilename(extension = "jpg", length = 12) {
   return `${name}.${extension}`;
 }
 
+//because javascript is retarded: [] == [] is false
+function arraysEqual(arr1, arr2) {
+  if (arr1.length !== arr2.length) return false;
+  for (let i = 0; i < arr1.length; i++) {
+    if (arr1[i] !== arr2[i]) return false;
+  }
+  return true;
+}
+
 export {
   // Time
   getFutureTimestamp,
@@ -249,4 +258,5 @@ export {
   loadAllTasks,
   getChatHistory,
   generateRandomFilename,
+  arraysEqual,
 };
