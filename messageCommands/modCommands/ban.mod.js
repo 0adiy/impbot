@@ -13,7 +13,7 @@ export default {
     if (!message.member.permissions.has("BanMembers")) return;
 
     if (args.length == 0)
-      return message.reply({ embeds: [generateModCommandEmbed(this)] }); // wanna send this json
+      return message.reply({ embeds: [generateModCommandEmbed(this)] });
 
     let embed = new EmbedBuilder();
     let userToBan = await getUser(client, message.guild, args[0]);
