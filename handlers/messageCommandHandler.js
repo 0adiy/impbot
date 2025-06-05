@@ -17,7 +17,7 @@ async function loadMessageCommands(client) {
     table.addRow(command.name, "🟩"); //formatting
   }
 
-  return console.log(table.toString(), "\nCommands loaded");
+  return console.log(table.toString(), "\nMessage commands loaded");
 }
 
 export { loadMessageCommands };
