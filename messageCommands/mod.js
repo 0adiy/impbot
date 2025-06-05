@@ -21,16 +21,20 @@ export default {
    * @param {Message} message
    */
   execute: async (client, message) => {
-    if (
-      !message.member.permissions.has([
-        "BanMembers",
-        "KickMembers",
-        "ManageMessages",
-        "ModerateMembers",
-        "Administrator",
-      ])
-    )
-      return;
+    //your individual moderation modules should do their own auth as well
+    const requiredPerms = [
+      "BanMembers",
+      "KickMembers",
+      "ManageMessages",
+      "ModerateMembers",
+      "Administrator",
+    ];
+
+    const hasAnyPerm = requiredPerms.some(perm =>
+      message.member.permissions.has(perm)
+    );
+
+    if (!hasAnyPerm) return;
 
     const args = message.content.slice(config.prefix.length).split(/ +|\n/g);
 
