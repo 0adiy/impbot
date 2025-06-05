@@ -100,8 +100,7 @@ async function logEvent(type, client, information) {
   if (type == "UP") {
     information = `${client.user.tag} is ready!`;
     console.log(`🚀 ${information}`);
-    return;
-    // return logChannel.send(`${EMOJIS.BOOT} ${information}`);
+    return logChannel.send(`${EMOJIS.BOOT} ${information}`);
   }
   if (type == "RXN") {
     const { reaction, command, user } = information;
