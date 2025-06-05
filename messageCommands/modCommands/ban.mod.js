@@ -9,11 +9,11 @@ export default {
   description: "Bans a user from the server",
   args: ["user", "reason"],
   help: `${suitePrefix} ban <@1053339940211142676> You are too annoying\n${suitePrefix} ban <@1053339940211142676>\n${suitePrefix} ban toxic.turtle spam is not allowed`,
-  execute: async (client, message, args) => {
+  execute: async function (client, message, args) {
     if (!message.member.permissions.has("BanMembers")) return;
 
     if (args.length == 0)
-      return message.reply({ embeds: [generateModCommandEmbed(ban)] });
+      return message.reply({ embeds: [generateModCommandEmbed(this)] }); // wanna send this json
 
     let embed = new EmbedBuilder();
     let userToBan = await getUser(client, message.guild, args[0]);
