@@ -11,8 +11,7 @@ async function loadModCommands(client) {
   for (const file of cmdFiles) {
     const imported = await import("file://" + file);
     const command = imported.default;
-
-    client.messageCommands.set(command.name, command);
+    client.modCommands.set(command.name, command);
 
     table.addRow(command.name, "🛡️"); //formatting
   }
