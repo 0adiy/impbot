@@ -1,9 +1,10 @@
 import { Events, Message, Client, EmbedBuilder } from "discord.js";
-import chalk from "chalk";
 import config from "../config.js";
 import { messageMiddleWare } from "../middlewares/message.middleware.js";
-import { logEvent } from "../utils/generalUtils.js";
-import { EMOJIS } from "../utils/enums.js";
+import { logEvent, isSuperUser } from "../utils/generalUtils.js";
+import { getMessageCommands } from "../handlers/commandHandler.js";
+import { CommandScope } from "../constants/commandScope.js";
+import { CommandPrivacy } from "../constants/commandPrivacy.js";
 
 export default {
   name: Events.MessageCreate,
@@ -24,19 +25,20 @@ export default {
 
     const args = message.content.slice(config.prefix.length).split(/ +|\n/g);
     const commandName = args.shift().toLowerCase();
+    const commands = client.messageCommands;
 
     const command =
-      client.messageCommands.get(commandName) ||
-      client.messageCommands.find(cmd => cmd.aliases?.includes(commandName));
+      commands.get(commandName) ||
+      commands.find(cmd => cmd.aliases?.includes(commandName));
 
     if (!command) return;
 
-    if (command.guildOnly && !message.channel.isTextBased())
+    if (command.scope === CommandScope.GUILD && !message.channel.isTextBased())
       return message.reply("I can't execute that command inside DMs!");
 
     if (
-      command.isPrivate &&
-      !config.superUsersArray.includes(message.author.id)
+      command.privacy === CommandPrivacy.PRIVATE &&
+      !isSuperUser(message.author.id)
     )
       return message.reply(`You are lacking permissions to use this command.`);
 

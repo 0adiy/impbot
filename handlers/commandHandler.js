@@ -24,9 +24,6 @@ export async function getModCommands() {
 
 export async function getMessageCommands() {
   const commands = await getAllCommands();
-  // commands.forEach(cmd => {
-  //   console.log(cmd);
-  // });
   return commands.filter(
     cmd =>
       cmd.type === CommandType.MESSAGE &&
