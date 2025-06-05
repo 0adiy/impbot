@@ -1,6 +1,7 @@
 import config from "../config.js";
-import { COLORS, EMOJIS } from "./enums.js";
+import { COLORS, EMOJIS, PICS } from "./enums.js";
 import { EmbedBuilder, User } from "discord.js";
+import { suitePrefix } from "../messageCommands/mod.js";
 
 // ─────────────────────────────────────────────
 // Time & Utility
@@ -99,7 +100,8 @@ async function logEvent(type, client, information) {
   if (type == "UP") {
     information = `${client.user.tag} is ready!`;
     console.log(`🚀 ${information}`);
-    return logChannel.send(`${EMOJIS.BOOT} ${information}`);
+    return;
+    // return logChannel.send(`${EMOJIS.BOOT} ${information}`);
   }
   if (type == "RXN") {
     const { reaction, command, user } = information;
@@ -231,6 +233,29 @@ function arraysEqual(arr1, arr2) {
   return true;
 }
 
+function generateModCommandEmbed(command) {
+  let embed = new EmbedBuilder();
+  let description = `
+      **Syntax:**
+      \`${suitePrefix} ${command.name} ${command.args
+    .map(a => `<${a}>`)
+    .join(" ")}\`
+
+      **Description:**
+      ${command.description}
+
+      **Examples:**
+      ${command.help}
+      `;
+  embed
+    .setTitle(`${capitalizeFirstLetter(command.name)}`)
+    .setDescription(description)
+    .setThumbnail(PICS.SHIELD)
+    .setColor(COLORS.PRIMARY);
+  if (command.note) embed.setFooter({ text: command.note });
+  return embed;
+}
+
 export {
   // Time
   getFutureTimestamp,
@@ -259,4 +284,5 @@ export {
   getChatHistory,
   generateRandomFilename,
   arraysEqual,
+  generateModCommandEmbed,
 };
