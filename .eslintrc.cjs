@@ -1,10 +1,15 @@
 module.exports = {
-  root: true,
-  env: { node: true, es2020: true },
+  env: {
+    node: true,
+    es2021: true,
+  },
+  parserOptions: {
+    ecmaVersion: "latest",
+    sourceType: "module",
+  },
   extends: ["eslint:recommended"],
-  ignorePatterns: ["dist", ".eslintrc.cjs"],
-  parserOptions: { sourceType: "module", ecmaVersion: "latest" },
   rules: {
-    "no-unused-vars": "off",
+    "no-unused-vars": "warn",
+    "no-undef": "error",
   },
 };
