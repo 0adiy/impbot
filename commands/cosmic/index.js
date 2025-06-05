@@ -1,6 +1,8 @@
+import { CommandType } from "../../constants/commandTypes.js";
+import { CommandCategory } from "../../constants/commandCategories.js";
+import { CommandPrivacy } from "../../constants/commandPrivacy.js";
 import {
   SlashCommandBuilder,
-  EmbedBuilder,
   InteractionContextType,
   ApplicationIntegrationType,
   ButtonBuilder,
@@ -11,9 +13,18 @@ import {
   dropAliens,
   updateInteraction,
   processProjectiles,
-} from "../utils/gameUtils.js";
-import { EMOJIS } from "../utils/enums.js";
+} from "../../utils/gameUtils.js";
+import { EMOJIS } from "../../utils/enums.js";
+
+const cosmic = {
+  name: "cosmic",
+  type: CommandType.SLASH,
+  category: CommandCategory.UTILITY,
+  privacy: CommandPrivacy.PUBLIC,
+};
+
 export default {
+  ...cosmic,
   data: new SlashCommandBuilder()
     .setName("cosmic")
     .setDescription("Play a retro star blaster!")
