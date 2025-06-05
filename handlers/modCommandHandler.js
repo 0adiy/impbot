@@ -6,7 +6,7 @@ async function loadModCommands(client) {
 
   await client.modCommands.clear();
 
-  const cmdFiles = await loadFiles("messageCommands/modCommands");
+  const cmdFiles = await loadFiles("modCommands");
 
   for (const file of cmdFiles) {
     const imported = await import("file://" + file);
