@@ -1,6 +1,6 @@
 import { Routes, REST } from "discord.js";
 import config from "../config.js";
-import { loadFiles } from "../utils/fileloader.js";
+import { loadFiles } from "../utils/fileLoader.js";
 import ascii from "ascii-table";
 
 //setting up REST for discord

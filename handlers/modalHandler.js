@@ -1,5 +1,5 @@
 import ascii from "ascii-table";
-import { loadFiles } from "../utils/fileloader.js";
+import { loadFiles } from "../utils/indexLoader.js";
 
 // REVIEW - read the code a bit more carefully
 export default async function loadModals(client) {

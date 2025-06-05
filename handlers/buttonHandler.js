@@ -1,5 +1,5 @@
 import ascii from "ascii-table";
-import { loadFiles } from "../utils/fileloader.js";
+import { loadFiles } from "../utils/fileLoader.js";
 
 export default async function loadButtons(client) {
   const table = new ascii().setHeading("Button Actions", "Status");

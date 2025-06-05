@@ -1,5 +1,5 @@
 import ascii from "ascii-table";
-import { loadFiles } from "../utils/fileloader.js";
+import { loadFiles } from "../utils/indexLoader.js";
 
 export default async function loadReactionCommands(client) {
   const table = new ascii().setHeading("Reaction Commands", "Status");

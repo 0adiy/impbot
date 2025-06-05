@@ -1,9 +1,8 @@
-import { loadFiles } from "../utils/fileloader.js";
+import { loadFiles } from "../utils/fileLoader.js";
 import ascii from "ascii-table";
 
 async function loadEvents(client) {
   const table = new ascii().setHeading("Events", "Status"); // table for formatted printing
-
   await client.events.clear(); // clear all events first
 
   const Files = await loadFiles("events");
