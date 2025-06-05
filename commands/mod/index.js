@@ -2,8 +2,8 @@ import { CommandType } from "../../constants/commandTypes.js";
 import { CommandCategory } from "../../constants/commandCategories.js";
 import { CommandPrivacy } from "../../constants/commandPrivacy.js";
 import { CommandScope } from "../../constants/commandScope.js";
-import { COLORS, PICS } from "../utils/enums.js";
-import config from "../config.js";
+import { COLORS, PICS } from "../../utils/enums.js";
+import config from "../../config.js";
 import * as util from "./util.js";
 
 export default {
@@ -32,7 +32,7 @@ export default {
       const embed = new EmbedBuilder()
         .setTitle("Moderation Suite")
         .setDescription(
-          `Use \`${suitePrefix} help\` to view all available moderation commands.\nThe suite offers a wide range of tools built for reliability, efficiency, and ease of use — whether you're managing a small server or a large community.`
+          `Use \`${suitePrefix} manual\` to view all available moderation commands.\nThe suite offers a wide range of tools built for reliability, efficiency, and ease of use — whether you're managing a small server or a large community.`
         )
         .setThumbnail(PICS.HAMMER)
         .setColor(COLORS.PRIMARY);
@@ -45,5 +45,3 @@ export default {
     // if (command) await command.execute(client, message, args);
   },
 };
-
-export { suite, suitePrefix };

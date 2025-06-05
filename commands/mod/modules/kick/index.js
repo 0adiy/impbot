@@ -16,7 +16,7 @@ export default {
   args: ["user", "reason"],
   description: "Unbans a user from the server",
   note: "Discord doesn’t support unbanning by username, so ID or mention is best.",
-  help: `${util.suitePrefix} unban 1053339940211142676 behave this time\n${util.suitePrefix} unban <@1053339940211142676> oops it was a mistake\n${suitePrefix} unban sorry_ahh`,
+  help: `${util.suitePrefix} unban 1053339940211142676 behave this time\n${util.suitePrefix} unban <@1053339940211142676> oops it was a mistake\n${util.suitePrefix} unban sorry_ahh`,
   execute: async function (client, message, args) {
     if (!message.member.permissions.has("BanMembers")) return;
 

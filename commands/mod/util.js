@@ -1,4 +1,4 @@
-import { COLORS, PICS } from "../utils/enums.js";
+import { COLORS, PICS } from "../../utils/enums.js";
 import config from "../../config.js";
 
 export const suite = `mod`;
@@ -60,6 +60,6 @@ export const requiredPerms = [
   "Administrator",
 ];
 
-export const hasAnyPerm = requiredPerms.some(perm =>
-  message.member.permissions.has(perm)
-);
+export function hasAnyPerm(message) {
+  return requiredPerms.some(perm => message.member.permissions.has(perm));
+}
