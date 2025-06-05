@@ -1,17 +1,25 @@
-# MODule Template
+# MODule Command Template
 
 Each mod command file should export a default object containing the properties below.
 
+---
+
 ## Properties
 
-| Property    | Type     | Optional | Description                                       | Default   |
-| ----------- | -------- | -------- | ------------------------------------------------- | --------- |
-| name        | string   |          | Name of the command                               |           |
-| description | string   |          | Short description of the command                  |           |
-| note        | string   | ✅       | Message to be put inside the footer of help embed | undefined |
-| args        | string[] | ✅       | Parameters of the command                         | []        |
-| help        | string   |          | Detailed usage of the command                     |           |
-| execute     | function |          | Function to execute the command                   |           |
+| Property    | Type            | Optional | Description                                       |
+| ----------- | --------------- | -------- | ------------------------------------------------- |
+| name        | string          |          | Name of the command                               |
+| type        | CommandType     |          | Type of command (e.g., `MESSAGE`, `SLASH`)        |
+| category    | CommandCategory |          | Category of the command (`MODERATION`, etc.)      |
+| privacy     | CommandPrivacy  |          | Visibility of the command (`PUBLIC`, etc.)        |
+| scope       | CommandScope    |          | Where the command runs (`GUILD`, `DM`, etc.)      |
+| description | string          |          | Short description of the command                  |
+| note        | string          | ✅       | Message to be put inside the footer of help embed |
+| args        | string\[]       | ✅       | Parameters of the command                         |
+| help        | string          |          | Detailed usage of the command                     |
+| execute     | function        |          | Function to execute the command                   |
+
+---
 
 ## Note
 
@@ -20,17 +28,27 @@ Each mod command file should export a default object containing the properties b
 - Avoid duplicating functionality—many helpful utilities are already available in [discordUtils.js](../../utils/discordUtils.js), so check there before writing your own.
 - Don't use arrow syntax for `execute()` function, because that won't allow `this` to be passed
 
+---
+
 ## Example
 
 ```js
+import { CommandType } from "../../../../constants/commandTypes.js";
+import { CommandCategory } from "../../../../constants/commandCategories.js";
+import { CommandPrivacy } from "../../../../constants/commandPrivacy.js";
+import { CommandScope } from "../../../../constants/commandScope.js";
 import { EmbedBuilder } from "discord.js";
-import { COLORS, ANIMATIONS } from "../../utils/enums.js";
-import { getUser, banMember } from "../../utils/discordUtils.js";
-import { generateModCommandEmbed } from "../../utils/generalUtils.js";
-import { suitePrefix } from "../mod.js";
+import { COLORS, PICS } from "../../../../utils/enums.js";
+import { getUser, banMember } from "../../../../utils/discordUtils.js";
+import { generateModCommandEmbed } from "../../../../utils/generalUtils.js";
+import { suitePrefix } from "../../util.js";
 
 export default {
   name: "ban",
+  type: CommandType.MESSAGE,
+  category: CommandCategory.MODERATION,
+  privacy: CommandPrivacy.PUBLIC,
+  scope: CommandScope.GUILD,
   description: "Bans a user from the server",
   args: ["user", "reason"], //not guaranteed to be available
   help: `${suitePrefix} ban <@1053339940211142676> You are too annoying`,
@@ -57,14 +75,14 @@ export default {
         .setTitle("Invalid User")
         .setDescription(`Could not find user with ID or username ${args[0]}`)
         .setColor(COLORS.ERROR)
-        .setThumbnail(ANIMATIONS.CROSS);
+        .setThumbnail(PICS.CROSS);
     } else {
       const ban = await banMember(executor, userToBan, args.slice(1).join(" "));
       embed
         .setTitle(ban.status ? "Successfully Banned" : "Failed to Ban")
         .setDescription(ban.message)
         .setColor(ban.status ? COLORS.SUCCESS : COLORS.ERROR)
-        .setThumbnail(ban.status ? ANIMATIONS.CHECK : ANIMATIONS.CROSS);
+        .setThumbnail(ban.status ? PICS.CHECK : PICS.CROSS);
     }
     return message.reply({ embeds: [embed] });
   },
