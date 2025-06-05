@@ -1,19 +1,35 @@
-import { loadFiles } from "../utils/fileloader.js";
-import ascii from "ascii-table";
+import { loadIndices } from "../utils/indexLoader.js";
+import { CommandType } from "../constants/commandTypes.js";
+import { Collection } from "discord.js";
+import { CommandCategory } from "../constants/commandCategories.js";
 
 export async function getAllCommands() {
-  const table = new ascii().setHeading("Name", "Type");
-  const cmdFiles = await loadFiles("commands");
-  const commands = new Map();
+  const cmdFiles = await loadIndices("commands");
+  const commands = new Collection();
   for (const file of cmdFiles) {
     try {
       const { default: command } = await import("file://" + file);
-      table.addRow(command.name, command.type);
       commands.set(command.name, command);
     } catch (err) {
       console.log(file, err);
     }
   }
+  return commands;
+}
 
-  console.log(table.toString(), "\nCommands loaded");
+export async function getModCommands() {
+  const commands = await getAllCommands();
+  return commands.filter(cmd => cmd.category === CommandType.MODERATION);
+}
+
+export async function getMessageCommands() {
+  const commands = await getAllCommands();
+  // commands.forEach(cmd => {
+  //   console.log(cmd);
+  // });
+  return commands.filter(
+    cmd =>
+      cmd.type === CommandType.MESSAGE &&
+      cmd.category !== CommandCategory.MODERATION
+  );
 }
