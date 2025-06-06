@@ -2,7 +2,6 @@ import { Events, Message, Client, EmbedBuilder } from "discord.js";
 import config from "../config.js";
 import { messageMiddleWare } from "../middlewares/message.middleware.js";
 import { logEvent, isSuperUser } from "../utils/generalUtils.js";
-import { getMessageCommands } from "../handlers/commandHandler.js";
 import { CommandScope } from "../constants/commandScope.js";
 import { CommandPrivacy } from "../constants/commandPrivacy.js";
 

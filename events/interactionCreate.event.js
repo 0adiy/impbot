@@ -1,5 +1,6 @@
 import { ChatInputCommandInteraction, Client, Events } from "discord.js";
 import { logEvent, isSuperUser } from "../utils/generalUtils.js";
+import { CommandPrivacy } from "../constants/commandPrivacy.js";
 
 export default {
   name: Events.InteractionCreate,
@@ -22,7 +23,10 @@ export default {
           ephemeral: true,
         });
 
-      if (command.isPrivate && !isSuperUser(interaction.user))
+      if (
+        command.privacy === CommandPrivacy.PRIVATE &&
+        !isSuperUser(interaction.user)
+      )
         return interaction.reply({
           content: "This operation is forbidden.",
         });

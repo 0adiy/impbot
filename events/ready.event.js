@@ -1,8 +1,8 @@
 import { Events } from "discord.js";
-import { loadSlashCommands } from "../handlers/slashCommandHandler.js";
 import { loadAndSetAllReminders } from "../utils/generalUtils.js";
 import { logEvent } from "../utils/generalUtils.js";
 import reminderSchema from "../models/reminder.model.js";
+import { loadAllCommands } from "../handlers/commandHandler.js";
 
 export default {
   name: Events.ClientReady,
@@ -16,6 +16,7 @@ export default {
       24 * 60 * 60 * 1000
     );
 
-    loadSlashCommands(client);
+    //loads message commands, slash commands and mod commands into Client
+    await loadAllCommands(client);
   },
 };
