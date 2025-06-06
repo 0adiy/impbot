@@ -1,3 +1,7 @@
+import { CommandType } from "../../constants/commandTypes.js";
+import { CommandCategory } from "../../constants/commandCategories.js";
+import { CommandPrivacy } from "../../constants/commandPrivacy.js";
+import { SlashCommandBuilder } from "discord.js";
 import {
   SlashCommandBuilder,
   EmbedBuilder,
@@ -9,7 +13,15 @@ import { configureLyrixcope, getSongLyrics } from "lyrixcope";
 import { logEvent } from "../../utils/generalUtils.js";
 import { COLORS } from "../../utils/enums.js";
 
+const lyric = {
+  name: "lyrics",
+  type: CommandType.SLASH,
+  category: CommandCategory.UTILITY,
+  privacy: CommandPrivacy.PUBLIC,
+};
+
 export default {
+  ...lyric,
   data: new SlashCommandBuilder()
     .setName("lyrics")
     .setDescription("Get lyrics of the desired song")
