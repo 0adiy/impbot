@@ -15,9 +15,9 @@ import {
   createQueryBasedAI,
   createTranslatorAI,
 } from "./utils/googleGenerativeAI.js";
-import { getMessageCommands } from "./handlers/commandHandler.js";
 import loadReactionCommands from "./handlers/reactionCommandHandler.js";
 import loadButtons from "./handlers/buttonHandler.js";
+
 connectDB();
 
 const client = new Client({
@@ -48,7 +48,6 @@ const client = new Client({
 client.contextualAI = createContextBasedAI();
 client.queryAI = createQueryBasedAI();
 client.events = new Collection();
-client.slashCommands = new Collection();
 client.uptimeTrackerTimestamp = new Date();
 client.modals = new Collection();
 client.selectMenus = new Collection();
@@ -57,7 +56,11 @@ client.buttons = new Collection();
 client.translatorAI = createTranslatorAI();
 client.games = new Map(); //cosmic
 
-client.messageCommands = await getMessageCommands();
+//these are being registered at ready event
+client.messageCommands = new Collection();
+client.slashCommands = new Collection();
+client.modCommands = new Collection();
+
 loadEvents(client);
 loadModals(client);
 loadSelectMenus(client);

@@ -8,16 +8,16 @@ export function getRandomItems(array, count) {
     .slice(0, Math.min(count, array.length));
 }
 
-function capitalizeFirstLetter(str) {
+export function capitalizeFirstLetter(str) {
   return str.charAt(0).toUpperCase() + str.slice(1);
 }
 
-function isSuperUser(user) {
+export function isSuperUser(user) {
   const id = user instanceof User ? user.id : String(user);
   return config.superUsersArray.includes(id);
 }
 
-async function logEvent(type, client, information) {
+export async function logEvent(type, client, information) {
   const logChannel = await client.channels.cache.get(config.logChannel);
   if (type == "DM") {
     let message = information;
@@ -77,7 +77,16 @@ async function logEvent(type, client, information) {
 
 let reminderTimeoutList = [];
 
-async function loadAndSetAllReminders(reminderSchema, client) {
+export async function setReminder(reminder, duration, client) {
+  const timeoutId = setTimeout(
+    () => sendReminderAlert(client, reminder),
+    duration
+  );
+  reminderTimeoutList.push(timeoutId);
+  console.log("Reminder set.");
+}
+
+export async function loadAndSetAllReminders(reminderSchema, client) {
   reminderTimeoutList.forEach(clearTimeout);
   reminderTimeoutList = [];
 
@@ -106,17 +115,3 @@ async function sendReminderAlert(client, reminder) {
 
   channel.send({ content: `<@${reminder.userId}>`, embeds: [embed] });
 }
-
-// ─────────────────────────────────────────────
-// Extra Utils
-// ─────────────────────────────────────────────
-
-export {
-  capitalizeFirstLetter,
-  // User
-  isSuperUser,
-  // Logging
-  logEvent,
-  // Reminders
-  loadAndSetAllReminders,
-};
