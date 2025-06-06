@@ -56,22 +56,3 @@ export async function loadAllCommands(client) {
   }
   return console.log(table.toString(), "\nCommands loaded");
 }
-export async function removeGlobalCommands(client) {
-  try {
-    console.log("Started removing commands");
-
-    rest.get(Routes.applicationCommands(config.CLIENT_ID)).then(data => {
-      const promises = [];
-      for (const command of data) {
-        const deleteUrl = `${Routes.applicationCommands(config.CLIENT_ID)}/${
-          command.id
-        }`;
-        promises.push(rest.delete(deleteUrl));
-      }
-
-      console.log("Removed commands succesfully");
-    });
-  } catch {
-    console.log("Failed to remove commands");
-  }
-}
