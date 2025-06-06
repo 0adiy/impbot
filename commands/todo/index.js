@@ -17,7 +17,7 @@ const taskCmd = {
   name: "task",
   type: CommandType.SLASH,
   category: CommandCategory.UTILITY,
-  privacy: CommandPrivacy.PUBLIC,
+  privacy: CommandPrivacy.PRIVATE,
 };
 
 export default {
