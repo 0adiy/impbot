@@ -6,18 +6,18 @@ This guide describes the standard structure for both **message commands** and **
 
 ## 🧩 Common Properties
 
-| Property      | Type                  | Required   | Description                                         |
-| ------------- | --------------------- | ---------- | --------------------------------------------------- |
-| `name`        | `string`              | ✅         | The command's primary name                          |
-| `description` | `string`              | ✅         | A description used in help or slash metadata        |
-| `aliases`     | `string[]`            | ❌         | Alternate names (message commands only)             |
-| `args`        | `string[]`            | ❌         | Expected arguments (message commands only)          |
-| `privacy`     | `CommandPrivacy`      | ✅         | Defines who can use this command                    |
-| `category`    | `CommandCategory`     | ✅         | Categorizes command (e.g., UTILITY, MODERATION)     |
-| `scope`       | `CommandScope`        | ❌         | Where the command can be used (DM, GUILD, BOTH)     |
-| `type`        | `CommandType`         | ✅         | Defines the command type (`MESSAGE`, `SLASH`, etc.) |
-| `data`        | `SlashCommandBuilder` | ✅ (SLASH) | Slash command metadata builder from `discord.js`    |
-| `execute`     | `Function`            | ✅         | Async function that executes the command            |
+| Property      | Type                  | Required   | Description                                                                  |
+| ------------- | --------------------- | ---------- | ---------------------------------------------------------------------------- |
+| `name`        | `string`              | ✅         | The command's primary name                                                   |
+| `description` | `string`              | ✅         | A short description of the command                                           |
+| `aliases`     | `string[]`            | ❌         | Alternate names (message commands only)                                      |
+| `args`        | `string[]`            | ❌         | Expected arguments (message commands only)                                   |
+| `privacy`     | `CommandPrivacy`      | ✅         | Defines who can use this command (`PRIVATE` means a super user only command) |
+| `category`    | `CommandCategory`     | ✅         | Categorizes command (e.g., UTILITY, MODERATION)                              |
+| `scope`       | `CommandScope`        | ❌         | Where the command can be used: DM/GUILD/BOTH (message commands only)         |
+| `type`        | `CommandType`         | ✅         | Defines the command type (`MESSAGE`, `SLASH`, etc.)                          |
+| `data`        | `SlashCommandBuilder` | ✅ (SLASH) | Slash command metadata builder from `discord.js` (slash commands only)       |
+| `execute`     | `Function`            | ✅         | Async function that executes the command                                     |
 
 ---
 

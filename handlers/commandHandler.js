@@ -21,6 +21,8 @@ export async function loadAllCommands(client) {
     "Status"
   );
 
+  const slashCommands = [];
+
   await client.slashCommands.clear();
   await client.messageCommands.clear();
   const cmdFiles = await loadIndices("commands");
@@ -31,9 +33,7 @@ export async function loadAllCommands(client) {
       switch (command.type) {
         case CommandType.SLASH:
           client.slashCommands.set(command.data.name, command);
-          await rest.put(Routes.applicationCommands(config.CLIENT_ID), {
-            body: [command.data.toJSON()],
-          });
+          slashCommands.push(command.data.toJSON());
           break;
         case CommandType.MESSAGE:
           if (command.category == CommandCategory.MODERATION) {
@@ -46,6 +46,13 @@ export async function loadAllCommands(client) {
     } catch (err) {
       console.log(file, err);
     }
+  }
+
+  //bulk register
+  if (slashCommands.length) {
+    await rest.put(Routes.applicationCommands(config.CLIENT_ID), {
+      body: slashCommands,
+    });
   }
   return console.log(table.toString(), "\nCommands loaded");
 }
