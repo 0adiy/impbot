@@ -1,7 +1,6 @@
 import { CommandType } from "../../constants/commandTypes.js";
 import { CommandCategory } from "../../constants/commandCategories.js";
 import { CommandPrivacy } from "../../constants/commandPrivacy.js";
-import { SlashCommandBuilder } from "discord.js";
 import {
   SlashCommandBuilder,
   EmbedBuilder,

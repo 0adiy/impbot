@@ -8,6 +8,7 @@ import {
 } from "discord.js";
 import reminderSchema from "../../models/reminder.model.js";
 import * as util from "./util.js";
+import { setReminder } from "../../utils/generalUtils.js";
 
 const reminder = {
   name: "reminder",
@@ -104,7 +105,7 @@ export default {
 
     if (offset < 24 * 60 * 60 * 1000) {
       // 24 hours
-      await util.setReminder(reminder, offset, client);
+      await setReminder(reminder, offset, client);
     }
 
     interaction.editReply(

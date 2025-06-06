@@ -4,12 +4,8 @@ import { CommandPrivacy } from "../../../../constants/commandPrivacy.js";
 import { CommandScope } from "../../../../constants/commandScope.js";
 import { EmbedBuilder } from "discord.js";
 import { COLORS, PICS } from "../../../../utils/enums.js";
-import {
-  generateModCommandEmbed,
-  arraysEqual,
-} from "../../../../utils/generalUtils.js";
+import { generateModCommandEmbed, arraysEqual } from "../../util.js";
 import { suitePrefix } from "../../util.js";
-import { getModCommands } from "../../../../handlers/commandHandler.js";
 
 export default {
   name: "manual",
@@ -21,7 +17,7 @@ export default {
   args: ["command"],
   help: `${suitePrefix} manual\n${suitePrefix} manual unban`,
   execute: async (client, message, args) => {
-    const commands = await getModCommands();
+    const commands = client.modCommands;
     //manual has no arguments, provide general manual
     if (arraysEqual(args, [])) {
       let embed = new EmbedBuilder()

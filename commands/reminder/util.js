@@ -6,14 +6,6 @@
  * @param {Object} client - The client instance to use for sending the reminder alert.
  */
 
-export async function setReminder(reminder, duration, client) {
-  const timeoutId = setTimeout(
-    () => sendReminderAlert(client, reminder),
-    duration
-  );
-  reminderTimeoutList.push(timeoutId);
-  console.log("Reminder set.");
-}
 /*************  ✨ Windsurf Command ⭐  *************/
 /**
  * Returns a Date object representing the current time plus the given amount of time.

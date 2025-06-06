@@ -1,5 +1,5 @@
 import config from "../../config.js";
-import { COLORS } from "../utils/enums.js";
+import { COLORS } from "../../utils/enums.js";
 import { capitalizeFirstLetter } from "../../utils/generalUtils.js";
 import { EmbedBuilder } from "discord.js";
 import { getRandomItems } from "../../utils/generalUtils.js";
