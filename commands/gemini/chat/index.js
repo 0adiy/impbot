@@ -1,8 +1,8 @@
-import { CommandType } from "../../constants/commandTypes.js";
-import { CommandCategory } from "../../constants/commandCategories.js";
-import { CommandPrivacy } from "../../constants/commandPrivacy.js";
-import { CommandScope } from "../../constants/commandScope.js";
-import { logEvent } from "../../utils/generalUtils.js";
+import { CommandType } from "../../../constants/commandTypes.js";
+import { CommandCategory } from "../../../constants/commandCategories.js";
+import { CommandPrivacy } from "../../../constants/commandPrivacy.js";
+import { CommandScope } from "../../../constants/commandScope.js";
+import { logEvent } from "../../../utils/generalUtils.js";
 import * as util from "./util.js";
 
 export default {
