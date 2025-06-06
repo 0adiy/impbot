@@ -3,6 +3,7 @@ import { CommandCategory } from "../../constants/commandCategories.js";
 import { CommandPrivacy } from "../../constants/commandPrivacy.js";
 import { CommandScope } from "../../constants/commandScope.js";
 import { COLORS, PICS } from "../../utils/enums.js";
+import { EmbedBuilder } from "discord.js";
 import config from "../../config.js";
 import * as util from "./util.js";
 
@@ -32,16 +33,15 @@ export default {
       const embed = new EmbedBuilder()
         .setTitle("Moderation Suite")
         .setDescription(
-          `Use \`${suitePrefix} manual\` to view all available moderation commands.\nThe suite offers a wide range of tools built for reliability, efficiency, and ease of use — whether you're managing a small server or a large community.`
+          `Use \`${util.suitePrefix} manual\` to view all available moderation commands.\nThe suite offers a wide range of tools built for reliability, efficiency, and ease of use — whether you're managing a small server or a large community.`
         )
         .setThumbnail(PICS.HAMMER)
         .setColor(COLORS.PRIMARY);
       return message.reply({ embeds: [embed] });
     }
-    //rewrite this logic
-    //not empty, find and execute
-    // const name = args.shift(); //pop out at 1 in the morning 🎶
-    // const command = client.modCommands.get(name);
-    // if (command) await command.execute(client, message, args);
+    // not empty, find and execute
+    const name = args.shift(); //pop out at 1 in the morning 🎶
+    const command = client.modCommands.get(name);
+    if (command) await command.execute(client, message, args);
   },
 };

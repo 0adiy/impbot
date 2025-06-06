@@ -1,5 +1,7 @@
 import { COLORS, PICS } from "../../utils/enums.js";
 import config from "../../config.js";
+import { EmbedBuilder } from "discord.js";
+import { capitalizeFirstLetter } from "../../utils/generalUtils.js";
 
 export const suite = `mod`;
 export const suitePrefix = `${config.prefix}${suite}`;

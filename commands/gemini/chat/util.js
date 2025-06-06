@@ -1,8 +1,9 @@
-  /**
-   * Retrieves the last 1500 characters of chat history from the specified channel
-   * @param {TextChannel} channel - The channel to retrieve the history from
-   * @returns {string} The retrieved chat history
-   */
+import config from "../../../config.js";
+/**
+ * Retrieves the last 1500 characters of chat history from the specified channel
+ * @param {TextChannel} channel - The channel to retrieve the history from
+ * @returns {string} The retrieved chat history
+ */
 export async function getChatHistory(channel) {
   let history = "";
   let lastMessageId = null;
