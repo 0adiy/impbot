@@ -2,11 +2,7 @@ import config from "../../config.js";
 import { COLORS } from "../utils/enums.js";
 import { capitalizeFirstLetter } from "../../utils/generalUtils.js";
 import { EmbedBuilder } from "discord.js";
-export function getRandomItems(array, count) {
-  return array
-    .sort(() => 0.5 - Math.random())
-    .slice(0, Math.min(count, array.length));
-}
+import { getRandomItems } from "../../utils/generalUtils.js";
 
 export function binarySearchLowerBound(array, word) {
   let low = 0,

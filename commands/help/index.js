@@ -5,11 +5,7 @@ import { CommandScope } from "../../constants/commandScope.js";
 import { EmbedBuilder } from "discord.js";
 import { COLORS } from "../../utils/enums.js";
 import config from "../../config.js";
-import {
-  logEvent,
-  isSuperUser,
-  capitalizeFirstLetter,
-} from "../../utils/generalUtils.js";
+import { logEvent, isSuperUser } from "../../utils/generalUtils.js";
 
 export default {
   name: "help",

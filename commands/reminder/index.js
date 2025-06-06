@@ -104,7 +104,7 @@ export default {
 
     if (offset < 24 * 60 * 60 * 1000) {
       // 24 hours
-      await setReminder(reminder, offset, client);
+      await util.setReminder(reminder, offset, client);
     }
 
     interaction.editReply(
