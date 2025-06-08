@@ -2,6 +2,7 @@
 /.env
 config.js
 config.old.js
+config.backup.js
 # Defaults
 /node_modules
 .vscode/*

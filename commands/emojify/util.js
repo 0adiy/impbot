@@ -155,7 +155,7 @@ export const emojisList = [
   "warning",
 ];
 
-export default function emojify(msg) {
+export function emojify(msg) {
   return msg.replace(
     /\s/g,
     () =>

@@ -177,10 +177,11 @@ async function getChannel(client, guildInput, channelInput) {
   if (linkMatch) channelInput = linkMatch[1];
 
   // try to fetch by ID
-  const channelById = await guild.channels.fetch(channelInput);
-  if (channelById) return channelById;
+  if (/^\d{17,19}$/.test(channelInput)) {
+    const channelById = await guild.channels.fetch(channelInput);
+    return channelById;
+  }
 
-  // fallback: find by name
   return (
     guild.channels.cache.find(
       c => c.name.toLowerCase() === channelInput.toLowerCase()

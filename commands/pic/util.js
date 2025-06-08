@@ -1,5 +1,5 @@
 import { getRandomItems } from "../../utils/generalUtils.js";
-
+import config from "../../config.js";
 /**
  * Fetches pictures from either Pexels or Pixabay
  *

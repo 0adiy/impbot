@@ -4,7 +4,7 @@ import { CommandPrivacy } from "../../constants/commandPrivacy.js";
 import { SlashCommandBuilder, InteractionContextType } from "discord.js";
 import * as util from "./util.js";
 
-const emojify = {
+const emojiCmd = {
   name: "emojify",
   type: CommandType.SLASH,
   category: CommandCategory.FUN,
@@ -12,7 +12,7 @@ const emojify = {
 };
 
 export default {
-  ...emojify,
+  ...emojiCmd,
   data: new SlashCommandBuilder()
     .setName("emojify")
     .setDescription("Emojifies your messages")

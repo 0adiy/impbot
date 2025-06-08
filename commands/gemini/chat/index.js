@@ -34,6 +34,7 @@ export default {
       const response = result.response.text();
       // don't log context anymore
       // await logEvent("CTX", client, payload);
+      await message.delete();
       message.channel.send(response);
     } catch (error) {
       await logEvent("ERR", client, error);
