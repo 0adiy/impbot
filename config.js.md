@@ -28,8 +28,6 @@ The file name must be written in lowercase letters.
 | :----- | :------------------- |
 | `name` | ID of the super user |
 
-- `superUsersArray` is automatically generated from the super user IDs.
-
 ### 🏠 Guilds (Servers)
 
 | Key    | Description |
@@ -111,8 +109,6 @@ const config = {
     },
   },
 };
-
-config.superUsersArray = Object.values(config.superUsers);
 
 export default config;
 ```
